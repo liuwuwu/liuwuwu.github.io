@@ -80,12 +80,12 @@
 
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
+<meta property="og:title" content="NEST">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="NEST">
 <meta property="og:locale" content="zh-Hans">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="NEST">
 
 
 
@@ -121,7 +121,7 @@
 
 
 
-  <title>Hexo</title>
+  <title>NEST</title>
   
 
 
@@ -152,12 +152,12 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
+        <span class="site-title">NEST</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">Tomorrow will be better</p>
       
   </div>
 
@@ -226,26 +226,6 @@
           </a>
         </li>
       
-        
-        <li class="menu-item menu-item-schedule">
-          <a href="/schedule/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br>
-            
-            日程表
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-sitemap">
-          <a href="/sitemap.xml" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
-            
-            站点地图
-          </a>
-        </li>
-      
 
       
     </ul>
@@ -288,7 +268,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="NEST">
     </span>
 
     
@@ -407,6 +387,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/16/volatile关键字/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NEST">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/16/volatile关键字/" itemprop="url">volatile详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-16T17:32:21+08:00">
+                2018-06-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>volatile关键字的中文意思是可变的，易变的。除了常见的锁同步机制外，Java还提供了一种轻量级的同步机制volatile,在本文的开始请允许我下先简单的介绍一下背景知识。</p>
+<p>###背景知识<br><strong>原子性：</strong>众所周知，原子是不能分割的，是构成物体的基本单位，在Java中引入这个定义就是为了说明有些操作是不能够再被进一步分解了，synchornized,lock可以实现原子性；<br><strong>可见性：</strong>可见性就是在多线程环境中，一个线程的操作对其他线程都是可见的，举个例子：线程A更改了某一个变量的值，其他线程在访问这个变量的时候获得的是最新的值，volatile，synchornized,lock,final可以实现可见性；<br><strong>有序性：</strong>在jvm中有时候为了提高处理器的效率会对代码进行重排序，在一个线程中为了运行的结果的一致性代码的执行顺序可以认为和编辑顺序一致，看起来不会发生重排序实际上存在重排序。volatile，synchornized,lock可以阻止重排序，单线程中的重排序例子如下所示：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//本例中的第一句和第二句代码就可能发生重排序，因为他们之间不存在依赖关系，重排序不会影响代码最终的执行结果</span></span><br><span class="line"><span class="keyword">int</span> i=<span class="number">0</span>;</span><br><span class="line"><span class="keyword">boolean</span> flag=<span class="keyword">true</span>;</span><br><span class="line"><span class="keyword">int</span> j=i+<span class="number">1</span>;</span><br></pre></td></tr></table></figure></p>
+<p>###volatile关键字的作用</p>
+<p>####实现可见性<br>谈到可见性，不得不提java中的内存模型，现在多个的电脑一般具有多个处理器，我们知道cpu的运行速度和内存的读写速度相差较大，为了解决这个问题人们引入了高速缓存，在多线程环境中，系统会为每一个线程分配一个缓存（也叫工作内存）。Java的内存模型见下图</p>
+<p><img src="D:\Bloghexo\source\images\1.jpg" alt="avatar"></p>
+<p>如果一个变量被volatile修饰，当这个变量被修改时，系统会马上将这个修改后的值传入主内存中，在其他线程访问这个变量时，系统会告诉该线程，哥们商店（缓存）中变量过期了，有毒快到厂家（主内存）那里去取。而未被volatile修饰的变量则不会这样，没有人告诉他们变量过期了。</p>
+<p>####实现有序性<br>volatile可以阻止代码的重排序，实现原理是volatile赋值后多执行了一个“load addl $0x0, (%esp)”操作,这个指令相当于在这里建立了一个内存屏障保证前面的代码都能够执行完成。</p>
+<p>###使用场景<br>满足下两种情况下可以使用volatile关键字：<br>1）对变量的写操作不依赖于当前值<br>2）该变量没有包含在具有其他变量的不变式中</p>
+<p>###总结<br>volatile关键字是一种轻量级的同步机制，可以保证可见性和有序性但是并不能够保证原子性，所以使用时要慎重。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/12/工厂设计模式/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -416,7 +546,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="NEST">
     </span>
 
     
@@ -563,7 +693,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="NEST">
     </span>
 
     
@@ -712,7 +842,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
+      <meta itemprop="name" content="NEST">
     </span>
 
     
@@ -879,7 +1009,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">5</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -890,7 +1020,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -901,7 +1031,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
