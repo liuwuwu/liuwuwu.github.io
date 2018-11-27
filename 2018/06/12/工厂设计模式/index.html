@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="设计模式,">
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="工厂模式是设计模式中十分重要的一种，在程序开发中具有广泛的应用，工厂模式分为三种：简单工厂模式（静态工厂模式）、工厂方法模式、抽象工厂模式。本文将结合自己的理解对这三种模式进行详细介绍。 ###简单工厂模式简单工厂模式又叫静态工厂模式，顾名思义它是通过静态方法进行对象创建的。它的工厂类既不是抽象类也没有实现某一个工厂接口，而是一个实实在在具体的类。里面可以通过case或者if-else语句根据传入">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工厂模式">
+<meta property="og:url" content="http://yoursite.com/2018/06/12/工厂设计模式/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="工厂模式是设计模式中十分重要的一种，在程序开发中具有广泛的应用，工厂模式分为三种：简单工厂模式（静态工厂模式）、工厂方法模式、抽象工厂模式。本文将结合自己的理解对这三种模式进行详细介绍。 ###简单工厂模式简单工厂模式又叫静态工厂模式，顾名思义它是通过静态方法进行对象创建的。它的工厂类既不是抽象类也没有实现某一个工厂接口，而是一个实实在在具体的类。里面可以通过case或者if-else语句根据传入">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-11-27T03:58:09.697Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="工厂模式">
+<meta name="twitter:description" content="工厂模式是设计模式中十分重要的一种，在程序开发中具有广泛的应用，工厂模式分为三种：简单工厂模式（静态工厂模式）、工厂方法模式、抽象工厂模式。本文将结合自己的理解对这三种模式进行详细介绍。 ###简单工厂模式简单工厂模式又叫静态工厂模式，顾名思义它是通过静态方法进行对象创建的。它的工厂类既不是抽象类也没有实现某一个工厂接口，而是一个实实在在具体的类。里面可以通过case或者if-else语句根据传入">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2018/06/12/工厂设计模式/">
 
 
 
 
 
-  <title>Hexo</title>
+  <title>工厂模式 | Hexo</title>
   
 
 
@@ -140,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-right 
-  page-home">
+  <div class="container sidebar-position-right page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -264,137 +268,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/23/hello-world/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/11/23/hello-world/" itemprop="url">Hello World</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-23T09:56:16+08:00">
-                2018-11-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
 
   
 
@@ -424,9 +300,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/12/工厂设计模式/" itemprop="url">工厂模式</a></h1>
+          <h1 class="post-title" itemprop="name headline">工厂模式</h1>
         
 
         <div class="post-meta">
@@ -498,17 +372,13 @@
       
 
       
-        
-          
-            <p>工厂模式是设计模式中十分重要的一种，在程序开发中具有广泛的应用，工厂模式分为三种：简单工厂模式（静态工厂模式）、工厂方法模式、抽象工厂模式。本文将结合自己的理解对这三种模式进行详细介绍。</p>
+        <p>工厂模式是设计模式中十分重要的一种，在程序开发中具有广泛的应用，工厂模式分为三种：简单工厂模式（静态工厂模式）、工厂方法模式、抽象工厂模式。本文将结合自己的理解对这三种模式进行详细介绍。</p>
 <p>###简单工厂模式<br>简单工厂模式又叫静态工厂模式，顾名思义它是通过静态方法进行对象创建的。它的工厂类既不是抽象类也没有实现某一个工厂接口，而是一个实实在在具体的类。里面可以通过case或者if-else语句根据传入的参数选择创建的对象。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> Electric&#123;</span><br><span class="line">    <span class="function">String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">diannao</span> <span class="keyword">implements</span> <span class="title">Electric</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"电脑价格为"</span>+i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bingxiang</span> <span class="keyword">implements</span> <span class="title">Electric</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"冰箱价格为"</span>+i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleFactory</span> </span>&#123;</span><br><span class="line">    <span class="comment">//i=1的时候新建冰箱，等于2的时候新建电脑；</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  Electric <span class="title">create</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (i)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="keyword">new</span> diannao();</span><br><span class="line">            <span class="keyword">default</span>: <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        Electric a= SimpleFactory.create(<span class="number">1</span>);</span><br><span class="line">        System.out.println(a.price(<span class="number">4500</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>###工厂方法<br>工厂方法设计模式去掉了简单工厂模式中工厂方法（create方法）的静态属性，使得它可以被子类继承。在简单工厂模式中需要在工厂方法中集中处理的压力可以分散在工厂方法模式中，工厂方法模式也就是通过继承将对象创建的任务延时到子类工厂中。工厂方法模式的特点是一类对象（抽象对象）,一个抽象工厂和若干个具体工厂（用来创建具体的对象）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">interface</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function">Electric <span class="title">create</span> <span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//通过factory接口的实现类来创建对象</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">bingxiangfactory</span> <span class="keyword">implements</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Electric <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">diannaofactory</span> <span class="keyword">implements</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Electric <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>###抽象工厂模式<br>抽象工厂模式是工厂方法模式的升级版，在工厂方法模式中只能创建某一类对象，当需要创建某几类互相关联或者互相依赖的对象时候，工厂方法模式需要创建的子类太多，不是很方便。所以就出现了抽象工厂模式，它的特点是几个互相关联或者依赖的抽象类（A、B、C）、一个抽象工厂、若干个具体工厂。只不过具体工厂中可以创建多种实例对象(A1、B1、C1)或(A2、B2、C2)。具体的例子我就不写了可以参考这篇博客 <a href="https://blog.csdn.net/jason0539/article/details/44976775" target="_blank" rel="noopener">JAVA设计模式之抽象工厂模式</a></p>
 <p>###工厂模式的应用场景<br>1.对象的创建过程十分复杂，需要初始化很多参数、甚至需要查询数据库等；<br>2.某个类有很多子类，这些类的创建过程在业务中有很多改变；</p>
 <p>###总结<br>工厂模式能够实现对象的创建和使用分离，在使用对象时不需要关心对象是如何创建的，降低耦合度的同时提高了代码的复用性，提高程序的扩展性。简单工厂设计模式虽然能够将对象的创建和使用分离但是它的扩展能力不强，当用户需要创建新的具体对象时（如上例中想创建吹风机对象）需要修改原始代码。所以它并不能满足开闭原则（对扩展开放，对修改关闭）。于是就有了工厂方法设计模式，首先定义一个抽象的工厂类（或者接口），将具体的对象创建任务交给具体的子类工厂。当需要创建新的具体对象时，仅需要添加一个对应的子类工厂就可以了，完全符合开闭原则。但是工厂方法的设计模式有个缺点就是当我们需要创建几类互相依赖或者关联的对象时会定义大量的子类使得代码变得十分冗余。于是抽象工厂模式便隆重登场了，它可以理解为工厂方法模式的升级版。也是通过子类工厂来创建对象只不过子类工厂可以创建多种互相关联的实例对象(A1、B1、C1)或(A2、B2、C2)。</p>
 
-          
-        
       
     </div>
     
@@ -523,304 +393,40 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/02/Java内存区域/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/02/Java内存区域/" itemprop="url">Java内存区域</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-02T14:15:21+08:00">
-                2018-06-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java虚拟机/" itemprop="url" rel="index">
-                    <span itemprop="name">Java虚拟机</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
           
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="运行时的数据区域"><a href="#运行时的数据区域" class="headerlink" title="运行时的数据区域"></a>运行时的数据区域</h4><p>Java虚拟机内存包括如下几个运行时的数据区域：    </p>
-<ol>
-<li>程序计数器；     </li>
-<li>Java虚拟机栈；     </li>
-<li>本地方法栈；     </li>
-<li>方法区；     </li>
-<li>堆；     <h5 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h5>程序计数器主要记录的是当前线程中需要执行的下一跳字节码指令的行号；每条线程都有一个独立的程序计数器，各个线程之间的程序计数器互不影响，他是Java虚拟机规范中唯一一个没有规定任何内存溢出的区域；     <h5 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h5>Java虚拟机栈主要描述的是方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧，用于存储方法中的局部变量表、操作数栈、动态链接、方法出口等信息；每一个方法的从调用到执行的过程都对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。我们经常说的栈内存和堆内存中的栈指的是虚拟机栈，甚至可以更详细点其实就是虚拟机栈中的局部变量表；在虚拟机规范中在这个区域中规定了两种异常情况：StackOverfolwError（如果线程申请的栈深度大于虚拟机所允许的深度）和OutOfMemoryError（如果虚拟机可以动态扩展，当扩展时无法申请到足够的内存）;<br>如果在单线程环境中无论是帧太大还是虚拟机的容量太小，当内存无法分配时虚拟机抛出的都是StackOverflowError；当线程过多时就有可能出现OutOfMemoryError；      <h5 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h5>本地方法栈与Java虚拟机栈发挥的作用相似只不过虚拟机栈服务的是Java方法而本地方法栈服务的是本地方法；本地方法栈抛出的异常也与Java虚拟机栈抛出的一样；     <h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5>方法区与前面介绍的几个区域不同的是前面几个是线程私有的，而方法区是线程共享的；方法区主要用来存储已经被虚拟机加载的类信息、常量、静态变量、及时编辑器编译后的代码等数据；很多人将方法区称为“永久代”，垃圾收集行为在这个区域出现的比较少，这个区域内存回收的目标主要是常量池回收和类型卸载；<br>####### 运行时常量池<br>运行时常量池是方法区的一个部分，class文件中除了有类的版本、字段、方法、接口等描述信息以外还有一项信息是常量池用于存放编译器生成的各种字面量和符号引用，这部分信息将在类加载后进入运行时常量池中存放。运行时常量池与class文件常量池不同的地方是具备动态性。意思是并非只有class文件常量池中的内容才能进入运行时常量池，如intern()方法。    <h5 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h5>这个区域唯一的目的就是用来存放对象(所有的对象实例以及数组都存储在堆上),同时这个区域也是Java虚拟机主要管理的区域。     <h5 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h5>对象的内存分配方法主要有：指针碰撞和空闲列表；选择哪种分配方式主要由Java堆是否规整决定，而Java堆是否规整主要是由垃圾收集器是否具有压缩整理功能决定的。解决内存分配在并发情况下线程安全的主要方法为：<br>(1)对分配内存的动作进行同步处理——实际上虚拟机采用CAS配上失败重试的方式保证更新操作的原子性；(2)把内存分配的动作按照线程划分在不同的空间中进行，每个线程预先分配一个小的内存(称为本地线程分配缓冲)，只有本地线程分配缓冲使用完后才需要同步锁定。    <h6 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h6>对象在内存中的存储布局可以分为三个部分：对象头、实例数据和对齐填充；对象头主要包含两部分的信息：(1)一部分用于存储对象自己的运行时数据，比如哈希码、GC分代年龄、锁状态标志、线程持有锁等；(2)l类型指针（虚拟机用来确定这个对象是哪个类的实例），另外如果对象是数组还需要存储数组的长度(一般对象的元数据中会包含对象的大小)；    <h6 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h6>主要有两种方式：句柄和直接指针；具体示意图参考深入理解Java虚拟机49面。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/01/你好/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/06/01/你好/" itemprop="url">测试</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-06-01T23:47:44+08:00">
-                2016-06-01
-              </time>
+              <a href="/2018/06/02/Java内存区域/" rel="next" title="Java内存区域">
+                <i class="fa fa-chevron-left"></i> Java内存区域
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
+              <a href="/2018/11/23/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
             
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hexo教程/" itemprop="url" rel="index">
-                    <span itemprop="name">Hexo教程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -830,10 +436,11 @@
   </article>
 
 
-    
-  </section>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -841,6 +448,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -1064,6 +675,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
