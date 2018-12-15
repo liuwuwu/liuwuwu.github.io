@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="锁,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="重量级锁的定义的简介Java中的线程是映射到操作系统的原生线程上，线程的阻塞或者唤醒是需要操作系统的帮助的，需要从用户态转换为核心态，这种状态转换是需要消耗处理器时间的，当我们的代码比较简单时这个过程耗费的时间甚至比代码执行所需要的时间更加长。所以我们将这种锁称为重量级的锁。重量级锁的分类：内置锁和显示锁 内置锁内置锁指的是Synchornized,使用起来非常方便,不需要显示的加锁和释放锁，任何">
+<meta name="keywords" content="锁">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重量级锁">
+<meta property="og:url" content="http://yoursite.com/2018/12/06/重量级锁/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="重量级锁的定义的简介Java中的线程是映射到操作系统的原生线程上，线程的阻塞或者唤醒是需要操作系统的帮助的，需要从用户态转换为核心态，这种状态转换是需要消耗处理器时间的，当我们的代码比较简单时这个过程耗费的时间甚至比代码执行所需要的时间更加长。所以我们将这种锁称为重量级的锁。重量级锁的分类：内置锁和显示锁 内置锁内置锁指的是Synchornized,使用起来非常方便,不需要显示的加锁和释放锁，任何">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-06T08:34:18.387Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重量级锁">
+<meta name="twitter:description" content="重量级锁的定义的简介Java中的线程是映射到操作系统的原生线程上，线程的阻塞或者唤醒是需要操作系统的帮助的，需要从用户态转换为核心态，这种状态转换是需要消耗处理器时间的，当我们的代码比较简单时这个过程耗费的时间甚至比代码执行所需要的时间更加长。所以我们将这种锁称为重量级的锁。重量级锁的分类：内置锁和显示锁 内置锁内置锁指的是Synchornized,使用起来非常方便,不需要显示的加锁和释放锁，任何">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/06/重量级锁/">
+
+
+
+
+
+  <title>重量级锁 | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/06/重量级锁/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">重量级锁</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-06T16:33:36+08:00">
+                2018-12-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="重量级锁的定义的简介"><a href="#重量级锁的定义的简介" class="headerlink" title="重量级锁的定义的简介"></a>重量级锁的定义的简介</h3><p>Java中的线程是映射到操作系统的原生线程上，线程的阻塞或者唤醒是需要操作系统的帮助的，需要从用户态转换为核心态，这种状态转换是需要消耗处理器时间的，当我们的代码比较简单时这个过程耗费的时间甚至比代码执行所需要的时间更加长。所以我们将这种锁称为重量级的锁。<br><strong>重量级锁的分类</strong>：<strong>内置锁</strong>和<strong>显示锁</strong></p>
+<h3 id="内置锁"><a href="#内置锁" class="headerlink" title="内置锁"></a>内置锁</h3><p>内置锁指的是Synchornized,使用起来非常方便,不需要显示的加锁和释放锁，任何一个对象都是一个内置锁，在任何出现Synchornized的地方都有一个对象与之关联，当Synchornized关键字修饰实例方法时它关联的对象为this；修饰静态方法时，关联的对象为当前类的class对象；当Synchornized关键字修饰代码块时，它关联的对象是Synchornized(obj)中的obj。内置锁又分为对象锁和类锁，对象锁主要是用于对象的实例方法或者对象的实例中的，而类锁主要用于类的静态方法或者类的class对象上的，类的对象有很多个，所以对象锁也有很多个而类锁只有一个，类锁和对象锁是两个不一样的锁，控制着不同的区域，它们是互不干扰的(类锁和对象锁管理的方法或者代码片段可以同时执行)。类锁是一个抽象的概念，并不是真实存在的，它只是用来帮助我们理解锁定实例方法和静态方法的区别的。</p>
+<h3 id="显示锁"><a href="#显示锁" class="headerlink" title="显示锁"></a>显示锁</h3><p>内置锁使用起来那么方便为何还要用显示锁呢？显示锁可以简单的理解为内置锁的升级版，他在内置锁的基础上添加了很多功能，既然显示锁这么优秀为什么还要保留内置锁呢？主要是因为显示锁有个缺点必须显示的加锁和释放锁并且释放锁必须要在finally中进行，否则出现异常时将无法释放锁导致死循环。</p>
+<h4 id="显示锁和内置锁的比较"><a href="#显示锁和内置锁的比较" class="headerlink" title="显示锁和内置锁的比较"></a>显示锁和内置锁的比较</h4><p> <strong>为什么要有显示锁？</strong><br> 答：与内置锁相比显示锁具有如下优点：<br> 1.定时等待的功能：显示锁中可以设置线程的等待时间，如果在这段时间内线程没有获得锁将直接返回；<br> 2.等待锁时具有响应中断的功能：内置锁中，线程在阻塞情况下并不能够响应中断请求，因为它默认每个线程都会获得锁，而显示锁不同，在等待锁时他能够响应中断请求；</p>
+<ol start="3">
+<li>多条件队列：内置锁中只有一个条件队列，这就导致等待同一把锁的不同线程可能具有不同的条件谓词，当一个条件谓词满足时不知道要唤醒哪些线程(线程是先获得锁，再判断条件谓词是否满足，如果满足则往下执行，如果不满足则重新释放锁)。显示锁中可以通过lock.newConditon()方法新建不同的条件队列，程序员可以根据条件谓词的满足情况选择对应的条件对列进行唤醒。</li>
+<li>显示锁中可以设置是否使用公平锁，内置锁是不公平锁，有可能出现等待的线程一直阻塞，出现饥饿死锁的情况，显示锁默认情况下是非公平的，但是可以通过 Lock lock=new ReentrantLock(true)将显示锁设置为公平的锁降低饥饿死锁发生的风险;</li>
+<li>显示锁中的ReentrantReadWriteLock能够通过new ReentrantReadWriteLock().readLock()方法构造出支持并发读的读锁，这就大大的提高了读的效率。<br><strong>既然显示锁这么优秀为什么还要保留内置锁？</strong><br>答：与内置锁相比显示锁的缺点为：不能够自动的进行锁的获取和释放，释放锁的操作必须要在finally中进行，不然的话一旦发生异常，就无法释放锁导致死锁的情况发生；<h4 id="显示锁的分类"><a href="#显示锁的分类" class="headerlink" title="显示锁的分类"></a>显示锁的分类</h4><h5 id="ReentrantLock-可重入的锁-是唯一一个实现了Lock接口的类，使用例子如下："><a href="#ReentrantLock-可重入的锁-是唯一一个实现了Lock接口的类，使用例子如下：" class="headerlink" title="ReentrantLock(可重入的锁)是唯一一个实现了Lock接口的类，使用例子如下："></a>ReentrantLock(可重入的锁)是唯一一个实现了Lock接口的类，使用例子如下：</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">       Lock lock=<span class="keyword">new</span> ReentrantLock(<span class="keyword">true</span>);</span><br><span class="line">       <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               lock.lock();</span><br><span class="line">               <span class="keyword">try</span>&#123;</span><br><span class="line">                   System.out.println(Thread.currentThread().getName()+<span class="string">"我获得了锁了"</span>);</span><br><span class="line">                   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">                       System.out.println(Thread.currentThread().getName()+<span class="string">"i的值为"</span>+i);</span><br><span class="line">               &#125;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">finally</span>&#123;</span><br><span class="line">                   lock.unlock();</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我获得了锁了，真的很高心"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">                        System.out.println(Thread.currentThread().getName()+<span class="string">"i的值为"</span>+i);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">finally</span>&#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="ReadWriteLock-读写锁"><a href="#ReadWriteLock-读写锁" class="headerlink" title="ReadWriteLock(读写锁)"></a>ReadWriteLock(读写锁)</h4><p>他是一个接口，有一个实现类ReentrantReadWriteLock,他有两个方法ReentrantReadWriteLock.readLock(),ReentrantReadWriteLock.writeLock()方法获得读写锁。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReadTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        ReentrantReadWriteLock reentrantReadWriteLock=<span class="keyword">new</span> ReentrantReadWriteLock();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                reentrantReadWriteLock.readLock().lock();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    <span class="comment">//System.out.println("正在进行读操作");</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"正在进行读操作"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">                        System.out.println(Thread.currentThread().getName()+<span class="string">"-----"</span>+i);</span><br><span class="line">                &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">finally</span> &#123;</span><br><span class="line">                    reentrantReadWriteLock.readLock().unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                reentrantReadWriteLock.writeLock().lock();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                  <span class="comment">//  System.out.println("正在进行写操作");</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"正在进行写操作"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">10</span>;i&lt;<span class="number">15</span>;i++)&#123;</span><br><span class="line">                        System.out.println(Thread.currentThread().getName()+<span class="string">"-----"</span>+i);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">finally</span> &#123;</span><br><span class="line">                    reentrantReadWriteLock.writeLock().unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>参考文献</strong><br><a href="https://www.cnblogs.com/dolphin0520/p/3923167.html" target="_blank" rel="noopener">Java并发编程：Lock</a><br><a href="https://www.jb51.net/article/129060.htm" target="_blank" rel="noopener">深入理解java内置锁(synchronized)和显式锁(ReentrantLock)</a><br><a href="https://www.cnblogs.com/owenma/p/8609348.html" target="_blank" rel="noopener">Java锁Synchronized对象锁和类锁区别</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/锁/" rel="tag"># 锁</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/24/HashMap源码详解（下）/" rel="next" title="HashMap源码详解（下）">
+                <i class="fa fa-chevron-left"></i> HashMap源码详解（下）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/07/轻量级锁&偏向锁&自旋锁/" rel="prev" title="轻量级锁&偏向锁&自旋锁">
+                轻量级锁&偏向锁&自旋锁 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#重量级锁的定义的简介"><span class="nav-number">1.</span> <span class="nav-text">重量级锁的定义的简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内置锁"><span class="nav-number">2.</span> <span class="nav-text">内置锁</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#显示锁"><span class="nav-number">3.</span> <span class="nav-text">显示锁</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#显示锁和内置锁的比较"><span class="nav-number">3.1.</span> <span class="nav-text">显示锁和内置锁的比较</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#显示锁的分类"><span class="nav-number">3.2.</span> <span class="nav-text">显示锁的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#ReentrantLock-可重入的锁-是唯一一个实现了Lock接口的类，使用例子如下："><span class="nav-number">3.2.1.</span> <span class="nav-text">ReentrantLock(可重入的锁)是唯一一个实现了Lock接口的类，使用例子如下：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ReadWriteLock-读写锁"><span class="nav-number">3.3.</span> <span class="nav-text">ReadWriteLock(读写锁)</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

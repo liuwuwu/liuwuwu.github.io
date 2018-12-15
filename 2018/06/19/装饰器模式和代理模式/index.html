@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="设计模式,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="装饰器模式简介维基百科中的定义：通过使用装饰器模式可以在运行时动态地扩充一个类的功能。原理是:增加一个修饰类包裹原来的类,包裹的方式一般是通过将原来的对象作为修饰类的构造函数的参数。装饰类实现新的功能,但是在不需要用到新功能的地方,他可以直接调用原来的类中的方法.修饰类必须和原来的类有相同的接口。装饰器模式的组件：Component为统一接口，也是装饰类和被装饰类的基本类型。ConcreteCom">
+<meta name="keywords" content="设计模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="装饰器模式和代理模式">
+<meta property="og:url" content="http://yoursite.com/2018/06/19/装饰器模式和代理模式/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="装饰器模式简介维基百科中的定义：通过使用装饰器模式可以在运行时动态地扩充一个类的功能。原理是:增加一个修饰类包裹原来的类,包裹的方式一般是通过将原来的对象作为修饰类的构造函数的参数。装饰类实现新的功能,但是在不需要用到新功能的地方,他可以直接调用原来的类中的方法.修饰类必须和原来的类有相同的接口。装饰器模式的组件：Component为统一接口，也是装饰类和被装饰类的基本类型。ConcreteCom">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://liuwuwu.github.io/picture/装饰器模式图.png">
+<meta property="og:updated_time" content="2018-12-05T07:12:30.368Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="装饰器模式和代理模式">
+<meta name="twitter:description" content="装饰器模式简介维基百科中的定义：通过使用装饰器模式可以在运行时动态地扩充一个类的功能。原理是:增加一个修饰类包裹原来的类,包裹的方式一般是通过将原来的对象作为修饰类的构造函数的参数。装饰类实现新的功能,但是在不需要用到新功能的地方,他可以直接调用原来的类中的方法.修饰类必须和原来的类有相同的接口。装饰器模式的组件：Component为统一接口，也是装饰类和被装饰类的基本类型。ConcreteCom">
+<meta name="twitter:image" content="https://liuwuwu.github.io/picture/装饰器模式图.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/19/装饰器模式和代理模式/">
+
+
+
+
+
+  <title>装饰器模式和代理模式 | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/19/装饰器模式和代理模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">装饰器模式和代理模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-19T13:17:11+08:00">
+                2018-06-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="装饰器模式"><a href="#装饰器模式" class="headerlink" title="装饰器模式"></a>装饰器模式</h3><h4 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h4><p>维基百科中的定义：通过使用装饰器模式可以在运行时动态地扩充一个类的功能。原理是:增加一个修饰类包裹原来的类,包裹的方式一般是通过将原来的对象作为修饰类的构造函数的参数。装饰类实现新的功能,但是在不需要用到新功能的地方,他可以直接调用原来的类中的方法.修饰类必须和原来的类有相同的接口。<br>装饰器模式的组件：<br><img src="https://liuwuwu.github.io/picture/装饰器模式图.png" alt="装饰器模式的组件"><br>Component为统一接口，也是装饰类和被装饰类的基本类型。<br>ConcreteComponent为具体实现类，也是被装饰类，他本身是个具有一些功能的完整的类。<br>Decorator是装饰类，实现了Component接口的同时还在内部维护了一个ConcreteComponent的实例，并可以通过构造函数初始化。而Decorator本身，通常采用默认实现，他的存在仅仅是一个声明：我要生产出一些用于装饰的子类了。而其子类才是赋有具体装饰效果的装饰产品类。<br>ConcreteDecorator是具体的装饰产品类，每一种装饰产品都具有特定的装饰效果。可以通过构造器声明装饰哪种类型的ConcreteComponent，从而对其进行装饰。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先定义一个接口他是装饰器类和被装饰器类共同实现的接口</span></span><br><span class="line"> <span class="class"><span class="keyword">interface</span> <span class="title">animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定义一个被装饰的类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">littleanimal</span> <span class="keyword">implements</span> <span class="title">animal</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是一个小动物，小呀小动物，我要慢慢的跑"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"小动物肚子饿了要吃东西"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定义一个装饰者的类</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">beautiful</span> <span class="keyword">implements</span> <span class="title">animal</span></span>&#123;</span><br><span class="line">    animal aa;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">beautiful</span><span class="params">(animal aa)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.aa=aa;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定义一个具体的装饰者类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">concret1</span> <span class="keyword">extends</span> <span class="title">beautiful</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">concret1</span><span class="params">(animal bb)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(bb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"我是美丽的小动物"</span>);</span><br><span class="line">        aa.run();</span><br><span class="line">        System.out.println(<span class="string">"我到终点了"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定义另外一个具体的装饰类</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">concret2</span> <span class="keyword">extends</span> <span class="title">beautiful</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">concret2</span><span class="params">(animal bb)</span></span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(bb);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">eat</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"小动物很羞涩"</span>);</span><br><span class="line">        aa.eat();</span><br><span class="line">        System.out.println(<span class="string">"我吃完东西了"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DecoratorTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">      <span class="comment">//根据自己的需要调用不同的装饰类</span></span><br><span class="line">        animal a=<span class="keyword">new</span> concret2(<span class="keyword">new</span> littleanimal());</span><br><span class="line">        animal b=<span class="keyword">new</span> concret1(<span class="keyword">new</span> littleanimal());</span><br><span class="line">        b.run();</span><br><span class="line">        a.eat();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="我自己理解的装饰器模式"><a href="#我自己理解的装饰器模式" class="headerlink" title="我自己理解的装饰器模式"></a>我自己理解的装饰器模式</h4><p>装饰器就是通过和被装饰的类实现共同的接口，这样的话，任何可以用到被装饰对象的地方都可以用装饰对象来进行替代，并且被装饰类的内部结构不会被破坏，我们可以根据自己的需要定义各种各样的装饰类进行调用。因为每一个装饰类在进行构造的时候都需要一个被装饰的实例，我们将需要被装饰的对象通过构造器传入。这种模式的优点是：他比通过继承进行功能扩展更加灵活，比如一个类有50个兄弟姐妹，我们仅仅只需要一个构建一个装饰器就可以对他们进行功能扩展，而不用对每一个类分别构建子类进行功能扩展。他的缺点就是进行多层装饰会比较复杂。</p>
+<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><h4 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h4><p>代理模式可以控制对对象的访问，就像我们在租房时候找一个中介代理，这样房主就不知道我的真实身份，我们可以通过中介与房主进行交互。<br><strong>组成</strong>：<strong>抽象角色</strong>:通过接口或抽象类声明真实角色实现的业务方法。<strong>代理角色</strong>:实现抽象角色,是真实角色的代理，通过真实角色的业务逻辑方法来实现抽象方法,并可以附加自己的操作。<strong>真实角色</strong>:实现抽象角色,定义真实角色所要实现的业务逻辑,供代理角色调用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//定义一个接口</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">renter</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">rent</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//定义一个真实用户</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">real</span> <span class="keyword">implements</span> <span class="title">renter</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"工资不高，想找一个便宜点的房子，环境还要好"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">proxy</span> <span class="keyword">implements</span> <span class="title">renter</span></span>&#123;</span><br><span class="line">    renter person;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">proxy</span><span class="params">()</span></span>&#123;</span><br><span class="line">        person=<span class="keyword">new</span> real();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">rent</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"房东我跟你说，顾客有话让我代为转达"</span>);</span><br><span class="line">        person.rent();</span><br><span class="line">        System.out.println(<span class="string">"好的，那我们就这样愉快的决定了"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ProxyTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> proxy().rent();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代理模式的优点：可以控制对真实对象的访问，起到保护该对象的作用，缺点就是通过代理可能会使得请求的速度变慢(多走了一道程序，花费时间变多)。</p>
+<h4 id="代理模式和装饰器模式的区别"><a href="#代理模式和装饰器模式的区别" class="headerlink" title="代理模式和装饰器模式的区别"></a>代理模式和装饰器模式的区别</h4><p>装饰器模式<br>装饰器类和被装饰类实现同一个接口.装饰器类关注于在一个对象上动态的添加方法。<br>强调:增强方法代理模式<br>代理类和真实处理类实现同一个接口.代理模式关注于控制对对象的访问,代理类通过代理模式向访问他的客户隐藏了真实调用的对象.<br>强调:增强<br>借用某个大佬博主的一句话来总结代理模式和装饰器模式<br>     使用代理模式,代理和真实对象之间的关系在编译时就已经确定了,而装饰器者能够在运行时递归的被构造.(代理模式会在代理类中创建真实处理类的一个实例,所以可以确定代理和真实对象的关系,而装饰器模式是将原始对象作为一个参数传给装饰器类)</p>
+<h4 id="适配器模式和装饰者模式的区别"><a href="#适配器模式和装饰者模式的区别" class="headerlink" title="适配器模式和装饰者模式的区别"></a>适配器模式和装饰者模式的区别</h4><p>适配器模式目的是将一种类型的接口转换为令一种类型的接口，适配器类也要实现原有的接口，但是通过拥有新接口的对象来对原接口进行转换。而装饰器模式的目的是对对象的功能进行扩充，装饰和被装饰的类都要实现相同接口，通过拥有被装饰类的实例，并调用该实例的相应的方法进行扩充。</p>
+<p>参考的博客：<br><a href="https://www.cnblogs.com/jzb-blog/p/6717349.html" target="_blank" rel="noopener">装饰器模式(Decorator)——深入理解与实战应用</a><br><a href="https://blog.csdn.net/yeguxin/article/details/77337649" target="_blank" rel="noopener">JAVA开发的23种设计模式之 —  装饰器模式 &amp;&amp; 代理器模式</a><br><a href="https://blog.csdn.net/uniquewonderq/article/details/79873251" target="_blank" rel="noopener">适配器模式与装饰器模式的区别</a><br><a href="https://www.cnblogs.com/itliucheng/p/4227119.html" target="_blank" rel="noopener">适配器模式和装饰者模式的区别</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/设计模式/" rel="tag"># 设计模式</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/17/JDBC详解/" rel="next" title="JDBC详解">
+                <i class="fa fa-chevron-left"></i> JDBC详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/24/同步容器/" rel="prev" title="同步容器">
+                同步容器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#装饰器模式"><span class="nav-number">1.</span> <span class="nav-text">装饰器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介"><span class="nav-number">1.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#我自己理解的装饰器模式"><span class="nav-number">1.2.</span> <span class="nav-text">我自己理解的装饰器模式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代理模式"><span class="nav-number">2.</span> <span class="nav-text">代理模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#简介-1"><span class="nav-number">2.1.</span> <span class="nav-text">简介</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代理模式和装饰器模式的区别"><span class="nav-number">2.2.</span> <span class="nav-text">代理模式和装饰器模式的区别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#适配器模式和装饰者模式的区别"><span class="nav-number">2.3.</span> <span class="nav-text">适配器模式和装饰者模式的区别</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

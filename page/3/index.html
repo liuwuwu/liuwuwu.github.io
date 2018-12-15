@@ -262,6 +262,1316 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/12/工厂设计模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/12/工厂设计模式/" itemprop="url">工厂模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-12T14:15:21+08:00">
+                2018-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>工厂模式是设计模式中十分重要的一种，在程序开发中具有广泛的应用，工厂模式分为三种：简单工厂模式（静态工厂模式）、工厂方法模式、抽象工厂模式。本文将结合自己的理解对这三种模式进行详细介绍。</p>
+<h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>简单工厂模式又叫静态工厂模式，顾名思义它是通过静态方法进行对象创建的。它的工厂类既不是抽象类也没有实现某一个工厂接口，而是一个实实在在具体的类。里面可以通过case或者if-else语句根据传入的参数选择创建的对象。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> Electric&#123;</span><br><span class="line">    <span class="function">String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">diannao</span> <span class="keyword">implements</span> <span class="title">Electric</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"电脑价格为"</span>+i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bingxiang</span> <span class="keyword">implements</span> <span class="title">Electric</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"冰箱价格为"</span>+i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleFactory</span> </span>&#123;</span><br><span class="line">    <span class="comment">//i=1的时候新建冰箱，等于2的时候新建电脑；</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  Electric <span class="title">create</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (i)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="keyword">new</span> diannao();</span><br><span class="line">            <span class="keyword">default</span>: <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        Electric a= SimpleFactory.create(<span class="number">1</span>);</span><br><span class="line">        System.out.println(a.price(<span class="number">4500</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h3><p>工厂方法设计模式去掉了简单工厂模式中工厂方法（create方法）的静态属性，使得它可以被子类继承。在简单工厂模式中需要在工厂方法中集中处理的压力可以分散在工厂方法模式中，工厂方法模式也就是通过继承将对象创建的任务延时到子类工厂中。工厂方法模式的特点是一类对象（抽象对象）,一个抽象工厂和若干个具体工厂（用来创建具体的对象）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">interface</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function">Electric <span class="title">create</span> <span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//通过factory接口的实现类来创建对象</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">bingxiangfactory</span> <span class="keyword">implements</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Electric <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">diannaofactory</span> <span class="keyword">implements</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Electric <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>抽象工厂模式是工厂方法模式的升级版，在工厂方法模式中只能创建某一类对象，当需要创建某几类互相关联或者互相依赖的对象时候，工厂方法模式需要创建的子类太多，不是很方便。所以就出现了抽象工厂模式，它的特点是几个互相关联或者依赖的抽象类（A、B、C）、一个抽象工厂、若干个具体工厂。只不过具体工厂中可以创建多种实例对象(A1、B1、C1)或(A2、B2、C2)。具体的例子我就不写了可以参考这篇博客 <a href="https://blog.csdn.net/jason0539/article/details/44976775" target="_blank" rel="noopener">JAVA设计模式之抽象工厂模式</a></p>
+<h3 id="工厂模式的应用场景"><a href="#工厂模式的应用场景" class="headerlink" title="工厂模式的应用场景"></a>工厂模式的应用场景</h3><p>1.对象的创建过程十分复杂，需要初始化很多参数、甚至需要查询数据库等；<br>2.某个类有很多子类，这些类的创建过程在业务中有很多改变；</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>工厂模式能够实现对象的创建和使用分离，在使用对象时不需要关心对象是如何创建的，降低耦合度的同时提高了代码的复用性，提高程序的扩展性。简单工厂设计模式虽然能够将对象的创建和使用分离但是它的扩展能力不强，当用户需要创建新的具体对象时（如上例中想创建吹风机对象）需要修改原始代码。所以它并不能满足开闭原则（对扩展开放，对修改关闭）。于是就有了工厂方法设计模式，首先定义一个抽象的工厂类（或者接口），将具体的对象创建任务交给具体的子类工厂。当需要创建新的具体对象时，仅需要添加一个对应的子类工厂就可以了，完全符合开闭原则。但是工厂方法的设计模式有个缺点就是当我们需要创建几类互相依赖或者关联的对象时会定义大量的子类使得代码变得十分冗余。于是抽象工厂模式便隆重登场了，它可以理解为工厂方法模式的升级版。也是通过子类工厂来创建对象只不过子类工厂可以创建多种互相关联的实例对象(A1、B1、C1)或(A2、B2、C2)。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/02/final和static关键字详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/02/final和static关键字详解/" itemprop="url">final和static关键字详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-02T14:15:21+08:00">
+                2018-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="final关键字"><a href="#final关键字" class="headerlink" title="final关键字"></a>final关键字</h3><p>在java中final通常用来标记：”不好意思蛤，我是无法改变的。”程序员有可能出于很多因素的考虑不想做出改变。为了加深对于这个关键词的理解，接下来我将从final修饰的数据、方法、类三个方面来总结一下final的用法。 </p>
+<h4 id="final修饰数据"><a href="#final修饰数据" class="headerlink" title="final修饰数据"></a>final修饰数据</h4><p>众所周知，final修饰的数据是无法改变的，对于基本数据类型final是使得数值不变，对于引用对象，final是使得引用恒定不变。根据需求的不同，这种不变性建立的时机是存在差异的，比如有些情况下希望建立一个永不改变的编译时常量，而有些情况下希望一个运行时被初始化的值不再被改变。对于编译时常量这种情况，常量必须是基本数据类型，并且用final修饰，在对它进行定义的时候必须进行赋值。这种做法的优点是编译器可以将它直接带入用到它的计算式中，在编译阶段执行计算，减轻运行时的负担。有些数据必须在运行阶段才能确定(如随机函数，空白final等)，空白final必须在定义域或者构造器中用表达式对其进行初始化。这种做法的优点是：增加了灵活性，可以为不同的对象创建不同的fianl域。具体例子如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">        <span class="comment">//------------------空白final的用例------------ </span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> a;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">A</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        a=i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//----------------因为随机函数的原因，必须运行时才能确定id的值----------</span></span><br><span class="line">        Random random=<span class="keyword">new</span> Random(<span class="number">32</span>);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> id=random.nextInt(<span class="number">54</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="final修饰方法"><a href="#final修饰方法" class="headerlink" title="final修饰方法"></a>final修饰方法</h4><p>final修饰方法的原因有两个:(1)锁定方法，防止任何继承类修改他，和private不同，final修饰的方法是能够被子类继承的，只是不能被覆盖，private修饰的方法既不能被覆盖也不能被子类继承，(2)提高效率，不过现在这种做法并不被推荐使用； </p>
+<h4 id="final修饰类"><a href="#final修饰类" class="headerlink" title="final修饰类"></a>final修饰类</h4><p>final修饰的类是禁止继承的，final类中的所有方法都隐式的指定为final的，无法覆盖他们； </p>
+<h3 id="static关键字"><a href="#static关键字" class="headerlink" title="static关键字"></a>static关键字</h3><p>static是静态修饰符，我们知道在程序中任何变量和代码都是在编译时由系统自动分配内存的，静态指的是这个分配的内存会一直存在，虽然Java中禁止使用全局方法，但是当我们在类中置入static方法后就可以访问其他static域和static方法，所以在一定程度上static方法具有全局函数的语义。 </p>
+<h4 id="static变量"><a href="#static变量" class="headerlink" title="static变量"></a>static变量</h4><p>一般根据是否有static修饰将成员变量分为两类静态变量和实例变量，静态变量在类加载时候分配内存，只执行一次，类的所有实例共享这个变量，可以通过类名直接访问，不需要创建它的实例。<br>static方法<br>static方法不需要创建对象可以直接通过类名访问，当然也可以通过该类的实例来访问。static方法中不能访问非静态成员变量和方法，并且里面不能有this和super关键字。 </p>
+<h4 id="static代码块"><a href="#static代码块" class="headerlink" title="static代码块"></a>static代码块</h4><p>与静态变量一样，静态代码块也是在类加载时执行，它与静态方法的区别是它是自动执行的，而静态方法必须要调用后才能够执行。静态初始化块并不是类的构成元素，当类中有多个static块时按照先后顺序执行。<br>解惑<br>1、为什么向匿名内部类传递的参数、内部类访问外部类方法的局部变量要用final修饰？<br>答：首先Java中的匿名内部类是一个典型的闭包问题，关于具体的闭包问题的介绍可以参考java中的闭包问题，Java在处理闭包是通过产生一个复制品(拷贝)，将参数传递给内部类，为了防止内部类修改变量值导致它与外部类中的值不一致，程序难以接受所以必须要用final修饰。当参数为基本数据类型时final修饰说明这个变量的值的固定的，不能改变；为引用数据类型时说明引用是固定的，永远指向同一个对象，保证内外的一致性。内部类访问外部类方法局部变量要用final修饰的原因是外部类方法的局部变量的生存周期可能小于内部类的生存周期，导致在访问变量时，变量已经不存在了，加了final后编译器会将这些变量拷贝一份作为内部类的成员变量，同时final也可以保证它与原局部变量的一致性。<br>2、为什么静态方法里面不能访问非静态成员变量和方法？<br>答：因为静态成员不需要创建实例通过类名就可以直接访问，而非静态成员必须要通过实例来调用，所以在调用方法时有可能并没有创建相应的实例，程序也就无法知道到底是哪个实例来调用非静态成员和方法。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/02/Java内存区域/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/02/Java内存区域/" itemprop="url">Java内存区域</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-02T14:15:21+08:00">
+                2018-06-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java虚拟机/" itemprop="url" rel="index">
+                    <span itemprop="name">Java虚拟机</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="运行时的数据区域"><a href="#运行时的数据区域" class="headerlink" title="运行时的数据区域"></a>运行时的数据区域</h4><p>Java虚拟机内存包括如下几个运行时的数据区域：    </p>
+<ol>
+<li>程序计数器；     </li>
+<li>Java虚拟机栈；     </li>
+<li>本地方法栈；     </li>
+<li>方法区；     </li>
+<li>堆；     <h5 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h5>程序计数器主要记录的是当前线程中需要执行的下一跳字节码指令的行号；每条线程都有一个独立的程序计数器，各个线程之间的程序计数器互不影响，他是Java虚拟机规范中唯一一个没有规定任何内存溢出的区域；     <h5 id="虚拟机栈"><a href="#虚拟机栈" class="headerlink" title="虚拟机栈"></a>虚拟机栈</h5>Java虚拟机栈主要描述的是方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧，用于存储方法中的局部变量表、操作数栈、动态链接、方法出口等信息；每一个方法的从调用到执行的过程都对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。我们经常说的栈内存和堆内存中的栈指的是虚拟机栈，甚至可以更详细点其实就是虚拟机栈中的局部变量表；在虚拟机规范中在这个区域中规定了两种异常情况：StackOverfolwError（如果线程申请的栈深度大于虚拟机所允许的深度）和OutOfMemoryError（如果虚拟机可以动态扩展，当扩展时无法申请到足够的内存）;<br>如果在单线程环境中无论是帧太大还是虚拟机的容量太小，当内存无法分配时虚拟机抛出的都是StackOverflowError；当线程过多时就有可能出现OutOfMemoryError；      <h5 id="本地方法栈"><a href="#本地方法栈" class="headerlink" title="本地方法栈"></a>本地方法栈</h5>本地方法栈与Java虚拟机栈发挥的作用相似只不过虚拟机栈服务的是Java方法而本地方法栈服务的是本地方法；本地方法栈抛出的异常也与Java虚拟机栈抛出的一样；     <h5 id="方法区"><a href="#方法区" class="headerlink" title="方法区"></a>方法区</h5>方法区与前面介绍的几个区域不同的是前面几个是线程私有的，而方法区是线程共享的；方法区主要用来存储已经被虚拟机加载的类信息、常量、静态变量、及时编辑器编译后的代码等数据；很多人将方法区称为“永久代”，垃圾收集行为在这个区域出现的比较少，这个区域内存回收的目标主要是常量池回收和类型卸载；<br>####### 运行时常量池<br>运行时常量池是方法区的一个部分，class文件中除了有类的版本、字段、方法、接口等描述信息以外还有一项信息是常量池用于存放编译器生成的各种字面量和符号引用，这部分信息将在类加载后进入运行时常量池中存放。运行时常量池与class文件常量池不同的地方是具备动态性。意思是并非只有class文件常量池中的内容才能进入运行时常量池，如intern()方法。    <h5 id="Java堆"><a href="#Java堆" class="headerlink" title="Java堆"></a>Java堆</h5>这个区域唯一的目的就是用来存放对象(所有的对象实例以及数组都存储在堆上),同时这个区域也是Java虚拟机主要管理的区域。     <h5 id="对象的创建"><a href="#对象的创建" class="headerlink" title="对象的创建"></a>对象的创建</h5>对象的内存分配方法主要有：指针碰撞和空闲列表；选择哪种分配方式主要由Java堆是否规整决定，而Java堆是否规整主要是由垃圾收集器是否具有压缩整理功能决定的。解决内存分配在并发情况下线程安全的主要方法为：<br>(1)对分配内存的动作进行同步处理——实际上虚拟机采用CAS配上失败重试的方式保证更新操作的原子性；(2)把内存分配的动作按照线程划分在不同的空间中进行，每个线程预先分配一个小的内存(称为本地线程分配缓冲)，只有本地线程分配缓冲使用完后才需要同步锁定。    <h6 id="对象的内存布局"><a href="#对象的内存布局" class="headerlink" title="对象的内存布局"></a>对象的内存布局</h6>对象在内存中的存储布局可以分为三个部分：对象头、实例数据和对齐填充；对象头主要包含两部分的信息：(1)一部分用于存储对象自己的运行时数据，比如哈希码、GC分代年龄、锁状态标志、线程持有锁等；(2)l类型指针（虚拟机用来确定这个对象是哪个类的实例），另外如果对象是数组还需要存储数组的长度(一般对象的元数据中会包含对象的大小)；    <h6 id="对象的访问定位"><a href="#对象的访问定位" class="headerlink" title="对象的访问定位"></a>对象的访问定位</h6>主要有两种方式：句柄和直接指针；具体示意图参考深入理解Java虚拟机49面。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/11/equals与==的区别/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/05/11/equals与==的区别/" itemprop="url">equals与==的区别</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-11T08:56:20+08:00">
+                2018-05-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>今天有一个同学问我java中equals和==的区别，感觉自己知道的也不是很全面，很感激他，让我知道了自己知识面的缺陷。所以打算趁这个机会把他们弄清楚。<br>java中“==”和equals的含义<br>java中的数据类型可以分为两类：（1）基本数据类型：byte、char、short、int、float、double、long、boolean。他们之间的比较用“==”，比较的是他们的值。（2）引用数据类型，当他们用“==”时比较的是他们在内存中的存放地址，所以除非是同一个new出来的对象，他们的比较后的结果为true,反之结果为false。Java中equals方法默认的初始行为是比较对象的地址，即初始状态下equals与“==”是等效的，这是因为Java中所有的类都是继承Object，这个类中定义的equals方法的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>但是一般的对象都会根据自己的情况重写这个equals方法，重写后的equals方法一般被用来比较对象的值是否相同。<br>总结<br>“==”的功能：对于基本数据类型按值比较，对于引用数据类型比较地址是否相同。<br>equals的功能：在默认情况下（未重写前）它与“==”可以说是等效的，都是比较地址是否相同，但是一般都会重写将他的功能变为比较对象的内容是否相等。<br>String类中的equals方法<br>String类重写了equals方法，使得它的功能变为比较两个对象的内容是否相等，它的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object anObject)</span> </span>&#123;</span><br><span class="line">           <span class="keyword">if</span> (<span class="keyword">this</span> == anObject) &#123;</span><br><span class="line">              <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">          &#125;</span><br><span class="line">           <span class="keyword">if</span> (anObject <span class="keyword">instanceof</span> String) &#123;</span><br><span class="line">              String anotherString = (String)anObject;</span><br><span class="line">              <span class="keyword">int</span> n = value.length;</span><br><span class="line">              <span class="keyword">if</span> (n == anotherString.value.length) &#123;</span><br><span class="line">                 <span class="keyword">char</span> v1[] = value;</span><br><span class="line">                 <span class="keyword">char</span> v2[] = anotherString.value;</span><br><span class="line">                 <span class="keyword">int</span> i = <span class="number">0</span>;</span><br><span class="line">                 <span class="keyword">while</span> (n-- != <span class="number">0</span>) &#123;</span><br><span class="line">                     <span class="keyword">if</span> (v1[i] != v2[i])</span><br><span class="line">                         <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">                     i++;</span><br><span class="line">                 &#125;</span><br><span class="line">                 <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">           <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure></p>
+<p>下面我们来看一个特殊的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestString</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">       String s1 = <span class="string">"Monday"</span>;</span><br><span class="line">       String s2 = <span class="keyword">new</span> String(<span class="string">"Monday"</span>);</span><br><span class="line">         <span class="keyword">if</span> (s1 == s2)</span><br><span class="line">       &#123;System.out.println(<span class="string">"s1 == s2"</span>);&#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">       &#123;</span><br><span class="line">         System.out.println(<span class="string">"s1 != s2"</span>);</span><br><span class="line">         &#125;</span><br><span class="line">       <span class="keyword">if</span> (s1.equals(s2)) &#123;</span><br><span class="line">         System.out.println(<span class="string">"s1 equals s2"</span>);</span><br><span class="line">            &#125;</span><br><span class="line">     <span class="keyword">else</span>&#123;</span><br><span class="line">         System.out.println(<span class="string">"s1 not equals s2"</span>);&#125;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>程序的结果出乎我们的意料，“==”方法的结果为false，这是为什么呢？原来程序在运行时会创建一个字符串缓冲池，如果使用s2=”Monday”创建字符串时程序会在字符串缓冲池中寻找值相同的对象，但是一旦使用了new关键字，不管缓冲池中是否存在值相同的对象，它都会新建一个（可以理解为我不要旧的，我要新的）。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/27/接口/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/27/接口/" itemprop="url">接口</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-27T13:15:11+08:00">
+                2018-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="接口的作用"><a href="#接口的作用" class="headerlink" title="接口的作用"></a>接口的作用</h4><p>对于有些问题我们不仅要知其然，还要知其所以然。不知道大家有没有思考过为什么java的设计者会开发出接口？《Thinking in java》中是这样介绍的：接口和内部类为我们提供了一种将接口与实现分离的更加结构化的方法，可以这样理解接口就是将功能和实现分离，让我们可以根据自己的需要来实现这个功能。还有一点就是接口可以用来完全解耦，比如有一个方法他的参数是一个类A，那么他只能接受A或者A的子类，如果该方法接受的参数是一个接口，那么任何实现了该接口的对象都可以作为该方法的参数。<br>接口和抽象类的区别<br>抽象类是接口和类的中间状态，他们之间的主要区别如下：<br>抽象类中的方法可以有具体的实现，而接口不行；<br>抽象类可以有main方法，可以运行，而接口中不能有main方法，不能运行；<br>抽象类中的访问控制权限可以非public而接口中的访问控制权限必需是public的；<br>抽象类是一个类，继承时用关键字extends,而接口是用关键字implents;<br>虽然他们都不能新建对象，但是抽象类中是可以有构造器的，而接口中不能有构造器；<br>接口中的域为什么是static和final？<br>我们首先解释为何接口中的域是static的，因为一个类是可以实现多个接口的，如果每个接口中都有一个相同的变量但是值不同那么，这个类该继承哪个呢？所以将变量声明为static的就可以很好的解决这个问题，我们可以通过接口名来区分变量的值。至于为什么要为final这是因为接口的域表达的是很多类的共有属性，当然不希望被某一个类私自串改。有一点需要记住的是接口中的域和方法都是public修饰的。还有需要注意的是接口的修饰符只能是public或默认的。</p>
+<p>####接口的继承<br>一个接口可以继承多个接口，用关键字extends，千万不要觉得与接口有关的都用关键字implements。这在一定程度上可以认为实现了多重继承。关于组合接口时的名字冲突问题我觉得《Thinking in java》中有一个例子举得比较好P181，在这引用一下：<br><code>`</code>java<br>interface I1{<br>void f();<br>}    </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/24/重载/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/24/重载/" itemprop="url">重载</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-24T19:11:01+08:00">
+                2018-04-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近突然觉得有必要重新整理一下Java基础知识，毕竟温故而新，打算按照“Thinking in java”中的章节安排重新梳理一下。首先介绍方法的重载,方法重载指的是方法名相同，具体的实现和参数列表等可以不同。就好像洗衣服包括：洗牛仔衣、洗球衣一样。<br>　　我们可以通过方法的参数列表中参数的类型和数目对重载的方法进行区分，以便保证方法调用的正确性，可能有人会问，为什么不可以通过方法的返回值类型进行区分呢？这是因为我们在调用方法时并不总是为了得到它的返回值，有时仅仅为了得到调用它时产生的“副作用”。如下面的列子所示当在main()函数中调用a()方法时,无法区分重载的方法中该调用哪个。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">　　<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">a</span><span class="params">()</span></span>&#123;</span><br><span class="line">　　System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">　　&#125;</span><br><span class="line">　　<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">a</span><span class="params">()</span></span>&#123;</span><br><span class="line">　　System.out.println(<span class="string">"OK"</span>);</span><br><span class="line">　　<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">　　&#125;</span><br><span class="line">　　<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">　　<span class="keyword">new</span> A().a();</span><br><span class="line">　　&#125;</span><br><span class="line">　　&#125;</span><br></pre></td></tr></table></figure></p>
+<p>　　还有在参数为基本类型时要注意数据类型的提升，也就是当传入的类型小于形式参数的类型，实际数据的类型就会提升，如int形参提升为long和double。有一点需要注意char提升为int。具体的例子如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span></span>&#123;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">info</span><span class="params">(<span class="keyword">double</span> a)</span></span>&#123;</span><br><span class="line">     System.out.println(a);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">info2</span><span class="params">(<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">    System.out.println(b);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">new</span> B().info(<span class="number">4</span>);</span><br><span class="line">    <span class="keyword">new</span> B().info(<span class="string">"a"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当也就是当传入的类型大于形式参数的类型时必须进行类型窄化转换，否则会报错。<br>　　最后总结一下关键字this的用法：(1)当在一个构造函数中需要调用其他的构造函数时，为了实现代码的重复利用可以用this+参数列表的形式直接调用现成的构造器，但是this必须放在第一句；(2)当类的成员变量和方法的形参同名时，为了避免成员变量被覆盖通常在变量前加this；(3)this可以指代引用当前函数所属类的对象。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/20/简单排序/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/20/简单排序/" itemprop="url">简单排序</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-20T11:56:09+08:00">
+                2018-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="简单排序简介"><a href="#简单排序简介" class="headerlink" title="简单排序简介"></a>简单排序简介</h3><p>排序指的是将某些杂乱无章的对象，按照某一逻辑顺序重新排列的过程，在java中一般通过接口来对实现对象的比较，常用的接口是Comparable接口和Comparator接口，这两个接口存在如下几点差异：<br>(1)Comparable接口需要实现compareTo()方法，而Comparator接口需要实现compare()方法即两者实现的方法不同；<br>(2)Comparable接口中的中的compareTo()方法在类的内部，参数只有一个(根据英文意思很好理解)，而Comparator接口的comparator()方法在类的外部,参数有两个，所以Comparable接口使用方便（可以直接调用)但是修改比较麻烦(要到类的里面修改源码),而Comparator使用起来比较麻烦(比较器作为参数传递给比较对象)，但是它比较灵活，我们可以根据不同的应用场景调用不同的比较器而不需要修改类的代码。接下来将介绍几种常用的排序算法。<br>简单排序<br>       简单排序算法包括：插入排序、选择排序、冒泡排序,这些排序算法的思路比较简单，但是复杂度都是O(n^2); </p>
+<h3 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h3><p>插入排序的思路是通过遍历的方式将后面待排序的元素与前面有序数组中的元素进行比较，找到插入点，插入点后的元素分别向后移动一位，最后将元素插入到插入点。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InsertSort</span> </span>&#123;<span class="comment">//插入排序的思想是通过将后面的值插入到前面的有序数组中</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;a.length;j++)&#123;</span><br><span class="line">            <span class="keyword">int</span> i,tem=a[j];</span><br><span class="line">            <span class="comment">//找到应该插入的位置</span></span><br><span class="line">            <span class="keyword">for</span>( i=<span class="number">0</span>;i&lt;j;i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(a[i]&gt;a[j])&#123;</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//将插入点后的元素后移</span></span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> m=j;m&gt;i;m--)&#123;</span><br><span class="line">                a[m]=a[m-<span class="number">1</span>];</span><br><span class="line">           &#125;</span><br><span class="line">                a[i]=tem;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            a[i]=i;</span><br><span class="line">        &#125;</span><br><span class="line">        a[<span class="number">0</span>]=<span class="number">16</span>;</span><br><span class="line">        a[<span class="number">1</span>]=<span class="number">11</span>;</span><br><span class="line">        <span class="keyword">new</span> InsertSort().sort(a);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="冒泡排序"><a href="#冒泡排序" class="headerlink" title="冒泡排序"></a>冒泡排序</h3><p>冒泡排序算法的思路就是不断的比较相邻的两个元素之间的大小，如果左边的元素大于右边，则交换两个元素的位置，反之则不变。这样就可以确保数组最右边的元素是最大的，遍历一次就确定了一个元素的位置便历N次数组就变得有序了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//冒泡排序的思想是通过比较相邻的两个元素使得最大的元素位于最右边</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BubbleSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> [] a)</span></span>&#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=a.length-<span class="number">1</span>;j&gt;<span class="number">0</span>;j--)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;j;i++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(a[i]&gt;a[i+<span class="number">1</span>])&#123;</span><br><span class="line">                    <span class="keyword">int</span> tem=a[i+<span class="number">1</span>];</span><br><span class="line">                    a[i+<span class="number">1</span>]=a[i];</span><br><span class="line">                    a[i]=tem;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            a[i]=i;</span><br><span class="line">        &#125;</span><br><span class="line">        a[<span class="number">0</span>]=<span class="number">12</span>;</span><br><span class="line">        a[<span class="number">1</span>]=<span class="number">11</span>;</span><br><span class="line">        <span class="keyword">new</span> BubbleSort().sort(a);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h3><p>选择排序的思想是遍历整个数组，用指针min标记最小值的位置，遍历结束后再交换min指向的元素和待排序数组的首元素，也就是不断的选出待排序数组的最小值。<br>//选择排序的思想是不断的选择数组中的最小值，先记住最小值的位置最后在进行交换<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SelectSort</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[]a)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> min,j;<span class="comment">//用来记录最小值的位置</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            min=i;</span><br><span class="line">            <span class="keyword">for</span>(j=i+<span class="number">1</span>;j&lt;a.length;j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(a[min]&gt;a[j])&#123;</span><br><span class="line">                   min=j;</span><br><span class="line">               &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">int</span> tem=a[i];</span><br><span class="line">            a[i]=a[min];</span><br><span class="line">            a[min]=tem;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[]args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            a[i]=i;</span><br><span class="line">        &#125;</span><br><span class="line">        a[<span class="number">0</span>]=<span class="number">16</span>;</span><br><span class="line">        a[<span class="number">1</span>]=<span class="number">11</span>;</span><br><span class="line">        <span class="keyword">new</span> SelectSort().sort(a);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/17/堆排序/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/17/堆排序/" itemprop="url">堆排序</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T10:17:30+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h3><p>堆排序:堆排序会用到一个叫做二叉堆的数据结构(父节点的元素大于它左右子节点)，根节点中的元素是最大的。排序的过程分为两个步骤：二叉堆的建立和从上到下的堆排序。建立二叉堆的思路就是将索引为[n/2]到1的元素分别与它的左右节点比较，并交换元素的位置确保根节点中的值最大。从上到下的排序过程思路是：交换最大元素和待排数组最后那个值的位置，从根节点开始比较他与两个子节点的大小，小于则交换。最后将待排序数组大小减一。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">StackSort</span> </span>&#123;</span><br><span class="line">    <span class="comment">//堆排序分为两步，第一步是堆的建立，第二步是通过下沉的方法进行排序</span></span><br><span class="line">    <span class="comment">//进行排序时候一般是从N/2开始不断的遍历将节点与两个子节点进行比较，</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ech</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tem=a[i];</span><br><span class="line">        a[i]=a[j];</span><br><span class="line">        a[j]=tem;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//-----------------------堆的建立------------------------</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sink</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> N,<span class="keyword">int</span> k)</span></span>&#123;<span class="comment">//N的值代表数组的最大索引，k的值代表元素在堆中的位置</span></span><br><span class="line">        <span class="keyword">while</span>(k*<span class="number">2</span>&lt;N)&#123;</span><br><span class="line">            <span class="keyword">int</span> j;</span><br><span class="line">            <span class="comment">//找到a[2k]和a[2k+1]中的较大的那个值</span></span><br><span class="line">            <span class="keyword">if</span>(a[<span class="number">2</span>*k]&gt;=a[<span class="number">2</span>*k+<span class="number">1</span>])&#123;</span><br><span class="line">               j=<span class="number">2</span>*k;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                j=<span class="number">2</span>*k+<span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span>(a[j]&gt;a[k])&#123;</span><br><span class="line">                ech(a,j,k);</span><br><span class="line">                k=j;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//--------------------------上浮函数-----------------------</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">swim</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> N,<span class="keyword">int</span> k)</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(k&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(a[k/<span class="number">2</span>]&lt;a[k])&#123;</span><br><span class="line">                ech(a,k/<span class="number">2</span>,k);</span><br><span class="line">                k=k/<span class="number">2</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//-------------------------下降函数-------------------------</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span> [] a)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> N=a.length-<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=N/<span class="number">2</span>;i&gt;=<span class="number">1</span>;i--)&#123;</span><br><span class="line">           sink(a,N,i);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span>(N&gt;<span class="number">1</span>)&#123;</span><br><span class="line">            ech(a,<span class="number">1</span>,N--);</span><br><span class="line">            sink(a,N,<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[]a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">20</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            a[i]=<span class="number">2</span>*i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">10</span>;j&lt;<span class="number">20</span>;j++)&#123;</span><br><span class="line">            a[j]=j;</span><br><span class="line">        &#125;</span><br><span class="line">        a[<span class="number">0</span>]=<span class="number">100</span>;</span><br><span class="line">        <span class="keyword">new</span> StackSort().sort(a);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/16/快速排序和归并排序/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/16/快速排序和归并排序/" itemprop="url">快速排序和归并排序</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-16T23:37:48+08:00">
+                2018-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>归并排序<br>       归并排序:因为简单排序算法的复杂度太大为O(n^2)所以人们设计了一种更加快的算法它在最坏的情况下的比较次数为O(NlogN)。算法的实现需要借助辅助数组，首先将待排数组复制到辅助数组中再将归并后的结果复制回原数组。我们首先介绍一下原地归并的代码。<br>//归并排序的算法复杂度为NlgN（它的比较次数为NlgN,访问数组的次数为6NlgN次）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">//原地归并排序，它需要一个辅助数组，将待排序数组复制到辅助数组，归并后再将结果复制到原数组</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergeSort</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[] bb;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merger</span><span class="params">(<span class="keyword">int</span> []aa, <span class="keyword">int</span> lo,<span class="keyword">int</span> mid,<span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">        <span class="comment">//对a[lo]-a[mid]和a[mid+1]-a[hi]进行归并排序</span></span><br><span class="line">        <span class="keyword">int</span> N=aa.length;</span><br><span class="line">        <span class="keyword">int</span> i=lo;</span><br><span class="line">        <span class="keyword">int</span> j=mid+<span class="number">1</span>;</span><br><span class="line">        bb=<span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">        <span class="comment">//将数组中的值复制到辅助数组中</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;aa.length;k++)&#123;</span><br><span class="line">            bb[k]=aa[k];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;aa.length;k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;mid)&#123;</span><br><span class="line">                aa[k]=bb[j++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j&gt;hi)&#123;</span><br><span class="line">                aa[k]=bb[i++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(bb[i]&lt;bb[j])&#123;</span><br><span class="line">               aa[k]=bb[i++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                aa[k]=bb[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[]aa=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">20</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            aa[i]=<span class="number">2</span>*i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">10</span>;j&lt;<span class="number">20</span>;j++)&#123;</span><br><span class="line">            aa[j]=j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> MergeSort().merger(aa,<span class="number">0</span>,<span class="number">9</span>,<span class="number">19</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;aa.length;i++)&#123;</span><br><span class="line">            System.out.println(aa[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>归并排序分为两大类:自上而下的归并排序和自下而上的归并排序。自上而下的归并排序是通过递归的方法不断的将数组均分为两部分进行并归。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//从上到下的归并排序算法</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergerDUsort</span> <span class="keyword">extends</span> <span class="title">MergeSort</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>[]aux;<span class="comment">//定义辅助数组，不然的话在递归调用时会报错</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[]a)</span></span>&#123;</span><br><span class="line">     aux=<span class="keyword">new</span> <span class="keyword">int</span> [a.length];</span><br><span class="line">     sort(a,<span class="number">0</span>,a.length-<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> lo,<span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(lo&gt;=hi)&#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">int</span> mid=(lo+hi)/<span class="number">2</span>;</span><br><span class="line">            sort(a,lo,mid);</span><br><span class="line">            sort(a,mid+<span class="number">1</span>,hi);</span><br><span class="line">            merger(a,lo,mid,hi);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merger</span><span class="params">(<span class="keyword">int</span> []aa, <span class="keyword">int</span> lo,<span class="keyword">int</span> mid,<span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">        <span class="comment">//对a[lo]-a[mid]和a[mid+1]-a[hi]进行归并排序</span></span><br><span class="line">        <span class="keyword">int</span> i=lo;</span><br><span class="line">        <span class="keyword">int</span> j=mid+<span class="number">1</span>;</span><br><span class="line">        <span class="comment">//将数组中的值复制到辅助数组中</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=lo;k&lt;aa.length;k++)&#123;</span><br><span class="line">            aux[k]=aa[k];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=lo;k&lt;aa.length;k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;mid)&#123;</span><br><span class="line">                aa[k]=aux[j++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j&gt;hi)&#123;</span><br><span class="line">                aa[k]=aux[i++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(aux[i]&lt;aux[j])&#123;</span><br><span class="line">                aa[k]=aux[i++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                aa[k]=aux[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[]a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">20</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            a[i]=<span class="number">2</span>*i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">10</span>;j&lt;<span class="number">20</span>;j++)&#123;</span><br><span class="line">            a[j]=j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> MergerDUsort().sort(a);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从下到上的归并排序：归并的规模先是1(即先将相邻的两个元素进行归并）再不断的倍增知道大于等于数组的规模的一半。它的实现不需要借助递归，通过简单的循环就可以实现。代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//从下到上的归并排序算法，主要思想就是归并的规模从一开始逐渐变大知道为N-1</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MergerUDsort</span> </span>&#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">int</span>[]aux;<span class="comment">//定义一个辅助数组</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">merger</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> lo,<span class="keyword">int</span> mid,<span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i=lo,j=mid+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=lo;k&lt;a.length;k++ )&#123;</span><br><span class="line">            aux[k]=a[k];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">0</span>;k&lt;a.length;k++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;mid)</span><br><span class="line">                a[k]=aux[j++];</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(j&gt;hi)&#123;</span><br><span class="line">                a[k]=aux[i++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(aux[i]&lt;aux[j])&#123;</span><br><span class="line">                a[k]=aux[i++];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                a[k]=aux[j++];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[]a)</span></span>&#123;</span><br><span class="line">        aux=<span class="keyword">new</span> <span class="keyword">int</span>[a.length];</span><br><span class="line">        <span class="keyword">int</span> size;</span><br><span class="line">        <span class="keyword">for</span>(size=<span class="number">1</span>;size&lt;a.length;size=size*<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> lo=<span class="number">0</span>;lo&lt;a.length-size;lo=lo+size*<span class="number">2</span>)&#123;</span><br><span class="line">                merger(a,lo,lo+size-<span class="number">1</span>,Math.min(lo+size+size-<span class="number">1</span>,a.length-<span class="number">1</span>));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[]a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">20</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            a[i]=<span class="number">2</span>*i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">10</span>;j&lt;<span class="number">20</span>;j++)&#123;</span><br><span class="line">            a[j]=j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> MergerUDsort().sort(a);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>快速排序<br>       快速排序:可能有人会觉得归并排序已经足够优秀了，没有必要研究其他排序算法了，这种想法显然是错误的因为归并排序虽然比较次数少，但是它的空间复杂度是不可忽视的。除此之外算法的比较次数并不是评价算法性能好坏的唯一指标(比如访问数组的次数等因素也要考虑)。所以研究一种在时间和空间上平衡的算法是很有必要的。与归并排序总是将数组均等分割归并不同，快速排序的切割点并不是固定的。每次排序总能够确定一个元素的位置，他的左边的元素小于等于他，右边的元素大于等于他。具体实现代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">//快速排序和归并排序一样都是基于分治的思想进行排序来降低算法的复杂度，但是归并排序是平均分割，</span></span><br><span class="line"><span class="comment">// 而快速排序的分割点并不一定是中点，快速排序需要先确定切割点的位置</span></span><br><span class="line">    <span class="comment">//也正是这个原因快速排序是先对数组进行处理再进行递归，而归并排序是先进行递归对数组进行处理</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">QuickSort</span> </span>&#123;</span><br><span class="line">    <span class="comment">//切割函数,返回切割点的位置</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">saparation</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> lo,<span class="keyword">int</span> hi)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> v = a[lo];</span><br><span class="line">        <span class="keyword">int</span> i = lo;</span><br><span class="line">        <span class="keyword">int</span> j = hi + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="comment">//i从lo+1开始不断的查找，直到找到比v大的元素</span></span><br><span class="line">            <span class="keyword">while</span> (a[++i]&lt; v) <span class="keyword">if</span> (i==hi) <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">//j从hi开始不断的遍历数组，直到找到比v小的元素</span></span><br><span class="line">            <span class="keyword">while</span> (v&lt;a[--j]) <span class="keyword">if</span> (j ==lo)  <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">//exc(a, i, j);//有逻辑错误，这句话不能在这如果i的值比j大则不能够交换</span></span><br><span class="line">            <span class="keyword">if</span> (i &gt;= j) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            exc(a, i, j);</span><br><span class="line">           <span class="comment">// exc(a,lo,j);//最后的这个交换应该是找到j的位置后再进行交换</span></span><br><span class="line">        &#125;</span><br><span class="line">        exc(a,lo,j);</span><br><span class="line">        <span class="keyword">return</span> j;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//交换数组元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exc</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> b,<span class="keyword">int</span> c)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tem=a[b];</span><br><span class="line">            a[b]=a[c];</span><br><span class="line">            a[c]=tem;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> min,<span class="keyword">int</span> max)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> lo=min;</span><br><span class="line">        <span class="keyword">int</span> hi=max;</span><br><span class="line">        <span class="keyword">if</span>(hi&lt;=lo) <span class="keyword">return</span>;<span class="comment">//只有lo&lt;hi迭代才会继续</span></span><br><span class="line">        <span class="keyword">int</span> j=saparation(a,lo,hi);</span><br><span class="line">        sort(a,lo,j-<span class="number">1</span>);</span><br><span class="line">        sort(a,j+<span class="number">1</span>,hi);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[]a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">20</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            a[i]=<span class="number">2</span>*i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">10</span>;j&lt;<span class="number">20</span>;j++)&#123;</span><br><span class="line">            a[j]=j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> QuickSort().sort(a,<span class="number">0</span>,a.length-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>快速排序算法中还有一种三向切分的开速排序算法，他主要针对的情况是当数组中重复元素比较多的情况，对于有大量重复元素的数组，他能将排序时间从线性对数级别降低到线性级别。它定义三个指针：lt、gt、i。lo到lt-1范围内都是小于那个元素的，lt到i-1都是等于那个比较元素的，i到gt元素不确定，gt+1到hi都是大于那个元素的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreeQuickSort</span> </span>&#123;</span><br><span class="line">    <span class="comment">//三向切分的快速排序算法与快速排序算法的基本思想是差不多的主要针对的是数组中有很多</span></span><br><span class="line">    <span class="comment">//重复元素的情况，</span></span><br><span class="line">    <span class="keyword">int</span> lt,i,gt;<span class="comment">//首先定义三个指针，lo到lt-1都是比那个值v小的元素，lt到i-1都是和v相等的值，i到gt都是没有确定的值</span></span><br><span class="line">    <span class="comment">//gt+1到hi都是比v大的元素</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sort</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> lo,<span class="keyword">int</span> hi)</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(lo&gt;=hi)&#123;</span><br><span class="line">          <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        lt=lo;</span><br><span class="line">        <span class="keyword">int</span> v=a[lo];</span><br><span class="line">        gt=hi;</span><br><span class="line">        <span class="keyword">int</span> i=lo+<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(i&gt;gt) <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(a[i]&gt;v)&#123;</span><br><span class="line">                ech(a,i,gt--);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span>(a[i]&lt;v)&#123;</span><br><span class="line">                ech(a,i++,lt++);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> i++;</span><br><span class="line">        &#125;</span><br><span class="line">        sort(a,lo,lt-<span class="number">1</span>);</span><br><span class="line">        sort(a,gt+<span class="number">1</span>,hi);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ech</span><span class="params">(<span class="keyword">int</span>[]a,<span class="keyword">int</span> i,<span class="keyword">int</span> j)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> tem=a[i];</span><br><span class="line">            a[i]=a[j];</span><br><span class="line">            a[j]=tem;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[]a=<span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">20</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">            a[i]=<span class="number">2</span>*i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">10</span>;j&lt;<span class="number">20</span>;j++)&#123;</span><br><span class="line">            a[j]=j;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">new</span> ThreeQuickSort().sort(a,<span class="number">0</span>,a.length-<span class="number">1</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;a.length;i++)&#123;</span><br><span class="line">            System.out.println(a[i]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/04/11/二叉查找树/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -449,7 +1759,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">30</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -460,7 +1770,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -471,7 +1781,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
