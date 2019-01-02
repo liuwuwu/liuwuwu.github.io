@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring读书笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用前的准备在使用@AspectJ之前，首先必须保证使用的是java5.0及以上版本。spring在处理@AspectJ注解表达式时需要将spring的asm模块添加到类路径中。asm是轻量级的字节码处理框架，因为Java的反射机制无法获取入参名，spring就利用sam处理@AspectJ中所描述的方法入参名。此外spring采用@AspectJ提供的@AspectJ注解类及相应的解析库，需要在">
+<meta name="keywords" content="Spring读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring读书笔记——基于@AspectJ的AOP">
+<meta property="og:url" content="http://yoursite.com/2018/12/25/Spring读书笔记——基于@AspectJ的AOP/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="使用前的准备在使用@AspectJ之前，首先必须保证使用的是java5.0及以上版本。spring在处理@AspectJ注解表达式时需要将spring的asm模块添加到类路径中。asm是轻量级的字节码处理框架，因为Java的反射机制无法获取入参名，spring就利用sam处理@AspectJ中所描述的方法入参名。此外spring采用@AspectJ提供的@AspectJ注解类及相应的解析库，需要在">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-24T13:20:57.881Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring读书笔记——基于@AspectJ的AOP">
+<meta name="twitter:description" content="使用前的准备在使用@AspectJ之前，首先必须保证使用的是java5.0及以上版本。spring在处理@AspectJ注解表达式时需要将spring的asm模块添加到类路径中。asm是轻量级的字节码处理框架，因为Java的反射机制无法获取入参名，spring就利用sam处理@AspectJ中所描述的方法入参名。此外spring采用@AspectJ提供的@AspectJ注解类及相应的解析库，需要在">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/25/Spring读书笔记——基于@AspectJ的AOP/">
+
+
+
+
+
+  <title>Spring读书笔记——基于@AspectJ的AOP | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/25/Spring读书笔记——基于@AspectJ的AOP/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring读书笔记——基于@AspectJ的AOP</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T19:31:27+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="使用前的准备"><a href="#使用前的准备" class="headerlink" title="使用前的准备"></a>使用前的准备</h3><p>在使用@AspectJ之前，首先必须保证使用的是java5.0及以上版本。spring在处理@AspectJ注解表达式时需要将spring的asm模块添加到类路径中。asm是轻量级的字节码处理框架，因为Java的反射机制无法获取入参名，spring就利用sam处理@AspectJ中所描述的方法入参名。此外spring采用@AspectJ提供的@AspectJ注解类及相应的解析库，需要在pom.xml文件中添加aspectj.weaver和aspectj.tools类包的依赖。下面是一个简单的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AspectJ</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PreGretingAspect</span></span>&#123;</span><br><span class="line"><span class="meta">@Before</span>(<span class="string">"execution(* greetTo(..))"</span>)<span class="comment">//定义切点和增强类型</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforeGreting</span><span class="params">()</span></span>&#123;<span class="comment">//增强的横切逻辑</span></span><br><span class="line">System.out.println(<span class="string">"尊敬的顾客您好"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="通过配置使用-AspectJ切面"><a href="#通过配置使用-AspectJ切面" class="headerlink" title="通过配置使用@AspectJ切面"></a>通过配置使用@AspectJ切面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//目标bean</span></span><br><span class="line">&lt;bean id=<span class="string">"waiter"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.NativeWaiter"</span>/&gt;</span><br><span class="line"><span class="comment">//使用了@AspectJ注解的切面类</span></span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.aspectj.example.PreGreetingAspect"</span>/&gt;</span><br><span class="line"><span class="comment">//自动代理创建器，自动将@AspectJ注解切面类织入到目标bean中</span></span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>如果使用基于schema的aop命名空间进行配置，就更加简单了。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;beans&gt;</span><br><span class="line">&lt;aop:aspectj-autoproxy/&gt;</span><br><span class="line">&lt;bean id=<span class="string">"waiter"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.NativeWaiter"</span>/&gt;</span><br><span class="line">&lt;bean <span class="string">"com.smart.aspectj.example.PreGreetingAspect"</span>/&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure></p>
+<p>首先在配置文件处引入aop的命名空间，接着通过aop命名空间的<a href="aop:aspectj-autoproxy/" target="_blank" rel="noopener">aop:aspectj-autoproxy/</a>自动为spring容器中那些匹配@AspectJ切面的Bean创建代理完成切面的织入工作。</p>
+<h4 id="切点表达式函数"><a href="#切点表达式函数" class="headerlink" title="切点表达式函数"></a>切点表达式函数</h4><p>为了描述方便将execution(<em> greetTo(..))中的execution()称为函数，匹配串</em> greetTo(..)称为入参。</p>
+<h5 id="函数中使用通配符"><a href="#函数中使用通配符" class="headerlink" title="函数中使用通配符"></a>函数中使用通配符</h5><p>@AspectJ中支持3种通配符：<br><strong>*</strong>：匹配任意字符，但它只能匹配上下文中的一个元素；<br><strong>..</strong>：匹配任意字符，可以匹配上下文中的多个元素，但是在表示类时，必须和*联合使用，而在表示入参时可以单独使用；<br><strong>+</strong>：表示按类型匹配指定类的所有类型，必须跟在类名后面，继承或者扩展指定类的所有类，同时还包括指定类本身。</p>
+<h4 id="不同的增强类型"><a href="#不同的增强类型" class="headerlink" title="不同的增强类型"></a>不同的增强类型</h4><p> @AspectJ为各种增强提供了不同的注解类：<br> 1.@Before<br> 前置增强，相当于BeforeAdvice。拥有两个成员：value(用于定义切点)。argNames:由于无法通过Java的反射机制获取方法的入参名，所以如果在编译阶段未启用调试信息，或者需要在运行期解析切点，就必须通过这个成员指定注解所标注的增强方法的参数名，多个参数用，号分隔。<br> 2.@AfterReturning<br> 后置增强，相当于AfterReturningAdvice。该注解类拥有4个成员：value(定义切点)，pointcut:表示切点的信息。如果显示指定pointcut的值，那么他将覆盖value的值。returning(将目标对象的方法返回值绑定给增强的方法)。args(如前所述)<br> 3.@Around<br> 环绕增强，相当于MentodInterceptor。Around注解类拥有两个成员：value(定义切点)，argsNames(如前所述)。<br> 4.@AfterThrowing<br>抛出增强，相当于ThrowsAdvice。该类注解共有4个成员:value(定义切点)，pointcut(如前所述)，throwing(将抛出的异常绑定到增强方法中)，args(如前所述)。<br>5.@After<br>Final增强，不管是抛出增强还是正常退出，该增强都会得到执行，该增强没有对应的接口，可以把他看成AfterReturningAdvice和ThrowsAdvice的混合物。一般用于释放资源。该注解类拥有两个成员(value和argsName)<br>6.@DeclareParents<br>引介增强，相当于IntroductionInterceptor。拥有两个成员value(定义切点，他表示在哪个目标类上添加引介增强)，defauleImpl(默认的接口实现类)。</p>
+<h4 id="切点函数种类"><a href="#切点函数种类" class="headerlink" title="切点函数种类"></a>切点函数种类</h4><p>1.@annotation表示标注了某个注解的所有方法例子如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Before</span>(<span class="meta">@annotation</span>(com.smart.anno.NeedTest))<span class="comment">//假设Waiter的greet方法标注了@NeedTest注解，spring会将切面注入到该方法中</span></span><br></pre></td></tr></table></figure></p>
+<p>2.execution()是最常用的切点函数，语法如下：execution(&lt;修饰符模式&gt;？&lt;返回类型模式&gt;&lt;方法名模式&gt;(&lt;参数模式&gt;&lt;异常模式&gt;?)除了返回类型、方法名、参数等模式外其它项都是可选的。<br>在类名模式串中“.<em>”表示包下的所有类，而“..</em>”表示包、子孙包下的所有类。通过方法入参定义切点时，可以使用“*”和“..”通配符，前者表示任意类型的参数，后者表示任意类型的参数且参数的个数不限。<br>3.args()和@args():前者接收一个类名，表示目标类方法入参对象是指定类(包含子类时)，切点匹配如args(com.smart.Waiter);后者接收一个注解类的类名，当方法的运行时入参对象标注了指定的注解时，匹配切点。例子见书p287页。<br>4.@within(),通过类匹配模式声明切点，该函数定义的连接点是针对目标类而言的，而非针对运行期对象而言，与execution函数不同的是该函数指定的最小范围只能是类。which(com.smart.A)匹配A中的所有方法。<br>5.@target()和@Within(),@target(M)匹配任意标注了@M的目标类，@Within()匹配标注了@M的类及子孙类。<strong>@target()、@Within()和@annotation针对的都是目标类，而非运行时的引用类型而言，所以如果在接口上标注实现该接口的类都不会匹配该切点</strong><br>6.target和this,前者通过判断目标类是否按类型匹配指定类来决定连接点是否匹配，而this通过判断代理类是否按类型匹配指定类来决定是否和切点匹配。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring读书笔记/" rel="tag"># Spring读书笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/24/Spring读书笔记——AOP的基础/" rel="next" title="Spring读书笔记——AOP的基础">
+                <i class="fa fa-chevron-left"></i> Spring读书笔记——AOP的基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/26/@AspectJ进阶/" rel="prev" title="Spring读书笔记——@AspectJ进阶">
+                Spring读书笔记——@AspectJ进阶 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用前的准备"><span class="nav-number">1.</span> <span class="nav-text">使用前的准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过配置使用-AspectJ切面"><span class="nav-number">2.</span> <span class="nav-text">通过配置使用@AspectJ切面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#切点表达式函数"><span class="nav-number">2.1.</span> <span class="nav-text">切点表达式函数</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#函数中使用通配符"><span class="nav-number">2.1.1.</span> <span class="nav-text">函数中使用通配符</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不同的增强类型"><span class="nav-number">2.2.</span> <span class="nav-text">不同的增强类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#切点函数种类"><span class="nav-number">2.3.</span> <span class="nav-text">切点函数种类</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

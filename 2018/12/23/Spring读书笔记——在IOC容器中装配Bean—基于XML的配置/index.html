@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring读书笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在使用spring的各项神奇而丰富的功能之前必须要装配好bean，并且建立好他们之间的关系。 基于XML的配置依赖注入spring主要支持三种注入方式：属性注入、构造方法注入、工厂方法注入； 属性注入定义：属性注入是指通过setXxx()方法注入bean的属性值或者依赖对象；优点：具有可选择性和灵活性高的优点；要求：bean必须要提供一个默认的构造函数，并为需要注入的属性提供对应的setter方法">
+<meta name="keywords" content="Spring读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring读书笔记——在IOC容器中装配Bean—基于XML的配置">
+<meta property="og:url" content="http://yoursite.com/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于XML的配置/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="在使用spring的各项神奇而丰富的功能之前必须要装配好bean，并且建立好他们之间的关系。 基于XML的配置依赖注入spring主要支持三种注入方式：属性注入、构造方法注入、工厂方法注入； 属性注入定义：属性注入是指通过setXxx()方法注入bean的属性值或者依赖对象；优点：具有可选择性和灵活性高的优点；要求：bean必须要提供一个默认的构造函数，并为需要注入的属性提供对应的setter方法">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-23T13:02:47.742Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring读书笔记——在IOC容器中装配Bean—基于XML的配置">
+<meta name="twitter:description" content="在使用spring的各项神奇而丰富的功能之前必须要装配好bean，并且建立好他们之间的关系。 基于XML的配置依赖注入spring主要支持三种注入方式：属性注入、构造方法注入、工厂方法注入； 属性注入定义：属性注入是指通过setXxx()方法注入bean的属性值或者依赖对象；优点：具有可选择性和灵活性高的优点；要求：bean必须要提供一个默认的构造函数，并为需要注入的属性提供对应的setter方法">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于XML的配置/">
+
+
+
+
+
+  <title>Spring读书笔记——在IOC容器中装配Bean—基于XML的配置 | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于XML的配置/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring读书笔记——在IOC容器中装配Bean—基于XML的配置</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T21:02:01+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在使用spring的各项神奇而丰富的功能之前必须要装配好bean，并且建立好他们之间的关系。</p>
+<h2 id="基于XML的配置"><a href="#基于XML的配置" class="headerlink" title="基于XML的配置"></a>基于XML的配置</h2><h3 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h3><p>spring主要支持三种注入方式：属性注入、构造方法注入、工厂方法注入；</p>
+<h4 id="属性注入"><a href="#属性注入" class="headerlink" title="属性注入"></a>属性注入</h4><p><strong>定义</strong>：属性注入是指通过setXxx()方法注入bean的属性值或者依赖对象；<br><strong>优点</strong>：具有可选择性和灵活性高的优点；<br><strong>要求</strong>：bean必须要提供一个默认的构造函数，并为需要注入的属性提供对应的setter方法。Spring通过默认的构造函数实例化bean对象，通过反射机制然后调用setter方法注入属性值。<br>JavaBean的属性命名规范：xxx属性对应setXxx()方法。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.smart.ditype</span><br><span class="line"><span class="comment">//属性注入的例子</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span></span>&#123;</span><br><span class="line">   <span class="keyword">private</span> String brand;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBrand</span><span class="params">(String brand)</span></span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.brand=brand;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//配置文件中的内容如下：</span></span><br><span class="line">   &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">       &lt;property name=<span class="string">"brand"</span> value=<span class="string">"红旗71"</span>/&gt;</span><br><span class="line">   &lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+<p>需要指出的是，spring中只会检查Bean中是否有对应的Setter方法，至于Bean中是否有对应的成员变更则不做要求，举个例子上面中class类中不一定要拥有brand成员变量。</p>
+<h4 id="构造函数注入"><a href="#构造函数注入" class="headerlink" title="构造函数注入"></a>构造函数注入</h4><p>构造函数注入保证了一些必要的属性在Bean实例化时就得到设置，确保Bean在实例化后就可以使用。</p>
+<h5 id="构造函数注入的参数匹配"><a href="#构造函数注入的参数匹配" class="headerlink" title="构造函数注入的参数匹配"></a>构造函数注入的参数匹配</h5><p>构造函数注入中可以按照如下方式匹配入参：按类型匹配入参、按索引匹配入参、联合使用类型和索引匹配入参、通过自身类型反射匹配入参。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//按照类型匹配入参</span></span><br><span class="line">&lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg type=<span class="string">"java.lang.String"</span> value=<span class="string">"红旗72"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> <span class="comment">//按照索引匹配,构造函数的第一个索引为0</span></span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg index=<span class="string">"0"</span> value=<span class="string">"红旗72"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> <span class="comment">//联合使用索引和类型进行匹配</span></span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg index=<span class="string">"0"</span>,type=<span class="string">"java.lang.String"</span> value=<span class="string">"红旗72"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> <span class="comment">//通过自身类型反射匹配入参</span></span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg value=<span class="string">"Jhon"</span>&gt;</span><br><span class="line">  &lt;constructor-arg ref bean=<span class="string">"car"</span>&gt;</span><br><span class="line">   &lt;constructor-arg ref bean=<span class="string">"office"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> calss=<span class="string">"com.smart.ditype.Car"</span> /&gt;</span><br><span class="line">  &lt;bean id=<span class="string">"office"</span> calss=<span class="string">"com.smart.ditype.Office"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>通过自身类型反射匹配入参要求构造函数的入参类型是可以分辨的(非基础类型且入参类型各异)，由于Java的反射机制可以获取构造函数的入参类型，即使构造函数注入的配置不提供类型和索引信息，spring依旧可以正确的完成构造函数的注入工作。</p>
+<h5 id="构造函数注入中的循环依赖问题"><a href="#构造函数注入中的循环依赖问题" class="headerlink" title="构造函数注入中的循环依赖问题"></a>构造函数注入中的循环依赖问题</h5><p>spring容器对构造函数配置的bean进行实例化有一个前提，即bean构造函数的入参引用的对象必须准备就绪，由于这个机制的限制，如果两个bean都采用构造函数注入，而且都通过构造函数入参引用对方，就会发生类似死锁的循环依赖问题。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span></span>&#123;</span><br><span class="line">     <span class="comment">//构造函数依赖一个boss实例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Car</span><span class="params">(String brand,Boss boss)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.brand=brand;</span><br><span class="line">        <span class="keyword">this</span>.boss=boss;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Boss</span></span>&#123;</span><br><span class="line">    <span class="comment">//构造函数依赖一个car实例</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Boss</span><span class="params">(String name,Car car)</span></span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name=name;</span><br><span class="line">  <span class="keyword">this</span>.car=car;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//配置文件为</span></span><br><span class="line">&lt;bean id=<span class="string">"car"</span> calss=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"0"</span> value=<span class="string">"红旗"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"1"</span> ref=<span class="string">"boss"</span>&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"><span class="comment">//----------------------------</span></span><br><span class="line">&lt;bean id=<span class="string">"boss"</span> calss=<span class="string">"com.smart.ditype.Boss"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"0"</span> value=<span class="string">"John"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"1"</span> ref=<span class="string">"car"</span>&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+<p>解决方法：只需要修改Bean的代码，将构造函数注入方式改为属性注入。</p>
+<h4 id="工厂方法注入"><a href="#工厂方法注入" class="headerlink" title="工厂方法注入"></a>工厂方法注入</h4><p>在一些遗留的系统或者第三方类库中，我们还会遇到工厂方法，这时可以使用spring工厂方法注入的方式进行配置。</p>
+<h4 id="非静态工厂方法"><a href="#非静态工厂方法" class="headerlink" title="非静态工厂方法"></a>非静态工厂方法</h4><p>有些工厂方法是非静态的，必须实例化工厂类后才能够调用工厂方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.smart.ditype</span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CarFactory</span></span>&#123;</span><br><span class="line"><span class="comment">//创建car的工厂方法</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Car <span class="title">createCar</span><span class="params">()</span></span>&#123;</span><br><span class="line">       Car car=<span class="keyword">new</span> Car();</span><br><span class="line">       car.setBrand(<span class="string">""</span>);</span><br><span class="line">       <span class="keyword">return</span> car</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 配置文件如下：</span></span><br><span class="line">&lt;bean id=<span class="string">"carFactory"</span> calss=<span class="string">"com.smart.ditype.CarFactory"</span>/&gt;</span><br><span class="line">&lt;bean id=<span class="string">"car5"</span> factory-bean=<span class="string">"carFactory"</span> factory-method=<span class="string">"createcar"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="静态工厂方法"><a href="#静态工厂方法" class="headerlink" title="静态工厂方法"></a>静态工厂方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.smart.ditype</span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CarFactory</span></span>&#123;</span><br><span class="line"><span class="comment">//创建car的工厂方法</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Car <span class="title">createCar</span><span class="params">()</span></span>&#123;</span><br><span class="line">   ....</span><br><span class="line">   <span class="comment">// 配置文件如下：</span></span><br><span class="line">&lt;bean id=<span class="string">"car5"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.CarFactory"</span> factory-method=<span class="string">"createcar"</span>/&gt;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring读书笔记/" rel="tag"># Spring读书笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/21/BeanFactory和ApplicationContext/" rel="next" title="BeanFactory和ApplicationContext">
+                <i class="fa fa-chevron-left"></i> BeanFactory和ApplicationContext
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于注解的配置/" rel="prev" title="Spring读书笔记——在IOC容器中装配Bean—基于注解的配置">
+                Spring读书笔记——在IOC容器中装配Bean—基于注解的配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基于XML的配置"><span class="nav-number">1.</span> <span class="nav-text">基于XML的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖注入"><span class="nav-number">1.1.</span> <span class="nav-text">依赖注入</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#属性注入"><span class="nav-number">1.1.1.</span> <span class="nav-text">属性注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#构造函数注入"><span class="nav-number">1.1.2.</span> <span class="nav-text">构造函数注入</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#构造函数注入的参数匹配"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">构造函数注入的参数匹配</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#构造函数注入中的循环依赖问题"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">构造函数注入中的循环依赖问题</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工厂方法注入"><span class="nav-number">1.1.3.</span> <span class="nav-text">工厂方法注入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非静态工厂方法"><span class="nav-number">1.1.4.</span> <span class="nav-text">非静态工厂方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#静态工厂方法"><span class="nav-number">1.1.5.</span> <span class="nav-text">静态工厂方法</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

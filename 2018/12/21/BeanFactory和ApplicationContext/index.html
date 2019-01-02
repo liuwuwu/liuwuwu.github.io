@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring读书笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="BeanFactory是spring容器中最核心的接口，他提供了高级的IOC配置，使得管理不同的Java对象成为可能。应用上下文建立在BeanFactory的基础之上，提供了很多面向应用的功能。对于两者的用途我们可以进行简单的划分：BeanFactory是spring的基础，面向spring本身。而ApplicationContext是面向使用spring的开发者，几乎所有的场合都可以直接使用Ap">
+<meta name="keywords" content="Spring读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BeanFactory和ApplicationContext">
+<meta property="og:url" content="http://yoursite.com/2018/12/21/BeanFactory和ApplicationContext/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="BeanFactory是spring容器中最核心的接口，他提供了高级的IOC配置，使得管理不同的Java对象成为可能。应用上下文建立在BeanFactory的基础之上，提供了很多面向应用的功能。对于两者的用途我们可以进行简单的划分：BeanFactory是spring的基础，面向spring本身。而ApplicationContext是面向使用spring的开发者，几乎所有的场合都可以直接使用Ap">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-21T15:17:11.616Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BeanFactory和ApplicationContext">
+<meta name="twitter:description" content="BeanFactory是spring容器中最核心的接口，他提供了高级的IOC配置，使得管理不同的Java对象成为可能。应用上下文建立在BeanFactory的基础之上，提供了很多面向应用的功能。对于两者的用途我们可以进行简单的划分：BeanFactory是spring的基础，面向spring本身。而ApplicationContext是面向使用spring的开发者，几乎所有的场合都可以直接使用Ap">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/21/BeanFactory和ApplicationContext/">
+
+
+
+
+
+  <title>BeanFactory和ApplicationContext | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/21/BeanFactory和ApplicationContext/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BeanFactory和ApplicationContext</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T23:16:39+08:00">
+                2018-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>BeanFactory是spring容器中最核心的接口，他提供了高级的IOC配置，使得管理不同的Java对象成为可能。应用上下文建立在BeanFactory的基础之上，提供了很多面向应用的功能。对于两者的用途我们可以进行简单的划分：BeanFactory是spring的基础，面向spring本身。而ApplicationContext是面向使用spring的开发者，几乎所有的场合都可以直接使用ApplicationContext而非BeanFactory。</p>
+<h3 id="BeanFactory和ApplicationContext的差异"><a href="#BeanFactory和ApplicationContext的差异" class="headerlink" title="BeanFactory和ApplicationContext的差异"></a>BeanFactory和ApplicationContext的差异</h3><p>1.bean的初始化时机不同：BeanFactory在初始化容器时并没有实例化bean,只有在第一次访问某个bean时候才会实例化目标bean；<br>2.注册BeanPostProcessor、InstantiationAwareBeanPostProcessor、BeanFactoryPostProcessor的方式不同。ApplicationContext会通过反射机制自动的识别配置文件中的BeanPostProcessor、InstantiationAwareBeanPostProcessor、BeanFactoryPostProcessor并将他们自动的注册到应用上下文中，而BeanFactory需要在代码中通过手工调用addBeanPostProcessor()方法进行注册。</p>
+<h3 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h3><h4 id="BeanFactory中Bean的生命周期"><a href="#BeanFactory中Bean的生命周期" class="headerlink" title="BeanFactory中Bean的生命周期"></a>BeanFactory中Bean的生命周期</h4><p>1.当调用getBean()方法向容器请求一个Bean时，如果容器注册了InstantiationAwareBeanPostProcessor接口，则在实例化Bean之前就postProcessBeforeInstantiation()方法；</p>
+<p>2.根据配置情况调用Bean的构造函数或者工厂方法实例化Bean；</p>
+<p>3.如果容器实现了InstantiationAwareBeanPostProcessor接口，那么在实例化Bean之后，将调用该接口的postProcessAfterInstantiation()方法,可以在这里对Bean进行处理；</p>
+<p>4.如果Bean配置了属性信息，在将配置值设置到Bean对应的属性之前会先调用InstantiationAwareBeanPostProcessor接口的postProcessPropetryValues()方法；</p>
+<p>5.调用Bean的set方法设置对应的属性值；</p>
+<p>6.如果Bean实现了BeanNameAware接口，将调用该接口的setBeanName()方法，设置Bean的名字；</p>
+<p>7.如果Bean实现了BeanFactoryAware接口,调用该接口的setBeanFactory()方法,设置对应的BeanFactory；</p>
+<p>8.如果BeanFactory装配了BeanPostProcessor后处理器，则将调用BeanPostProcessor的postProcessBeforeInitialization(Object bean,String beanName)方法对Bean进行加工操作，<strong>BeanPostProcessor</strong>在Spring框架中占有十分重要的地位，为容器提供了后续加工处理的切入点，如动态代理，AOP等都是通过他实现的；</p>
+<p>9.如果Bean实现了Initiali接口，则调用该接口的afterPropertiesSet()方法；</p>
+<p>10.执行配置文件中的init-method方法；<br>11.执行BeanPostProcessor接口的postProcessAfterInitialization(Object bean,String beanName)方法进行加工操作;</p>
+<p>12.如果是单例Bean则放入spring容器的缓冲池中，不是则返回给调用者，调用者负责后续生命周期的管理；</p>
+<p>13.对于单例Bean,容器关闭时，如果Bean实现了DisposableBean接口,则调用destory()方法进行释放资源和记录日志的操作；</p>
+<p>14.调用destory-method中指定的Bean销毁方法；</p>
+<h4 id="ApplicationContext中Bean的生命周期"><a href="#ApplicationContext中Bean的生命周期" class="headerlink" title="ApplicationContext中Bean的生命周期"></a>ApplicationContext中Bean的生命周期</h4><p>Bean在应用上下文中的生命周期和BeanFactory中的类似，不同主要体现在两点：<br>1.如果Bean实现了ApplicationContextAware接口，则会在上述8步和9步之间执行setApplicationContext()方法；</p>
+<p>2.此外如果在配置文件中声明了工厂后处理器接口BeanFactoryPostProcessor，则应用上下文在装载配置文件后、初始化Bean实例之前会调用这些BeanFactoryPostProcessor对配置信息进行加工处理。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring读书笔记/" rel="tag"># Spring读书笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/21/Spring读书笔记——IOC容器概述/" rel="next" title="Spring读书笔记——IOC容器概述">
+                <i class="fa fa-chevron-left"></i> Spring读书笔记——IOC容器概述
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于XML的配置/" rel="prev" title="Spring读书笔记——在IOC容器中装配Bean—基于XML的配置">
+                Spring读书笔记——在IOC容器中装配Bean—基于XML的配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#BeanFactory和ApplicationContext的差异"><span class="nav-number">1.</span> <span class="nav-text">BeanFactory和ApplicationContext的差异</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bean的生命周期"><span class="nav-number">2.</span> <span class="nav-text">Bean的生命周期</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#BeanFactory中Bean的生命周期"><span class="nav-number">2.1.</span> <span class="nav-text">BeanFactory中Bean的生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ApplicationContext中Bean的生命周期"><span class="nav-number">2.2.</span> <span class="nav-text">ApplicationContext中Bean的生命周期</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

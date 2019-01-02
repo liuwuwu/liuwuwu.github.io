@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Spring读书笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="AOP（Aspect Oriented Programing）面向切面编程，他能够将分散在各个业务逻辑代码中的相同代码通过横向切割的方式抽取到一个独立的模块中，将横切逻辑与业务逻辑分离。按照软件重构的思想，如果多个类中出现了相同的代码，则可以定义一个父类，将这些相同的代码定义到父类中，但是在有些情况下重复的代码位于方法中(如性能监控代码)，我们无法通过定义父类使用继承体系进行纵向的抽取，只能通过A">
+<meta name="keywords" content="Spring读书笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring读书笔记——AOP的基础">
+<meta property="og:url" content="http://yoursite.com/2018/12/24/Spring读书笔记——AOP的基础/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="AOP（Aspect Oriented Programing）面向切面编程，他能够将分散在各个业务逻辑代码中的相同代码通过横向切割的方式抽取到一个独立的模块中，将横切逻辑与业务逻辑分离。按照软件重构的思想，如果多个类中出现了相同的代码，则可以定义一个父类，将这些相同的代码定义到父类中，但是在有些情况下重复的代码位于方法中(如性能监控代码)，我们无法通过定义父类使用继承体系进行纵向的抽取，只能通过A">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-12-24T07:55:06.600Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring读书笔记——AOP的基础">
+<meta name="twitter:description" content="AOP（Aspect Oriented Programing）面向切面编程，他能够将分散在各个业务逻辑代码中的相同代码通过横向切割的方式抽取到一个独立的模块中，将横切逻辑与业务逻辑分离。按照软件重构的思想，如果多个类中出现了相同的代码，则可以定义一个父类，将这些相同的代码定义到父类中，但是在有些情况下重复的代码位于方法中(如性能监控代码)，我们无法通过定义父类使用继承体系进行纵向的抽取，只能通过A">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/24/Spring读书笔记——AOP的基础/">
+
+
+
+
+
+  <title>Spring读书笔记——AOP的基础 | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/24/Spring读书笔记——AOP的基础/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring读书笔记——AOP的基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-24T15:54:27+08:00">
+                2018-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>AOP（Aspect Oriented Programing）面向切面编程，他能够将分散在各个业务逻辑代码中的相同代码通过横向切割的方式抽取到一个独立的模块中，将横切逻辑与业务逻辑分离。按照软件重构的思想，如果多个类中出现了相同的代码，则可以定义一个父类，将这些相同的代码定义到父类中，但是在有些情况下重复的代码位于方法中(如性能监控代码)，我们无法通过定义父类使用继承体系进行纵向的抽取，只能通过AOP进行横向抽取。</p>
+<h4 id="AOP中的术语"><a href="#AOP中的术语" class="headerlink" title="AOP中的术语"></a>AOP中的术语</h4><p>1.连接点(Joinpoint)：spring仅支持方法的连接点，即进能在方法调用前，方法调用后，方法异常抛出时，以及方法调用前后植入增强，spring中连接点可以理解为方法。它由两个信息确定：方法表示的执行点和相对位置表示的方位。<br>2.切点(Pointcut)：AOP通过切点定位特定的连接点，可以将连接点比作数据库中的记录，切点当作数据库查询的条件，切点和连接点不是一对一的关系一个切点可以匹配多个连接点。<br>3.增强(Advice):在spring中增强除了用于描述一段程序的代码外，还拥有另外一个和连接点相关的信息，这便是执行点的方位信息。<br>4.目标对象(Target) 增强逻辑的植入目标。<br>5.织入(waving) 织入是将增强添加到目标类的具体的连接点上的过程，根据不同的实现技术，AOP有三种织入方式：<br>（1）编译期织入，要求使用特殊的Java编译器；<br>（2）类装载期织入，要求使用特殊的类装载器；<br>（3）动态代理织入，在运行期为目标类添加增强，有两种方式JDK的动态代理和CGLib的动态代理。<br>6.代理：一个类被AOP织入增强后，就产生了一个结果类，他是融合了原类和增强逻辑的代理。<br>7.切面：切面由切点和增强组成，它既包含横切逻辑的定义也包含连接点的定义。SpringAOP就是负责实施切面的框架，它将切面所定义的横切逻辑织入到切面指定的连接点中。<br><strong>增强的类型</strong>：AOP联盟一共定义了5种增强类型分别为前置增强、后置增强、环绕增强、异常抛出增强、引介增强。</p>
+<h4 id="AOP切面"><a href="#AOP切面" class="headerlink" title="AOP切面"></a>AOP切面</h4><p>增强提供了连接点的方位信息，如织入到方法前、方法后等。而切点进一步描述了织入哪些类的哪些方法上，spring通过Pointcut接口描述了切点。PointCut由classFilter和MethodMatcher构成，分别进行类和方法的定位。spring支持两种方法匹配器，静态方法匹配器和动态方法匹配器。静态方法匹配器仅对方法的签名(包含方法名和入参类型及顺序)进行匹配；而动态匹配因为每次调用的方法的入参可能都不一样，所以每次调用都必须进行判断。</p>
+<h5 id="切面的类型"><a href="#切面的类型" class="headerlink" title="切面的类型"></a>切面的类型</h5><p><strong>Advisor</strong>:代表一般的切面，仅仅包含一个Advice，因为Advice包含了横切代码和连接点信息，所以它本身就是一个切面，只不过它匹配目标类的所有方法。<br><strong>PointcutAdvisor</strong>:代表具有切点的切面，包含Advice和Pointcut两个类，这样就可以通过类、方法名及方法方位等信息进行定义切面的连接点。<br><strong>IntroductionAdvisor</strong>:代表引介切面。</p>
+<h4 id="自动创建代理"><a href="#自动创建代理" class="headerlink" title="自动创建代理"></a>自动创建代理</h4><p>spring提供了自动代理创建机制，让容器自动生成代理，把工作人员从繁琐的配置工作中解放出来，在内部spring是使用BeanPostProcessor自动完成这项工作的。<br>这些基于BeanPostProcessor的自动代理创建器的实现类，将根据一些规则在容器实例化bean时为匹配的bean生成代理实例。这些代理创建器可以分为3类：<br>1.基于Bean配置名规则的自动代理创建器：允许为一组特定的配置名的bean创建代理实例的自动代理创建器，实现类为BeanNameAutoProxyCreator;<br>2.基于Advisor匹配机制的自动代理创建器：它会对容器中所有的Advisor进行扫描，自动将这些切面运用到匹配的bean中，实现类为DefaultAdvisorAutoProxyCreator。<br>3.基于Bean中AspectJ注解标签的自动代理创建器：为包含AspectJ注解的bean自动创建代理实例，实现类为AnnotationAwareAspectJAdvisorAutoProxyCreator。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spring读书笔记/" rel="tag"># Spring读书笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于注解的配置/" rel="next" title="Spring读书笔记——在IOC容器中装配Bean—基于注解的配置">
+                <i class="fa fa-chevron-left"></i> Spring读书笔记——在IOC容器中装配Bean—基于注解的配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/25/Spring读书笔记——基于@AspectJ的AOP/" rel="prev" title="Spring读书笔记——基于@AspectJ的AOP">
+                Spring读书笔记——基于@AspectJ的AOP <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#AOP中的术语"><span class="nav-number">1.</span> <span class="nav-text">AOP中的术语</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOP切面"><span class="nav-number">2.</span> <span class="nav-text">AOP切面</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#切面的类型"><span class="nav-number">2.1.</span> <span class="nav-text">切面的类型</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自动创建代理"><span class="nav-number">3.</span> <span class="nav-text">自动创建代理</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

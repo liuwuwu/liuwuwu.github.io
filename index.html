@@ -262,6 +262,1358 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/Mybatis学习笔记——Mybatis框架简介/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/02/Mybatis学习笔记——Mybatis框架简介/" itemprop="url">Mybatis学习笔记——Mybatis框架简介</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-02T15:33:27+08:00">
+                2019-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Mybatis框架的基础知识"><a href="#Mybatis框架的基础知识" class="headerlink" title="Mybatis框架的基础知识"></a>Mybatis框架的基础知识</h4><p>sqlMapConfig.xml:mybatis全局配置文件，配置数据源、事务等运行环境，配置映射文件(配置了sql语句)；<br>SqlSessionFactory:会话工厂，创建SqlSession；<br>SqlSession：会话，操作数据库(发出sql增、删、改、查)内部通过Executor操作数据库，mappedstatement(底层封装对象)，对数据库存储封装，包括sql语句，输入输出参数；</p>
+<h4 id="和-的区别与联系"><a href="#和-的区别与联系" class="headerlink" title="#{}和\${}的区别与联系"></a>#{}和\${}的区别与联系</h4><p>$#{} 表示占位符，接收输入参数，类型可以是简单类型、pojo、hashmap；如果为简单类型，#{}中可以写成value或其他名称，通过ONGL读取对象中的属性值；<br>$${}表示一个拼接符号，会引起sql注入所以不建议使用\${}，接收输入参数，类型可以为简单类型、pojo、hashmap；如果为简单类型${}只能写为value;</p>
+<h4 id="OGNL简介"><a href="#OGNL简介" class="headerlink" title="OGNL简介"></a>OGNL简介</h4><p>OGNL的全称是Object Graph Navigation Language(对象图导航语言)，它是一种强大的表达式语言，让你通过简单一致的表达式语法来读取和设置Java对象的属性值，调用对象的方法，遍历整个对象的结构图，实现字段类型转换等功能。<br>相对于其它的表达式语言，OGNL的功能更为强大，它提供了很多高级而必需的特性，例如强大的类型转换功能、静态或实例方法的执行、跨集合投影，以及动态lambda表达式定义等。<br>OGNL基础：OGNL表达式的计算都是围绕OGNL上下文来进行的，OGNL上下文实际上就是一个Map对象，由ognl.OgnlContext类(实现了java.util.Map接口)来表示。OGNL上下文可以包含一个或多个JavaBean对象，在这些对象中有一个是特殊的，这个对象就是上下文的根(root)对象。如果在写表达式的时候，没有指定使用上下文中的哪一个对象，那么根对象将被假定为表达式所依据的对象。在OGNL上下文中，只能有一个根对象，如果你访问根对象，那么在写表达式的时候，直接写对象的属性就可以了；否则，你需要使用“#key”前缀，例如表达式#namager.name。<br>OGNL表达式:OGNL表达式的基础单元就是导航链，通常简称为链(chain)。最简单的链由下列部分组成：<br>１、属性名：如name和manager.name；</p>
+<p>２、方法调用：如manager.hashCode()，返回manager对象的散列码；</p>
+<p>３、数组索引：如emals[0]，返回当前对象的邮件列表中的第一个邮件地址。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/Mybatis学习笔记——原生态JDBC的介绍/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/02/Mybatis学习笔记——原生态JDBC的介绍/" itemprop="url">Mybatis学习笔记——原生态JDBC的介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-02T08:43:27+08:00">
+                2019-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="JDBC编程步骤"><a href="#JDBC编程步骤" class="headerlink" title="JDBC编程步骤"></a>JDBC编程步骤</h4><p>1.加载数据库驱动；</p>
+<p>2.获得数据库连接；</p>
+<p>3.创建Statment对象，执行sql语句；</p>
+<p>4.设置sql语句；</p>
+<p>5.执行sql语句，得到结果集；</p>
+<p>6.对结果集进行分析处理；</p>
+<p>7.释放资源；</p>
+<h4 id="原生态JDBC存在如下问题："><a href="#原生态JDBC存在如下问题：" class="headerlink" title="原生态JDBC存在如下问题："></a>原生态JDBC存在如下问题：</h4><p>1.每一个连接的在使用时候创建，不用的时候需要释放，如果使用频繁的话，频繁的建立和释放连接会浪费系统的资源，影响数据库的性能；<strong>使用数据库连接池解决</strong></p>
+<p>2.将sql语句硬编码到Java代码中，修改sql语句需要重新编译，不利于系统的维护；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
+<p>3.向PrepareStatment中设置参数，会对占位符位置和参数值硬编码，不利于系统的维护；；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
+<p>4.从result中遍历结果集数据时存在硬编码，主要体现在将获取字段进行硬编码不利于系统维护。<strong>将查询结果集自动映射为Java对象</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/26/@AspectJ进阶/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/26/@AspectJ进阶/" itemprop="url">Spring读书笔记——@AspectJ进阶</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-26T11:23:27+08:00">
+                2018-12-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>@AspectJ可以使用切点函数定义切点，还可以使用逻辑运算符对切点进行符合运算得到复合切点，为了在切面中重用切点，还可以对切点进行命名，以便在其他地方引用定义过的切点。</p>
+<h4 id="命名切点"><a href="#命名切点" class="headerlink" title="命名切点"></a>命名切点</h4><p>如果希望在其他地方重用一个切点，则可以通过@Pointcut注解及切面类方法对切点进行命名。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> calss Test&#123;</span><br><span class="line"><span class="meta">@Pointcut</span>(within(com.smart.*))<span class="comment">//通过注解方法inpackage()对该切点命名，方法可视域修饰符为private，biao表明该命名切点只能在本切面类中使用</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">inpackage</span><span class="params">()</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">@Pointcut</span>(<span class="string">"execution(* greetTo(..))"</span>)<span class="comment">//通过注解方法greeTo()对该切点进行命名，方法可视域修饰符为protected,表明该命名切点只能在本切面类中使用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="绑定连接点方法入参"><a href="#绑定连接点方法入参" class="headerlink" title="绑定连接点方法入参"></a>绑定连接点方法入参</h4><p>之前介绍的切点函数args()、this()等除了可以指定类名外，还可以指定参数名，将目标对象连接点上的方法入参绑定到增强方法中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Before</span>(<span class="string">"target(com.smart.NativeWaiter)&amp;&amp;args(name,num)"</span>)<span class="comment">//绑定方法入参，首先args(name,num)根据增强方法入参找到name和num对应的类型，得到真实的切点表达式，接着在该增强方法织入到目标连接点时，增强方法可以通过num,name访问到连接点入参</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bindargs</span><span class="params">(<span class="keyword">int</span> num,String name)</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>切点入参匹配是这样的：首先args()根据参数名称在增强方法中找到名称相同的入参并获得对应的类型这样就得到了匹配连接点方法的入参类型。接着连接点方法入参类型所在的位置则由参数名在args()函数中声明的位置决定。</p>
+<h4 id="绑定代理对象"><a href="#绑定代理对象" class="headerlink" title="绑定代理对象"></a>绑定代理对象</h4><p>使用this()或者target()函数可以绑定被代理对象的实例，在通过类实例名绑定对象时，依然具有原来连接点匹配的功能，只不过类名是通过增强方法中同名的入参的类型间接决定的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Before</span>(<span class="string">"this(waiter)"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bind</span><span class="params">(Waiter waiter)</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="绑定返回值"><a href="#绑定返回值" class="headerlink" title="绑定返回值"></a>绑定返回值</h4><p>在后置增强中可以使用returning绑定连接点方法的返回值<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AfterReturning</span>(value=<span class="string">"target(com.smart.NativeWaiter)"</span>,returning=<span class="string">"retVal"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bind</span><span class="params">(<span class="keyword">int</span> retVal)</span></span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="绑定抛出的异常"><a href="#绑定抛出的异常" class="headerlink" title="绑定抛出的异常"></a>绑定抛出的异常</h4><p>和通过切点函数绑定连接点信息不同，连接点抛出的异常必须要使用AfterThrowing注解的throwing成员进行绑定。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AfterThrowing</span>(value=<span class="string">"target(com.smart.NativeWaiter)"</span>,throwing=<span class="string">"aie"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">bind</span><span class="params">(IllegalArgumentException aie)</span></span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/25/Spring读书笔记——基于@AspectJ的AOP/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/25/Spring读书笔记——基于@AspectJ的AOP/" itemprop="url">Spring读书笔记——基于@AspectJ的AOP</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-25T19:31:27+08:00">
+                2018-12-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="使用前的准备"><a href="#使用前的准备" class="headerlink" title="使用前的准备"></a>使用前的准备</h3><p>在使用@AspectJ之前，首先必须保证使用的是java5.0及以上版本。spring在处理@AspectJ注解表达式时需要将spring的asm模块添加到类路径中。asm是轻量级的字节码处理框架，因为Java的反射机制无法获取入参名，spring就利用sam处理@AspectJ中所描述的方法入参名。此外spring采用@AspectJ提供的@AspectJ注解类及相应的解析库，需要在pom.xml文件中添加aspectj.weaver和aspectj.tools类包的依赖。下面是一个简单的例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@AspectJ</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PreGretingAspect</span></span>&#123;</span><br><span class="line"><span class="meta">@Before</span>(<span class="string">"execution(* greetTo(..))"</span>)<span class="comment">//定义切点和增强类型</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforeGreting</span><span class="params">()</span></span>&#123;<span class="comment">//增强的横切逻辑</span></span><br><span class="line">System.out.println(<span class="string">"尊敬的顾客您好"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="通过配置使用-AspectJ切面"><a href="#通过配置使用-AspectJ切面" class="headerlink" title="通过配置使用@AspectJ切面"></a>通过配置使用@AspectJ切面</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//目标bean</span></span><br><span class="line">&lt;bean id=<span class="string">"waiter"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.NativeWaiter"</span>/&gt;</span><br><span class="line"><span class="comment">//使用了@AspectJ注解的切面类</span></span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.aspectj.example.PreGreetingAspect"</span>/&gt;</span><br><span class="line"><span class="comment">//自动代理创建器，自动将@AspectJ注解切面类织入到目标bean中</span></span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>如果使用基于schema的aop命名空间进行配置，就更加简单了。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;beans&gt;</span><br><span class="line">&lt;aop:aspectj-autoproxy/&gt;</span><br><span class="line">&lt;bean id=<span class="string">"waiter"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.NativeWaiter"</span>/&gt;</span><br><span class="line">&lt;bean <span class="string">"com.smart.aspectj.example.PreGreetingAspect"</span>/&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure></p>
+<p>首先在配置文件处引入aop的命名空间，接着通过aop命名空间的<a href="aop:aspectj-autoproxy/" target="_blank" rel="noopener">aop:aspectj-autoproxy/</a>自动为spring容器中那些匹配@AspectJ切面的Bean创建代理完成切面的织入工作。</p>
+<h4 id="切点表达式函数"><a href="#切点表达式函数" class="headerlink" title="切点表达式函数"></a>切点表达式函数</h4><p>为了描述方便将execution(<em> greetTo(..))中的execution()称为函数，匹配串</em> greetTo(..)称为入参。</p>
+<h5 id="函数中使用通配符"><a href="#函数中使用通配符" class="headerlink" title="函数中使用通配符"></a>函数中使用通配符</h5><p>@AspectJ中支持3种通配符：<br><strong>*</strong>：匹配任意字符，但它只能匹配上下文中的一个元素；<br><strong>..</strong>：匹配任意字符，可以匹配上下文中的多个元素，但是在表示类时，必须和*联合使用，而在表示入参时可以单独使用；<br><strong>+</strong>：表示按类型匹配指定类的所有类型，必须跟在类名后面，继承或者扩展指定类的所有类，同时还包括指定类本身。</p>
+<h4 id="不同的增强类型"><a href="#不同的增强类型" class="headerlink" title="不同的增强类型"></a>不同的增强类型</h4><p> @AspectJ为各种增强提供了不同的注解类：<br> 1.@Before<br> 前置增强，相当于BeforeAdvice。拥有两个成员：value(用于定义切点)。argNames:由于无法通过Java的反射机制获取方法的入参名，所以如果在编译阶段未启用调试信息，或者需要在运行期解析切点，就必须通过这个成员指定注解所标注的增强方法的参数名，多个参数用，号分隔。<br> 2.@AfterReturning<br> 后置增强，相当于AfterReturningAdvice。该注解类拥有4个成员：value(定义切点)，pointcut:表示切点的信息。如果显示指定pointcut的值，那么他将覆盖value的值。returning(将目标对象的方法返回值绑定给增强的方法)。args(如前所述)<br> 3.@Around<br> 环绕增强，相当于MentodInterceptor。Around注解类拥有两个成员：value(定义切点)，argsNames(如前所述)。<br> 4.@AfterThrowing<br>抛出增强，相当于ThrowsAdvice。该类注解共有4个成员:value(定义切点)，pointcut(如前所述)，throwing(将抛出的异常绑定到增强方法中)，args(如前所述)。<br>5.@After<br>Final增强，不管是抛出增强还是正常退出，该增强都会得到执行，该增强没有对应的接口，可以把他看成AfterReturningAdvice和ThrowsAdvice的混合物。一般用于释放资源。该注解类拥有两个成员(value和argsName)<br>6.@DeclareParents<br>引介增强，相当于IntroductionInterceptor。拥有两个成员value(定义切点，他表示在哪个目标类上添加引介增强)，defauleImpl(默认的接口实现类)。</p>
+<h4 id="切点函数种类"><a href="#切点函数种类" class="headerlink" title="切点函数种类"></a>切点函数种类</h4><p>1.@annotation表示标注了某个注解的所有方法例子如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Before</span>(<span class="meta">@annotation</span>(com.smart.anno.NeedTest))<span class="comment">//假设Waiter的greet方法标注了@NeedTest注解，spring会将切面注入到该方法中</span></span><br></pre></td></tr></table></figure></p>
+<p>2.execution()是最常用的切点函数，语法如下：execution(&lt;修饰符模式&gt;？&lt;返回类型模式&gt;&lt;方法名模式&gt;(&lt;参数模式&gt;&lt;异常模式&gt;?)除了返回类型、方法名、参数等模式外其它项都是可选的。<br>在类名模式串中“.<em>”表示包下的所有类，而“..</em>”表示包、子孙包下的所有类。通过方法入参定义切点时，可以使用“*”和“..”通配符，前者表示任意类型的参数，后者表示任意类型的参数且参数的个数不限。<br>3.args()和@args():前者接收一个类名，表示目标类方法入参对象是指定类(包含子类时)，切点匹配如args(com.smart.Waiter);后者接收一个注解类的类名，当方法的运行时入参对象标注了指定的注解时，匹配切点。例子见书p287页。<br>4.@within(),通过类匹配模式声明切点，该函数定义的连接点是针对目标类而言的，而非针对运行期对象而言，与execution函数不同的是该函数指定的最小范围只能是类。which(com.smart.A)匹配A中的所有方法。<br>5.@target()和@Within(),@target(M)匹配任意标注了@M的目标类，@Within()匹配标注了@M的类及子孙类。<strong>@target()、@Within()和@annotation针对的都是目标类，而非运行时的引用类型而言，所以如果在接口上标注实现该接口的类都不会匹配该切点</strong><br>6.target和this,前者通过判断目标类是否按类型匹配指定类来决定连接点是否匹配，而this通过判断代理类是否按类型匹配指定类来决定是否和切点匹配。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/24/Spring读书笔记——AOP的基础/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/24/Spring读书笔记——AOP的基础/" itemprop="url">Spring读书笔记——AOP的基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-24T15:54:27+08:00">
+                2018-12-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>AOP（Aspect Oriented Programing）面向切面编程，他能够将分散在各个业务逻辑代码中的相同代码通过横向切割的方式抽取到一个独立的模块中，将横切逻辑与业务逻辑分离。按照软件重构的思想，如果多个类中出现了相同的代码，则可以定义一个父类，将这些相同的代码定义到父类中，但是在有些情况下重复的代码位于方法中(如性能监控代码)，我们无法通过定义父类使用继承体系进行纵向的抽取，只能通过AOP进行横向抽取。</p>
+<h4 id="AOP中的术语"><a href="#AOP中的术语" class="headerlink" title="AOP中的术语"></a>AOP中的术语</h4><p>1.连接点(Joinpoint)：spring仅支持方法的连接点，即进能在方法调用前，方法调用后，方法异常抛出时，以及方法调用前后植入增强，spring中连接点可以理解为方法。它由两个信息确定：方法表示的执行点和相对位置表示的方位。<br>2.切点(Pointcut)：AOP通过切点定位特定的连接点，可以将连接点比作数据库中的记录，切点当作数据库查询的条件，切点和连接点不是一对一的关系一个切点可以匹配多个连接点。<br>3.增强(Advice):在spring中增强除了用于描述一段程序的代码外，还拥有另外一个和连接点相关的信息，这便是执行点的方位信息。<br>4.目标对象(Target) 增强逻辑的植入目标。<br>5.织入(waving) 织入是将增强添加到目标类的具体的连接点上的过程，根据不同的实现技术，AOP有三种织入方式：<br>（1）编译期织入，要求使用特殊的Java编译器；<br>（2）类装载期织入，要求使用特殊的类装载器；<br>（3）动态代理织入，在运行期为目标类添加增强，有两种方式JDK的动态代理和CGLib的动态代理。<br>6.代理：一个类被AOP织入增强后，就产生了一个结果类，他是融合了原类和增强逻辑的代理。<br>7.切面：切面由切点和增强组成，它既包含横切逻辑的定义也包含连接点的定义。SpringAOP就是负责实施切面的框架，它将切面所定义的横切逻辑织入到切面指定的连接点中。<br><strong>增强的类型</strong>：AOP联盟一共定义了5种增强类型分别为前置增强、后置增强、环绕增强、异常抛出增强、引介增强。</p>
+<h4 id="AOP切面"><a href="#AOP切面" class="headerlink" title="AOP切面"></a>AOP切面</h4><p>增强提供了连接点的方位信息，如织入到方法前、方法后等。而切点进一步描述了织入哪些类的哪些方法上，spring通过Pointcut接口描述了切点。PointCut由classFilter和MethodMatcher构成，分别进行类和方法的定位。spring支持两种方法匹配器，静态方法匹配器和动态方法匹配器。静态方法匹配器仅对方法的签名(包含方法名和入参类型及顺序)进行匹配；而动态匹配因为每次调用的方法的入参可能都不一样，所以每次调用都必须进行判断。</p>
+<h5 id="切面的类型"><a href="#切面的类型" class="headerlink" title="切面的类型"></a>切面的类型</h5><p><strong>Advisor</strong>:代表一般的切面，仅仅包含一个Advice，因为Advice包含了横切代码和连接点信息，所以它本身就是一个切面，只不过它匹配目标类的所有方法。<br><strong>PointcutAdvisor</strong>:代表具有切点的切面，包含Advice和Pointcut两个类，这样就可以通过类、方法名及方法方位等信息进行定义切面的连接点。<br><strong>IntroductionAdvisor</strong>:代表引介切面。</p>
+<h4 id="自动创建代理"><a href="#自动创建代理" class="headerlink" title="自动创建代理"></a>自动创建代理</h4><p>spring提供了自动代理创建机制，让容器自动生成代理，把工作人员从繁琐的配置工作中解放出来，在内部spring是使用BeanPostProcessor自动完成这项工作的。<br>这些基于BeanPostProcessor的自动代理创建器的实现类，将根据一些规则在容器实例化bean时为匹配的bean生成代理实例。这些代理创建器可以分为3类：<br>1.基于Bean配置名规则的自动代理创建器：允许为一组特定的配置名的bean创建代理实例的自动代理创建器，实现类为BeanNameAutoProxyCreator;<br>2.基于Advisor匹配机制的自动代理创建器：它会对容器中所有的Advisor进行扫描，自动将这些切面运用到匹配的bean中，实现类为DefaultAdvisorAutoProxyCreator。<br>3.基于Bean中AspectJ注解标签的自动代理创建器：为包含AspectJ注解的bean自动创建代理实例，实现类为AnnotationAwareAspectJAdvisorAutoProxyCreator。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于注解的配置/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于注解的配置/" itemprop="url">Spring读书笔记——在IOC容器中装配Bean—基于注解的配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T23:39:41+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>不管是XML还是注解，他们都是表达Bean定义的载体，其实质都是为了Spring提供Bean的定义信息，在表现形式上都是将XML定义的内容通过注解进行描述，我们知道spring容器成功启动的三大要件分别为Bean的定义信息、Bean的实现类、和spring容器本身。如果采用XML的配置方式，bean的定义信息和实现类是分离的，而如果使用注解进行配置，则bean的定义信息通过在bean的实现类上进行标注注解实现。</p>
+<h4 id="通过注解定义一个Bean"><a href="#通过注解定义一个Bean" class="headerlink" title="通过注解定义一个Bean"></a>通过注解定义一个Bean</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@component</span>(<span class="string">"userDao"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span>  <span class="title">UserDao</span></span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>@component注解在UserDao类声明处对类进行标注，它可以被Spring容器识别，Spring自动将POJO转换为容器管理的bean。除了@component之外Spring还提供了3个功能基本和@compoent等效的注解：<br>@Respository:用于对Dao的实现类进行标注；<br>@Service： 用于对service的实现类进行标注；<br>@Controller:用于对Controller实现类进行标注；</p>
+<h4 id="扫描注解定义的Bean"><a href="#扫描注解定义的Bean" class="headerlink" title="扫描注解定义的Bean"></a>扫描注解定义的Bean</h4><p>spring提供了一个context命名空间，它提供了通过扫描类包以应用注解定义的方式。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//扫描类包以应用注解定义的Bean</span></span><br><span class="line">&lt;context:component-scan base-<span class="keyword">package</span>=<span class="string">"com.smart.anno"</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>通过context命名空间的component-scan的base-package属性指定一个需要扫描的基类包，spring会扫描这个基类中的所有类，并从类的注解信息中获得Bean的定义信息。如果希望扫描特定的类可以使用resource-pattern属性过滤数出特定的类。</p>
+<h4 id="自动装配bean"><a href="#自动装配bean" class="headerlink" title="自动装配bean"></a>自动装配bean</h4><p>spring使用@Autowired注解实现Bean的依赖注入，下面举一个例子<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@service</span></span><br><span class="line">pulbic <span class="class"><span class="keyword">class</span> <span class="title">LoggonService</span></span>&#123;</span><br><span class="line"><span class="meta">@Autowire</span></span><br><span class="line"><span class="keyword">private</span> LogDao logdao;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一般来说，如果spring容器中没有一个和标注变量类型匹配的Bean，那么spring启动时将报NoSuchBeanDefinitionException异常,如果希望即使找不到也不抛出异常，可以使用@Autowire（required=false）进行标注。<br>我们还可以使用@Qualifier指定注入Bean的名称。如果容器中有一个以上的匹配时，则可以通过@Qualifier注解限定Bean的名称<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@service</span></span><br><span class="line">pulbic <span class="class"><span class="keyword">class</span> <span class="title">LoggonService</span></span>&#123;</span><br><span class="line"><span class="meta">@Autowire</span></span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"userDao"</span>)</span><br><span class="line"><span class="keyword">private</span> LogDao logdao;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>除了上面介绍的对类的成员变量进行标注外，@Autowire还可以对类的方法进行标注，表示对入参进行自动装配。同样我们也可以通过@Qualifier指定bean的名称。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@service</span></span><br><span class="line">pulbic <span class="class"><span class="keyword">class</span> <span class="title">LoggonService</span></span>&#123;</span><br><span class="line"><span class="meta">@Autowire</span></span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"userDao"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(UserDao userDao)</span>)</span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//有多个参数的时候</span></span><br><span class="line"><span class="meta">@Autowire</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(@Qualifier(<span class="string">"userDao"</span>)</span> UserDao userDao，LogDao logdao))</span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="对延时依赖注入的支持"><a href="#对延时依赖注入的支持" class="headerlink" title="对延时依赖注入的支持"></a>对延时依赖注入的支持</h5><p>spring支持延时依赖注入，即在spring容器启动的时候，对于bean上面标注了@Lazy和@Autowire注解的属性，不会立即注入属性值，而是延时到调用此属性的时候才会注入。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="meta">@Lazy</span></span><br><span class="line"><span class="meta">@service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDao</span></span>&#123;</span><br><span class="line">....</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@service</span></span><br><span class="line">pulbic <span class="class"><span class="keyword">class</span> <span class="title">LoggonService</span></span>&#123;</span><br><span class="line"><span class="meta">@Lazy</span></span><br><span class="line"><span class="meta">@Autowire</span></span><br><span class="line"><span class="meta">@Qualifier</span>(<span class="string">"userDao"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(UserDao userDao)</span>)</span>&#123;</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>对bean实施延时依赖注入，要注意@Lazy必须要同时标注在属性和目标bean上如上例所示，缺一不可</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于XML的配置/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/23/Spring读书笔记——在IOC容器中装配Bean—基于XML的配置/" itemprop="url">Spring读书笔记——在IOC容器中装配Bean—基于XML的配置</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-23T21:02:01+08:00">
+                2018-12-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在使用spring的各项神奇而丰富的功能之前必须要装配好bean，并且建立好他们之间的关系。</p>
+<h2 id="基于XML的配置"><a href="#基于XML的配置" class="headerlink" title="基于XML的配置"></a>基于XML的配置</h2><h3 id="依赖注入"><a href="#依赖注入" class="headerlink" title="依赖注入"></a>依赖注入</h3><p>spring主要支持三种注入方式：属性注入、构造方法注入、工厂方法注入；</p>
+<h4 id="属性注入"><a href="#属性注入" class="headerlink" title="属性注入"></a>属性注入</h4><p><strong>定义</strong>：属性注入是指通过setXxx()方法注入bean的属性值或者依赖对象；<br><strong>优点</strong>：具有可选择性和灵活性高的优点；<br><strong>要求</strong>：bean必须要提供一个默认的构造函数，并为需要注入的属性提供对应的setter方法。Spring通过默认的构造函数实例化bean对象，通过反射机制然后调用setter方法注入属性值。<br>JavaBean的属性命名规范：xxx属性对应setXxx()方法。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.smart.ditype</span><br><span class="line"><span class="comment">//属性注入的例子</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span></span>&#123;</span><br><span class="line">   <span class="keyword">private</span> String brand;</span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBrand</span><span class="params">(String brand)</span></span>&#123;</span><br><span class="line">   <span class="keyword">this</span>.brand=brand;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//配置文件中的内容如下：</span></span><br><span class="line">   &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">       &lt;property name=<span class="string">"brand"</span> value=<span class="string">"红旗71"</span>/&gt;</span><br><span class="line">   &lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+<p>需要指出的是，spring中只会检查Bean中是否有对应的Setter方法，至于Bean中是否有对应的成员变更则不做要求，举个例子上面中class类中不一定要拥有brand成员变量。</p>
+<h4 id="构造函数注入"><a href="#构造函数注入" class="headerlink" title="构造函数注入"></a>构造函数注入</h4><p>构造函数注入保证了一些必要的属性在Bean实例化时就得到设置，确保Bean在实例化后就可以使用。</p>
+<h5 id="构造函数注入的参数匹配"><a href="#构造函数注入的参数匹配" class="headerlink" title="构造函数注入的参数匹配"></a>构造函数注入的参数匹配</h5><p>构造函数注入中可以按照如下方式匹配入参：按类型匹配入参、按索引匹配入参、联合使用类型和索引匹配入参、通过自身类型反射匹配入参。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//按照类型匹配入参</span></span><br><span class="line">&lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg type=<span class="string">"java.lang.String"</span> value=<span class="string">"红旗72"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> <span class="comment">//按照索引匹配,构造函数的第一个索引为0</span></span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg index=<span class="string">"0"</span> value=<span class="string">"红旗72"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> <span class="comment">//联合使用索引和类型进行匹配</span></span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg index=<span class="string">"0"</span>,type=<span class="string">"java.lang.String"</span> value=<span class="string">"红旗72"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> <span class="comment">//通过自身类型反射匹配入参</span></span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">  &lt;constructor-arg value=<span class="string">"Jhon"</span>&gt;</span><br><span class="line">  &lt;constructor-arg ref bean=<span class="string">"car"</span>&gt;</span><br><span class="line">   &lt;constructor-arg ref bean=<span class="string">"office"</span>&gt;</span><br><span class="line"> &lt;/bean&gt;</span><br><span class="line"> &lt;bean id=<span class="string">"car"</span> calss=<span class="string">"com.smart.ditype.Car"</span> /&gt;</span><br><span class="line">  &lt;bean id=<span class="string">"office"</span> calss=<span class="string">"com.smart.ditype.Office"</span> /&gt;</span><br></pre></td></tr></table></figure></p>
+<p>通过自身类型反射匹配入参要求构造函数的入参类型是可以分辨的(非基础类型且入参类型各异)，由于Java的反射机制可以获取构造函数的入参类型，即使构造函数注入的配置不提供类型和索引信息，spring依旧可以正确的完成构造函数的注入工作。</p>
+<h5 id="构造函数注入中的循环依赖问题"><a href="#构造函数注入中的循环依赖问题" class="headerlink" title="构造函数注入中的循环依赖问题"></a>构造函数注入中的循环依赖问题</h5><p>spring容器对构造函数配置的bean进行实例化有一个前提，即bean构造函数的入参引用的对象必须准备就绪，由于这个机制的限制，如果两个bean都采用构造函数注入，而且都通过构造函数入参引用对方，就会发生类似死锁的循环依赖问题。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Car</span></span>&#123;</span><br><span class="line">     <span class="comment">//构造函数依赖一个boss实例</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Car</span><span class="params">(String brand,Boss boss)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.brand=brand;</span><br><span class="line">        <span class="keyword">this</span>.boss=boss;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Boss</span></span>&#123;</span><br><span class="line">    <span class="comment">//构造函数依赖一个car实例</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Boss</span><span class="params">(String name,Car car)</span></span>&#123;</span><br><span class="line">  <span class="keyword">this</span>.name=name;</span><br><span class="line">  <span class="keyword">this</span>.car=car;</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//配置文件为</span></span><br><span class="line">&lt;bean id=<span class="string">"car"</span> calss=<span class="string">"com.smart.ditype.Car"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"0"</span> value=<span class="string">"红旗"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"1"</span> ref=<span class="string">"boss"</span>&gt;</span><br><span class="line">&lt;/bean&gt;</span><br><span class="line"><span class="comment">//----------------------------</span></span><br><span class="line">&lt;bean id=<span class="string">"boss"</span> calss=<span class="string">"com.smart.ditype.Boss"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"0"</span> value=<span class="string">"John"</span>&gt;</span><br><span class="line">&lt;Constructor-arg index=<span class="string">"1"</span> ref=<span class="string">"car"</span>&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+<p>解决方法：只需要修改Bean的代码，将构造函数注入方式改为属性注入。</p>
+<h4 id="工厂方法注入"><a href="#工厂方法注入" class="headerlink" title="工厂方法注入"></a>工厂方法注入</h4><p>在一些遗留的系统或者第三方类库中，我们还会遇到工厂方法，这时可以使用spring工厂方法注入的方式进行配置。</p>
+<h4 id="非静态工厂方法"><a href="#非静态工厂方法" class="headerlink" title="非静态工厂方法"></a>非静态工厂方法</h4><p>有些工厂方法是非静态的，必须实例化工厂类后才能够调用工厂方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.smart.ditype</span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CarFactory</span></span>&#123;</span><br><span class="line"><span class="comment">//创建car的工厂方法</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> Car <span class="title">createCar</span><span class="params">()</span></span>&#123;</span><br><span class="line">       Car car=<span class="keyword">new</span> Car();</span><br><span class="line">       car.setBrand(<span class="string">""</span>);</span><br><span class="line">       <span class="keyword">return</span> car</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 配置文件如下：</span></span><br><span class="line">&lt;bean id=<span class="string">"carFactory"</span> calss=<span class="string">"com.smart.ditype.CarFactory"</span>/&gt;</span><br><span class="line">&lt;bean id=<span class="string">"car5"</span> factory-bean=<span class="string">"carFactory"</span> factory-method=<span class="string">"createcar"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="静态工厂方法"><a href="#静态工厂方法" class="headerlink" title="静态工厂方法"></a>静态工厂方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.smart.ditype</span><br><span class="line">   <span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CarFactory</span></span>&#123;</span><br><span class="line"><span class="comment">//创建car的工厂方法</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Car <span class="title">createCar</span><span class="params">()</span></span>&#123;</span><br><span class="line">   ....</span><br><span class="line">   <span class="comment">// 配置文件如下：</span></span><br><span class="line">&lt;bean id=<span class="string">"car5"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.smart.ditype.CarFactory"</span> factory-method=<span class="string">"createcar"</span>/&gt;</span><br></pre></td></tr></table></figure>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/21/BeanFactory和ApplicationContext/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/21/BeanFactory和ApplicationContext/" itemprop="url">BeanFactory和ApplicationContext</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T23:16:39+08:00">
+                2018-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>BeanFactory是spring容器中最核心的接口，他提供了高级的IOC配置，使得管理不同的Java对象成为可能。应用上下文建立在BeanFactory的基础之上，提供了很多面向应用的功能。对于两者的用途我们可以进行简单的划分：BeanFactory是spring的基础，面向spring本身。而ApplicationContext是面向使用spring的开发者，几乎所有的场合都可以直接使用ApplicationContext而非BeanFactory。</p>
+<h3 id="BeanFactory和ApplicationContext的差异"><a href="#BeanFactory和ApplicationContext的差异" class="headerlink" title="BeanFactory和ApplicationContext的差异"></a>BeanFactory和ApplicationContext的差异</h3><p>1.bean的初始化时机不同：BeanFactory在初始化容器时并没有实例化bean,只有在第一次访问某个bean时候才会实例化目标bean；<br>2.注册BeanPostProcessor、InstantiationAwareBeanPostProcessor、BeanFactoryPostProcessor的方式不同。ApplicationContext会通过反射机制自动的识别配置文件中的BeanPostProcessor、InstantiationAwareBeanPostProcessor、BeanFactoryPostProcessor并将他们自动的注册到应用上下文中，而BeanFactory需要在代码中通过手工调用addBeanPostProcessor()方法进行注册。</p>
+<h3 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h3><h4 id="BeanFactory中Bean的生命周期"><a href="#BeanFactory中Bean的生命周期" class="headerlink" title="BeanFactory中Bean的生命周期"></a>BeanFactory中Bean的生命周期</h4><p>1.当调用getBean()方法向容器请求一个Bean时，如果容器注册了InstantiationAwareBeanPostProcessor接口，则在实例化Bean之前就postProcessBeforeInstantiation()方法；</p>
+<p>2.根据配置情况调用Bean的构造函数或者工厂方法实例化Bean；</p>
+<p>3.如果容器实现了InstantiationAwareBeanPostProcessor接口，那么在实例化Bean之后，将调用该接口的postProcessAfterInstantiation()方法,可以在这里对Bean进行处理；</p>
+<p>4.如果Bean配置了属性信息，在将配置值设置到Bean对应的属性之前会先调用InstantiationAwareBeanPostProcessor接口的postProcessPropetryValues()方法；</p>
+<p>5.调用Bean的set方法设置对应的属性值；</p>
+<p>6.如果Bean实现了BeanNameAware接口，将调用该接口的setBeanName()方法，设置Bean的名字；</p>
+<p>7.如果Bean实现了BeanFactoryAware接口,调用该接口的setBeanFactory()方法,设置对应的BeanFactory；</p>
+<p>8.如果BeanFactory装配了BeanPostProcessor后处理器，则将调用BeanPostProcessor的postProcessBeforeInitialization(Object bean,String beanName)方法对Bean进行加工操作，<strong>BeanPostProcessor</strong>在Spring框架中占有十分重要的地位，为容器提供了后续加工处理的切入点，如动态代理，AOP等都是通过他实现的；</p>
+<p>9.如果Bean实现了Initiali接口，则调用该接口的afterPropertiesSet()方法；</p>
+<p>10.执行配置文件中的init-method方法；<br>11.执行BeanPostProcessor接口的postProcessAfterInitialization(Object bean,String beanName)方法进行加工操作;</p>
+<p>12.如果是单例Bean则放入spring容器的缓冲池中，不是则返回给调用者，调用者负责后续生命周期的管理；</p>
+<p>13.对于单例Bean,容器关闭时，如果Bean实现了DisposableBean接口,则调用destory()方法进行释放资源和记录日志的操作；</p>
+<p>14.调用destory-method中指定的Bean销毁方法；</p>
+<h4 id="ApplicationContext中Bean的生命周期"><a href="#ApplicationContext中Bean的生命周期" class="headerlink" title="ApplicationContext中Bean的生命周期"></a>ApplicationContext中Bean的生命周期</h4><p>Bean在应用上下文中的生命周期和BeanFactory中的类似，不同主要体现在两点：<br>1.如果Bean实现了ApplicationContextAware接口，则会在上述8步和9步之间执行setApplicationContext()方法；</p>
+<p>2.此外如果在配置文件中声明了工厂后处理器接口BeanFactoryPostProcessor，则应用上下文在装载配置文件后、初始化Bean实例之前会调用这些BeanFactoryPostProcessor对配置信息进行加工处理。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/21/Spring读书笔记——IOC容器概述/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/21/Spring读书笔记——IOC容器概述/" itemprop="url">Spring读书笔记——IOC容器概述</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-21T15:02:11+08:00">
+                2018-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Spring读书笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Spring读书笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>IOC(Inverse of Control,控制反转)是Spring容器中的一个内核，AOP、声明式事务管理在此基础上发展而来。控制指的是调用类对某一接口实现类的选择权，反转是指该接口的实现类的控制权不由调用类决定，由第三方容器决定，也就是spring容器通过Bean的配置进行控制。</p>
+<h3 id="IOC的类型"><a href="#IOC的类型" class="headerlink" title="IOC的类型"></a>IOC的类型</h3><p>IOC主要包含三种类型：构造函数注入、属性注入、接口注入，接下来我们将以书上的例子详细讲解一下这三种注入方式。</p>
+<h4 id="构造函数注入"><a href="#构造函数注入" class="headerlink" title="构造函数注入"></a>构造函数注入</h4><p>我们假设这样一种场景，张艺谋导演想和刘德华合作拍一部大型的电影《墨攻》，其中有一个场景就是守门人大喊：“楼下何人”，隔离答道：“墨者隔离”。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//原始代码，演员和剧本高度耦合，不好</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MoAttack</span></span>&#123;</span><br><span class="line"><span class="comment">//演员直接侵入剧本，和剧本高度耦合</span></span><br><span class="line">LiuDeHua ldh=<span class="keyword">new</span> LiuDeHua();</span><br><span class="line">ldh.responseAsk(<span class="string">"墨者隔离"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//------------------通过构造函数注入进行改善---------------</span></span><br><span class="line"><span class="keyword">public</span> MoAcctack&#123;</span><br><span class="line"><span class="keyword">private</span> Gili geli;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">MoAcctack</span><span class="params">(Gili geli)</span></span>&#123;</span><br><span class="line"> <span class="keyword">this</span>.gili=geli;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cityGateAsk</span><span class="params">()</span></span>&#123;</span><br><span class="line">  geli.responseAsk(<span class="string">"墨者隔离"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Director</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">direct</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="comment">//指定具体的演员</span></span><br><span class="line">  Geli geli=<span class="keyword">new</span> LiuDeHua();</span><br><span class="line">  <span class="comment">//将演员注入到剧本中</span></span><br><span class="line">  MoAcctack mo=<span class="keyword">new</span> MoAcctack(geli);</span><br><span class="line">  mo.cityGateAsk();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们发现此时剧本和演员是实现了解耦，演员的挑选工作交给了导演。</p>
+<h4 id="属性注入"><a href="#属性注入" class="headerlink" title="属性注入"></a>属性注入</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> MoAcctack&#123;</span><br><span class="line"><span class="keyword">private</span> Gili geli;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGili</span><span class="params">(Gili geli)</span></span>&#123;</span><br><span class="line"> <span class="keyword">this</span>.gili=geli;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cityGateAsk</span><span class="params">()</span></span>&#123;</span><br><span class="line">  geli.responseAsk(<span class="string">"墨者隔离"</span>);</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Director</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">direct</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="comment">//指定具体的演员</span></span><br><span class="line">  Geli geli=<span class="keyword">new</span> LiuDeHua();</span><br><span class="line">  <span class="comment">//将演员注入到剧本中</span></span><br><span class="line">  MoAcctack mo=<span class="keyword">new</span> MoAcctack();</span><br><span class="line">  mo.setGili(geli);</span><br><span class="line">  mo.cityGateAsk();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与构造函数注入不同的是，属性注入是通过set方法进行注入的。</p>
+<h4 id="接口注入"><a href="#接口注入" class="headerlink" title="接口注入"></a>接口注入</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//首先定义一个接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Actorarrange</span></span>&#123;</span><br><span class="line">   <span class="keyword">private</span> Gili geli;</span><br><span class="line">   <span class="function"><span class="keyword">void</span> <span class="title">injectGeli</span><span class="params">(Geli geli)</span>；</span></span><br><span class="line"><span class="function">&#125;</span></span><br><span class="line"><span class="function"><span class="comment">//实现这个接口</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> class MoAcctack implements Actorarrange</span>&#123;</span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">injectGeli</span><span class="params">(Geli geli)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gili=geli;</span><br><span class="line">&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cityGateAsk</span><span class="params">()</span></span>&#123;</span><br><span class="line">       geli.responseAsk(<span class="string">"墨者隔离"</span>);</span><br><span class="line">&#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Director</span></span>&#123;</span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">direct</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="comment">//指定具体的演员</span></span><br><span class="line">  Geli geli=<span class="keyword">new</span> LiuDeHua();</span><br><span class="line">  <span class="comment">//将演员注入到剧本中</span></span><br><span class="line">  MoAcctack mo=<span class="keyword">new</span> MoAcctack();</span><br><span class="line">  mo.injectGili(geli);</span><br><span class="line">  mo.cityGateAsk();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="三种注入方式的比较"><a href="#三种注入方式的比较" class="headerlink" title="三种注入方式的比较"></a>三种注入方式的比较</h4><p>构造函数注入的特点是在对象初始化结束后就完成了注入工作，就是说我一旦说开始拍电影，我的演员就要一直存在，这种方式不是很灵活，因为可能有些场景我们不需要该演员的参与。这样的话造成了资源的浪费。属性注入则不同，什么时候需要，什么时候注入。这种注入方式的前提是调用的对象一定要有默认的构造器，否则会报错。接口注入方式和属性注入很相似，但是需要额外的接口，这在无形之中就增加了类的数目。所以一般不使用。<br><strong>与例子中的导演的功能类似spring容器就是通过配置文件或者注释来描述类和类之间的依赖关系，并完成对象的初始化和依赖注入的</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/15/背包问题专栏——多重背包问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -399,1358 +1751,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/背包问题专栏——完全背包问题/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/14/背包问题专栏——完全背包问题/" itemprop="url">背包问题专栏——完全背包问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-14T14:51:42+08:00">
-                2018-12-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在上一篇文章中我们总结了一下01背包问题，接下来我们介绍背包家族中的另外一个重要成员完全背包。</p>
-<h4 id="完全背包的例子"><a href="#完全背包的例子" class="headerlink" title="完全背包的例子"></a>完全背包的例子</h4><p>上一次小偷得手后，尝到了甜头，打算接着作案。这一次他来到了另外一个人的家里，与上次不同的是，这次主人家每件东西都有无数件（当然这个条件是我们假设的），小偷的包的容量是有限的，问如何选择才能使得所获得的利益是最大的？</p>
-<h4 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h4><p>假设第i件物品的体积为v[i],价值为w[i]。完全背包问题可以转换为01背包进行求解，状态转移方程为dp[i][v]=max{dp[i-1][v],dp[i-k<em>v[i]+k</em>w[i] (k&gt;=1&amp;k&lt;=(v/v[i]))},这种思路是基于01背包问题的解决办法，比较容易理解，我们在这里就不在赘述。另外一种思路就是dp[i][v]=max{dp[i-1][v],dp[i][i-v[i]]+w[i]}。dp[i][v]表示当背包容量为v时，尽可能的多添加i种物品所能获得的最大收益。它与之前i的添加情况有关。与01背包问题一样，我们也可以对空间复杂度进行优化，优化的状态转移方程为dp[v]=max{dp[v],dp[v-v[i]]+w[i]},有没有一种很熟悉的感觉，是的，这就是01背包中优化后的表达式。但是与01背包不同的是我们的内循环是从v-&gt;v[i]的，01背包中是从v[i]-&gt;v的。主要原因就是01中的i件物品只有一件，只有选或者不选两种选择，而完全背包则不同。</p>
-<h4 id="具体的Java代码"><a href="#具体的Java代码" class="headerlink" title="具体的Java代码"></a>具体的Java代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FullBag</span> </span>&#123;</span><br><span class="line">    <span class="comment">//有三种物品，每种物品的数量不限，体积分别为[3,2,2]、重量为[5,10,20]。小偷的包的体积为5。如何选择才能使得价值最高。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result=getMaxValue(<span class="number">5</span>,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">3</span>,<span class="number">2</span>,<span class="number">2</span>&#125;,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">5</span>,<span class="number">10</span>,<span class="number">20</span>&#125;);</span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMaxValue</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] dp=<span class="keyword">new</span> <span class="keyword">int</span>[cap+<span class="number">1</span>];</span><br><span class="line">        <span class="comment">//首先进行初始化</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cap+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            dp[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//接着就是根据状态转移方程进行选择</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=v.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i-<span class="number">1</span>];j&lt;cap+<span class="number">1</span>;j++)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[cap];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行结果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">40</span></span><br><span class="line">Process finished with exit code <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="判断选择了哪些物品"><a href="#判断选择了哪些物品" class="headerlink" title="判断选择了哪些物品"></a>判断选择了哪些物品</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//接着就是根据状态转移方程进行选择</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=v.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i-<span class="number">1</span>];j&lt;cap+<span class="number">1</span>;j++)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">                    <span class="keyword">if</span>(dp[j]==dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>])&#123;</span><br><span class="line">                        path[i][j]=<span class="number">1</span>;</span><br><span class="line">                       <span class="comment">// System.out.println(i);</span></span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//打印路劲</span></span><br><span class="line">        <span class="keyword">int</span> i=v.length;</span><br><span class="line">        <span class="keyword">int</span> j=cap;</span><br><span class="line">        <span class="keyword">while</span>(i&gt;<span class="number">0</span>&amp;&amp;j&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(path[i][j]==<span class="number">1</span>)&#123;</span><br><span class="line">                System.out.println(i);</span><br><span class="line">                j=j-v[i-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                i--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
-<p>参考文献：<br><a href="https://blog.csdn.net/qq_34374664/article/details/52232590" target="_blank" rel="noopener">完全背包详解（最优方法）</a><br><a href="https://blog.csdn.net/zhou_yujia/article/details/47841829" target="_blank" rel="noopener">“完全背包”详解及实现（包含背包具体物品的求解）</a><br><a href="https://blog.csdn.net/ling_du/article/details/41594767" target="_blank" rel="noopener">背包九讲</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/13/背包问题专栏——01背包/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/13/背包问题专栏——01背包/" itemprop="url">背包问题专栏——01背包</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-13T23:06:17+08:00">
-                2018-12-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="写作背景"><a href="#写作背景" class="headerlink" title="写作背景"></a>写作背景</h4><p>最近刷题遇到了几个动态规划的题目，觉得这种类型的题目有点意思，就想借此机会将动态规划的问题好好总结一下，通过查阅相关的资料发现，动态规划的问题大多可以直接或者间接的转换为背包问题，所以我们的专题就以01背包问题开始。</p>
-<h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>如果有一个贼跑到别人家里去偷东西，他带了一个容量为v的包，主人家的东西很多有i种，每种的价值和所占的体积分别为w[i]、v[i]，问怎样偷才能获得最大的收益？</p>
-<h4 id="解决问题的思路"><a href="#解决问题的思路" class="headerlink" title="解决问题的思路"></a>解决问题的思路</h4><p>对于第i件物品有两种选择，拿或者不拿，拿的话他的收益dp[i][v]=dp[i-1][v-v[i]]+w[i],不拿的话他的收益dp[i][v]=dp[i-1][v]。我们比较这两个值，并且选择较大的值。</p>
-<h4 id="java代码"><a href="#java代码" class="headerlink" title="java代码"></a>java代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">      <span class="number">0</span>  <span class="number">1</span>  <span class="number">2</span>  <span class="number">3</span>  <span class="number">4</span>  <span class="number">5</span>   <span class="number">6</span>    <span class="number">7</span>    <span class="number">8</span></span><br><span class="line">      <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>   <span class="number">0</span>    <span class="number">0</span>    <span class="number">0</span></span><br><span class="line"><span class="number">6</span> <span class="number">48</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>  <span class="number">0</span>   <span class="number">48</span>  <span class="number">48</span>   <span class="number">48</span></span><br><span class="line"><span class="number">1</span> <span class="number">7</span>   <span class="number">0</span>  <span class="number">7</span>  <span class="number">7</span>  <span class="number">7</span>  <span class="number">7</span>  <span class="number">7</span>   <span class="number">48</span>  <span class="number">55</span>   <span class="number">55</span></span><br><span class="line"><span class="number">5</span> <span class="number">40</span>  <span class="number">0</span>  <span class="number">7</span>  <span class="number">7</span>  <span class="number">7</span>  <span class="number">7</span>  <span class="number">40</span>  <span class="number">48</span>  <span class="number">55</span>   <span class="number">55</span></span><br><span class="line"><span class="number">2</span> <span class="number">12</span>  <span class="number">0</span>  <span class="number">7</span>  <span class="number">12</span> <span class="number">19</span> <span class="number">19</span> <span class="number">40</span>  <span class="number">48</span>  <span class="number">55</span>   <span class="number">60</span></span><br><span class="line"><span class="number">1</span> <span class="number">8</span>   <span class="number">0</span>  <span class="number">8</span>  <span class="number">15</span> <span class="number">20</span> <span class="number">27</span> <span class="number">40</span>  <span class="number">48</span>  <span class="number">56</span>   <span class="number">63</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Bag01</span> </span>&#123;</span><br><span class="line">    <span class="comment">//有如下5种物品，小明的包最多只能装下8公斤的物品，小明特别贪心，思考怎么选择使自己包能装下并且得到的价值最大。</span></span><br><span class="line">    <span class="comment">//物品1:6公斤　　   价值48元</span></span><br><span class="line">    <span class="comment">//物品2:1公斤  　　 价值7元</span></span><br><span class="line">    <span class="comment">//物品3:5公斤  　　 价值40元</span></span><br><span class="line">    <span class="comment">//物品4:2公斤 　　  价值12元</span></span><br><span class="line">    <span class="comment">//物品5:1公斤  　　 价值8元</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">      <span class="keyword">int</span> result= solution(<span class="number">8</span>,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">6</span>,<span class="number">1</span>,<span class="number">5</span>,<span class="number">2</span>,<span class="number">1</span>&#125;,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">48</span>,<span class="number">7</span>,<span class="number">40</span>,<span class="number">12</span>,<span class="number">8</span>&#125;);</span><br><span class="line">      System.out.println(result);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">solution</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result=<span class="number">0</span>;</span><br><span class="line">        <span class="comment">//物品的数量</span></span><br><span class="line">        <span class="keyword">int</span> num=v.length;</span><br><span class="line">        <span class="comment">//用来存放结果</span></span><br><span class="line">        <span class="keyword">int</span>[][] dp=<span class="keyword">new</span> <span class="keyword">int</span>[num+<span class="number">1</span>][cap+<span class="number">1</span>];</span><br><span class="line">        <span class="comment">//首先对第一行进行初始化，当选择第0件物品时，收益为0</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=cap;i++)&#123;</span><br><span class="line">            dp[<span class="number">0</span>][i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//再对第一列进行初始化，当包的容量为0的时候，收益为0</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=num;j++)&#123;</span><br><span class="line">            dp[j][<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//物品的选择代码</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=num;i++)&#123;<span class="comment">//i代表第几种物品</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=cap;j++)&#123;<span class="comment">//j代表背包的容量</span></span><br><span class="line">                <span class="comment">//如果第i件物品的所占的体积大于cap则不能加</span></span><br><span class="line">              <span class="keyword">if</span>(v[i-<span class="number">1</span>]&gt;j)&#123;<span class="comment">//这里用v[i-1]是第i件物品对应的体积</span></span><br><span class="line">                  dp[i][j]=dp[i-<span class="number">1</span>][j];</span><br><span class="line">              &#125;</span><br><span class="line">              <span class="keyword">else</span>&#123;</span><br><span class="line">                  <span class="comment">//比较拿或者不拿两种情况下的收益值的大小，取大的值</span></span><br><span class="line">                  dp[i][j]=Math.max(dp[i-<span class="number">1</span>][j],dp[i-<span class="number">1</span>][j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[num][cap];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><p>上面的代码的时间复杂度为O(VN),空间复杂度也为O(VN)。经过分析发现时间上无法进行优化了，但是空间上可以进行优化，可以使用一维数组代替二维数组。上面的状态转移方程为dp[i][v]=max{dp[i-1][v-v[i]]+w[i],dp[i-1][v]}；可以优化为dp[v]=max{dp[v-v[i]]+w[i],dp[v]};原理是迭代的时候下层循环中使用的v[i]其实保留的是上次循环中的值。需要注意的是下层循环方向为从右到左。如果下层循环从左到右则同一行前面的结果可能会对后面的结果产生影响。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">great</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w)</span></span>&#123;</span><br><span class="line">       <span class="keyword">int</span>[] dp=<span class="keyword">new</span> <span class="keyword">int</span>[cap+<span class="number">1</span>];</span><br><span class="line">       <span class="comment">//首先进行初始化</span></span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=cap;i++)&#123;</span><br><span class="line">           dp[i]=<span class="number">0</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="comment">//接着就是迭代比较</span></span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=v.length;i++)&#123;<span class="comment">//前i件物品</span></span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> j=cap;j&gt;=<span class="number">1</span>;j--)&#123;</span><br><span class="line">               <span class="keyword">if</span>(v[i-<span class="number">1</span>]&gt;j)&#123;</span><br><span class="line">                   dp[j]=dp[j];</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">else</span>&#123;</span><br><span class="line">                   dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> dp[cap];</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="判断选择的物品"><a href="#判断选择的物品" class="headerlink" title="判断选择的物品"></a>判断选择的物品</h4><p>得出了最优的解后，又有一个问题出现了，我们如何判断选择的物品有哪些呢？ 根据算法求出的最大价值表本身其实含有位置信息，从dp[N][V]逆着走向F[0][0]，设i=N,j=V，如果dp[i][j]==dp[i-1][j-C[i]]+W[i]说明包里面有第i件物品，同时j -= C[i]，不管dp[i][j]与dp[i-1][j-C[i]]+W[i]相不相等i都要减1，因为01背包的第i件物品要么放要么不放，不管放还是不放其已经遍历过了，需要继续往下遍历。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//判断哪些物品被选中了</span></span><br><span class="line">       List&lt;Integer&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">int</span> i=num;</span><br><span class="line">       <span class="keyword">int</span> j=cap;</span><br><span class="line">       <span class="keyword">while</span>(i&gt;<span class="number">0</span> &amp;&amp; j&gt;<span class="number">0</span>) &#123;</span><br><span class="line">         <span class="keyword">if</span>(dp[i][j]==dp[i-<span class="number">1</span>][j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>])&#123;</span><br><span class="line">             list.add(i);</span><br><span class="line">             j=j-v[i-<span class="number">1</span>];</span><br><span class="line">         &#125;</span><br><span class="line">         i--;</span><br><span class="line">       &#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>参考博客：</strong></p>
-<p><a href="https://blog.csdn.net/qq_38538733/article/details/74993010" target="_blank" rel="noopener">背包问题——“01背包”详解及实现（包含背包中具体物品的求解）</a></p>
-<p><a href="https://blog.csdn.net/ling_du/article/details/41594767" target="_blank" rel="noopener">背包九讲</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/09/聊一聊锁的优化/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/09/聊一聊锁的优化/" itemprop="url">聊一聊锁的优化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-09T18:41:52+08:00">
-                2018-12-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>优化锁的思路一般有如下5种：<br>1.减少持有锁的时间<br>2.减小锁的粒度<br>3.锁的粗化<br>4.锁的消除<br>5.锁的分离</p>
-<h3 id="减少持有锁的时间"><a href="#减少持有锁的时间" class="headerlink" title="减少持有锁的时间"></a>减少持有锁的时间</h3><p>在进行并发编程时，有的人觉得同步代码块包括的范围越大越好，因为这样越安全，的确这样做安全性是上去了，但是线程持有锁的时间却变长了，导致其他线程等待的时间变长了，降低了程序的性能。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> Synchornized <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">  System.out.println(<span class="string">"helllo"</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//下面才是需要同步的代码</span></span><br><span class="line">f();</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//可以改为</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span>  <span class="title">hello</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">  System.out.println(<span class="string">"helllo"</span>);</span><br><span class="line">&#125;</span><br><span class="line">Synchornized（<span class="keyword">this</span>）&#123;</span><br><span class="line">      f();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="锁的粗化"><a href="#锁的粗化" class="headerlink" title="锁的粗化"></a>锁的粗化</h3><p>我们都知道频繁的加锁和释放锁是很消耗cpu资源的，在某些极端情况下，程序设计者可能会在循环中进行锁的获取和释放操作。这种情况下可以使用锁的粗化进行优化，具体的例子如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">Synchornized(<span class="keyword">this</span>)&#123;</span><br><span class="line">    f();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//可以优化为</span></span><br><span class="line">Synchornized(<span class="keyword">this</span>)&#123;</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)&#123;</span><br><span class="line">    f();</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="减小锁的粒度"><a href="#减小锁的粒度" class="headerlink" title="减小锁的粒度"></a>减小锁的粒度</h3><p>Concurrenthashmap中就采用了这种技术，采用分段锁提高了处理并发的能力。</p>
-<h3 id="锁的消除"><a href="#锁的消除" class="headerlink" title="锁的消除"></a>锁的消除</h3><p>锁消除是在编译期进行的操作，需要进行对象的逃逸分析，因为有些对象可能是线程私有的，然而对这些对象进行的操作是需要进行同步的(加锁的)，比如jdk<br>中的Hashtable、StringBuffer等对象，其中的很多方法都是加了锁的。在对这些对象进行锁消除时需要进行逃逸分析，据此判断对象是否是线程私有的。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hh</span><span class="params">()</span></span>&#123;</span><br><span class="line">    StringBuffer sb=<span class="keyword">new</span> StringBuffer(<span class="string">"he"</span>);</span><br><span class="line">    sb.append(<span class="string">"1"</span>);</span><br><span class="line">    sb.append(<span class="string">"2"</span>);</span><br><span class="line">    sb.append(<span class="string">"3"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="锁的分离"><a href="#锁的分离" class="headerlink" title="锁的分离"></a>锁的分离</h3><p>最常见的锁分离就是读写锁ReadWriteLock，根据功能进行分离成读锁和写锁，这样读读不互斥，读写互斥，写写互斥，即保证了线程安全，又提高了性能。</p>
-<h3 id="JVM中的锁的优化"><a href="#JVM中的锁的优化" class="headerlink" title="JVM中的锁的优化"></a>JVM中的锁的优化</h3><p>主要技术有:偏向锁、自旋锁、轻量级锁，前文已经讲了我们这里就不在赘述。</p>
-<h3 id="关于锁的其他概念"><a href="#关于锁的其他概念" class="headerlink" title="关于锁的其他概念"></a>关于锁的其他概念</h3><h4 id="公平锁和非公平锁"><a href="#公平锁和非公平锁" class="headerlink" title="公平锁和非公平锁"></a>公平锁和非公平锁</h4><p>公平锁是按照时间的先后顺序进行锁的分配操作：先申请的线程，先获得(先进先出的队列)，其中ReentrantLock、ReentrantReadWriteLock都可以设置为公平锁；<br>非公平的锁：非公平锁比较粗鲁，上来就直接尝试占有锁，如果尝试失败，就再采用类似公平锁那种方式，它是基于抢占式的锁获取方式。</p>
-<h4 id="乐观锁和悲观锁"><a href="#乐观锁和悲观锁" class="headerlink" title="乐观锁和悲观锁"></a>乐观锁和悲观锁</h4><p>乐观锁：总是假设最好的情况，获取数据的时候总是认为别人不会进行修改不会上锁，直到提交更新的时候才判断是否有其他操作产生冲突；偏向锁、轻量级锁、自旋锁都是乐观锁；<br>悲观锁：对锁的获取比较悲观，总是担心会有其他的线程会对数据进行更改，会给数据上锁，防止其他线程破坏数据的完整性。内置锁、显示锁都是悲观锁。</p>
-<h4 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h4><p>要想死锁必须满足以下四种情况：<br>1.互斥条件：一个资源每次只能被一个进程使用。<br>2.请求与保持条件：一个进程因请求资源而阻塞时，对已获得的资源保持不放。<br>3.不剥夺条件：进程已获得的资源，在未使用完之前，不能强行剥夺。<br>4.循环等待条件：若干进程之间形成一种头尾相接的循环等待资源关系。<br>避免死锁最简单的方法就是阻止循环等待条件，将系统中所有的资源设置标志位、排序，规定所有的进程申请资源必须以一定的顺序做操作来避免死锁。<br>参考文献</p>
-<p><a href="https://blog.csdn.net/u013256816/article/details/51204385" target="_blank" rel="noopener">Java中的锁</a><br><a href="http://www.importnew.com/21353.html" target="_blank" rel="noopener">锁的优化和注意事项</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/07/轻量级锁&偏向锁&自旋锁/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/07/轻量级锁&偏向锁&自旋锁/" itemprop="url">轻量级锁&偏向锁&自旋锁</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-07T10:08:22+08:00">
-                2018-12-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h3><p>偏向锁中的偏是偏心的偏，他会偏向于第一个获得他的线程，他的出现基于这样的一个假设：在大多数情况下锁不仅不存在竞争，还总是由一个线程多次获取，通过引入了偏向锁降低了线程获取锁的代价。重量级的锁加锁和释放锁代价较大，轻量级的锁通过CAS操作获得锁，而偏向锁除了第一次加锁需要CAS外，后续操作都不需要。<br>加锁过程：当锁对象第一次被线程获取的时候，线程使用CAS操作把这个锁的线程ID记录在对象MarkWord之中，同时置偏向标志位1。以后该线程在进入和退出同步块时不需要进行CAS操作来加锁和解锁，只需要简单地测试一下对象头的Mark Word里是否存储着指向当前线程的偏向锁。如果测试成功，表示线程已经获得了锁。如果CAS操作失败了，则说明多个线程在该锁的获取上存在竞争，拥有该偏向锁的线程运行到全局安全点（safepoint）处被挂起,偏向锁升级为轻量级锁。锁升级成功后被挂起的线程继续执行。<strong>当有两个线程同时获取这个锁时，偏向模式就宣告结束。</strong></p>
-<h3 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h3><h4 id="轻量级锁的加锁过程"><a href="#轻量级锁的加锁过程" class="headerlink" title="轻量级锁的加锁过程"></a>轻量级锁的加锁过程</h4><p>轻量级锁的加锁和释放锁都是通过CAS操作来实现的，具体的执行过程为：当线程执行同步代码时，发现同步对象还没有被锁定，jvm就会在该线程的栈帧中建立一个名为锁记录(Lock Record)的区域用于存储同步对象头的拷贝。通过CAS将对象头的mark word修改为指向当前线程Lock Record的指针，如果修改成功了，那么这个线程就获得了这个轻量级锁，并将锁的标志位修改为00；如果失败了说明已经有线程获得了该对象锁，虚拟机会检查对象锁指向的线程栈帧是否是当前线程的栈帧，如果是则直接进入同步代码中，如果不是则说明存在线程竞争。本线程会自旋一段时间，如果自旋还是获取不到锁(如果有两条以上的线程争用同一个锁，那轻量级锁就不再有效，要膨胀为重量级锁，锁标志<br>的状态值变为”10”，Mark Word中存储的就是指向重量级（互斥量）的指针)则该锁升级为重量级的锁。升级为重量级的锁后，为获取到锁的线程会阻塞。<br><img src="https://liuwuwu.github.io/picture/轻量级锁1.png" alt="加锁前对象头和线程栈帧的状态"><br><img src="https://liuwuwu.github.io/picture/轻量级锁2.png" alt="加锁后对象头和线程栈帧的状态"></p>
-<h4 id="轻量级锁的释放过程"><a href="#轻量级锁的释放过程" class="headerlink" title="轻量级锁的释放过程"></a>轻量级锁的释放过程</h4><p>上文提到，轻量级的锁的释放锁的过程是通过CAS操作来完成的。如果Mard Word仍然指向当前线程的锁记录，那就要用CAS操作把当前的Mard Word和线程中复制的Lock Record 替换回来，如果替换成功 那么真个同步过程就完成了 ，如果替换失败，说明有其他线程尝试过获取该锁，那就要释放锁的同时 唤醒被挂起的线程。</p>
-<h3 id="自旋锁"><a href="#自旋锁" class="headerlink" title="自旋锁"></a>自旋锁</h3><p>Java的线程是映射到操作系统的原生线程之上的，如果要阻塞或唤醒一个线程，都需要操作系统来帮忙完成，这就需要从用户态转换到核心态中，因此状态装换需要耗费很多的处理器时间，对于代码简单的同步块（如被synchronized修饰的getter()和setter()方法），状态转换消耗的时间有可能比用户代码执行的时间还要长。<br>虚拟机的开发团队注意到在许多应用上，共享数据的锁定状态只会持续很短的一段时间，为了这段时间取挂起和恢复现场并不值得。如果物理机器有一个以上的处理器，能让两个或以上的线程同时并行执行，我们就可以让后面请求锁的那个线程“稍等一下“，但不放弃处理器的执行时间，看看持有锁的线程是否很快就会释放锁。为了让线程等待，我们只需让线程执行一个忙循环（自旋），这项技术就是所谓的自旋锁。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>轻量级锁的 “轻” 在于当没有多线程竞争的情况下 只利用简单的CAS操作来代替操作系统互斥量减少了开销 所以要轻。但是如果存在多线程竞争的情况是 轻量级锁不但不会轻反而会更重。偏向锁只适用于在只有一个线程执行同步代码块的情况 ，如果程序中大部分锁总是被不同的线程访问，那偏向模式就是多余的。</p>
-<p>参考文献</p>
-<p><a href="https://www.2cto.com/kf/201611/566008.html" target="_blank" rel="noopener">对象监视器锁、轻量级锁、偏向锁详解</a></p>
-<p><a href="http://www.cnblogs.com/wade-luffy/p/5969418.html" target="_blank" rel="noopener">偏向锁，轻量级锁，自旋锁，重量级锁的详细介绍 </a></p>
-<p><a href="https://blog.csdn.net/choukekai/article/details/63688332" target="_blank" rel="noopener">偏向锁，轻量级锁与重量级锁的区别与膨胀</a></p>
-<p><a href="https://blog.csdn.net/u012465296/article/details/53022317" target="_blank" rel="noopener">Java中synchronized的实现原理与应用</a></p>
-<p><a href="https://blog.csdn.net/u013256816/article/details/51204385" target="_blank" rel="noopener">Java中的锁</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/06/重量级锁/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/12/06/重量级锁/" itemprop="url">重量级锁</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-06T16:33:36+08:00">
-                2018-12-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="重量级锁的定义的简介"><a href="#重量级锁的定义的简介" class="headerlink" title="重量级锁的定义的简介"></a>重量级锁的定义的简介</h3><p>Java中的线程是映射到操作系统的原生线程上，线程的阻塞或者唤醒是需要操作系统的帮助的，需要从用户态转换为核心态，这种状态转换是需要消耗处理器时间的，当我们的代码比较简单时这个过程耗费的时间甚至比代码执行所需要的时间更加长。所以我们将这种锁称为重量级的锁。<br><strong>重量级锁的分类</strong>：<strong>内置锁</strong>和<strong>显示锁</strong></p>
-<h3 id="内置锁"><a href="#内置锁" class="headerlink" title="内置锁"></a>内置锁</h3><p>内置锁指的是Synchornized,使用起来非常方便,不需要显示的加锁和释放锁，任何一个对象都是一个内置锁，在任何出现Synchornized的地方都有一个对象与之关联，当Synchornized关键字修饰实例方法时它关联的对象为this；修饰静态方法时，关联的对象为当前类的class对象；当Synchornized关键字修饰代码块时，它关联的对象是Synchornized(obj)中的obj。内置锁又分为对象锁和类锁，对象锁主要是用于对象的实例方法或者对象的实例中的，而类锁主要用于类的静态方法或者类的class对象上的，类的对象有很多个，所以对象锁也有很多个而类锁只有一个，类锁和对象锁是两个不一样的锁，控制着不同的区域，它们是互不干扰的(类锁和对象锁管理的方法或者代码片段可以同时执行)。类锁是一个抽象的概念，并不是真实存在的，它只是用来帮助我们理解锁定实例方法和静态方法的区别的。</p>
-<h3 id="显示锁"><a href="#显示锁" class="headerlink" title="显示锁"></a>显示锁</h3><p>内置锁使用起来那么方便为何还要用显示锁呢？显示锁可以简单的理解为内置锁的升级版，他在内置锁的基础上添加了很多功能，既然显示锁这么优秀为什么还要保留内置锁呢？主要是因为显示锁有个缺点必须显示的加锁和释放锁并且释放锁必须要在finally中进行，否则出现异常时将无法释放锁导致死循环。</p>
-<h4 id="显示锁和内置锁的比较"><a href="#显示锁和内置锁的比较" class="headerlink" title="显示锁和内置锁的比较"></a>显示锁和内置锁的比较</h4><p> <strong>为什么要有显示锁？</strong><br> 答：与内置锁相比显示锁具有如下优点：<br> 1.定时等待的功能：显示锁中可以设置线程的等待时间，如果在这段时间内线程没有获得锁将直接返回；<br> 2.等待锁时具有响应中断的功能：内置锁中，线程在阻塞情况下并不能够响应中断请求，因为它默认每个线程都会获得锁，而显示锁不同，在等待锁时他能够响应中断请求；</p>
-<ol start="3">
-<li>多条件队列：内置锁中只有一个条件队列，这就导致等待同一把锁的不同线程可能具有不同的条件谓词，当一个条件谓词满足时不知道要唤醒哪些线程(线程是先获得锁，再判断条件谓词是否满足，如果满足则往下执行，如果不满足则重新释放锁)。显示锁中可以通过lock.newConditon()方法新建不同的条件队列，程序员可以根据条件谓词的满足情况选择对应的条件对列进行唤醒。</li>
-<li>显示锁中可以设置是否使用公平锁，内置锁是不公平锁，有可能出现等待的线程一直阻塞，出现饥饿死锁的情况，显示锁默认情况下是非公平的，但是可以通过 Lock lock=new ReentrantLock(true)将显示锁设置为公平的锁降低饥饿死锁发生的风险;</li>
-<li>显示锁中的ReentrantReadWriteLock能够通过new ReentrantReadWriteLock().readLock()方法构造出支持并发读的读锁，这就大大的提高了读的效率。<br><strong>既然显示锁这么优秀为什么还要保留内置锁？</strong><br>答：与内置锁相比显示锁的缺点为：不能够自动的进行锁的获取和释放，释放锁的操作必须要在finally中进行，不然的话一旦发生异常，就无法释放锁导致死锁的情况发生；<h4 id="显示锁的分类"><a href="#显示锁的分类" class="headerlink" title="显示锁的分类"></a>显示锁的分类</h4><h5 id="ReentrantLock-可重入的锁-是唯一一个实现了Lock接口的类，使用例子如下："><a href="#ReentrantLock-可重入的锁-是唯一一个实现了Lock接口的类，使用例子如下：" class="headerlink" title="ReentrantLock(可重入的锁)是唯一一个实现了Lock接口的类，使用例子如下："></a>ReentrantLock(可重入的锁)是唯一一个实现了Lock接口的类，使用例子如下：</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.ReentrantLock;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LockTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">       Lock lock=<span class="keyword">new</span> ReentrantLock(<span class="keyword">true</span>);</span><br><span class="line">       <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">           <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">               lock.lock();</span><br><span class="line">               <span class="keyword">try</span>&#123;</span><br><span class="line">                   System.out.println(Thread.currentThread().getName()+<span class="string">"我获得了锁了"</span>);</span><br><span class="line">                   <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">                       System.out.println(Thread.currentThread().getName()+<span class="string">"i的值为"</span>+i);</span><br><span class="line">               &#125;</span><br><span class="line">               &#125;</span><br><span class="line">               <span class="keyword">finally</span>&#123;</span><br><span class="line">                   lock.unlock();</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable() &#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                lock.lock();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我获得了锁了，真的很高心"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">                        System.out.println(Thread.currentThread().getName()+<span class="string">"i的值为"</span>+i);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">finally</span>&#123;</span><br><span class="line">                    lock.unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<h4 id="ReadWriteLock-读写锁"><a href="#ReadWriteLock-读写锁" class="headerlink" title="ReadWriteLock(读写锁)"></a>ReadWriteLock(读写锁)</h4><p>他是一个接口，有一个实现类ReentrantReadWriteLock,他有两个方法ReentrantReadWriteLock.readLock(),ReentrantReadWriteLock.writeLock()方法获得读写锁。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReadTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        ReentrantReadWriteLock reentrantReadWriteLock=<span class="keyword">new</span> ReentrantReadWriteLock();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                reentrantReadWriteLock.readLock().lock();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                    <span class="comment">//System.out.println("正在进行读操作");</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"正在进行读操作"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">5</span>;i++)&#123;</span><br><span class="line">                        System.out.println(Thread.currentThread().getName()+<span class="string">"-----"</span>+i);</span><br><span class="line">                &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">finally</span> &#123;</span><br><span class="line">                    reentrantReadWriteLock.readLock().unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">2</span>;i++)&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                reentrantReadWriteLock.writeLock().lock();</span><br><span class="line">                <span class="keyword">try</span>&#123;</span><br><span class="line">                  <span class="comment">//  System.out.println("正在进行写操作");</span></span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"正在进行写操作"</span>);</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">10</span>;i&lt;<span class="number">15</span>;i++)&#123;</span><br><span class="line">                        System.out.println(Thread.currentThread().getName()+<span class="string">"-----"</span>+i);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">finally</span> &#123;</span><br><span class="line">                    reentrantReadWriteLock.writeLock().unlock();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>参考文献</strong><br><a href="https://www.cnblogs.com/dolphin0520/p/3923167.html" target="_blank" rel="noopener">Java并发编程：Lock</a><br><a href="https://www.jb51.net/article/129060.htm" target="_blank" rel="noopener">深入理解java内置锁(synchronized)和显式锁(ReentrantLock)</a><br><a href="https://www.cnblogs.com/owenma/p/8609348.html" target="_blank" rel="noopener">Java锁Synchronized对象锁和类锁区别</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/24/HashMap源码详解（下）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/24/HashMap源码详解（下）/" itemprop="url">HashMap源码详解（下）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-24T08:27:08+08:00">
-                2018-08-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在上一篇文章中我们聊了一下HashMap的存储结构和put、get方法，接下来我们将重点介绍一下它的扩容机制。不知道大家有没有过这样的疑问为何HashMap中进行扩容的时候要扩大2倍不是3倍或者1.5倍。如果大家弄清楚了本文的内容，这个问题也就迎刃而解了。话不多说让我们直奔主题吧！</p>
-<h4 id="HashMap的扩容机制"><a href="#HashMap的扩容机制" class="headerlink" title="HashMap的扩容机制"></a>HashMap的扩容机制</h4><p>为了提高空间的利用率，HashMap采用了自动扩容的机制，但是由于其底层数据结构仍然采用了数组的数据结构，所以在自动扩容时需要将旧的数组中的元素复制到新的数组中。这就好比是用一个水桶装水，开始水不是很多，我们就用一个小桶，后来水多了我们就要换一个大桶同时还要将小桶中的水倒入到大桶中。扩容的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Node&lt;K,V&gt;[] resize() &#123;</span><br><span class="line">        Node&lt;K,V&gt;[] oldTab = table;</span><br><span class="line">        <span class="keyword">int</span> oldCap = (oldTab == <span class="keyword">null</span>) ? <span class="number">0</span> : oldTab.length;</span><br><span class="line">        <span class="keyword">int</span> oldThr = threshold;</span><br><span class="line">        <span class="keyword">int</span> newCap, newThr = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (oldCap &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (oldCap &gt;= MAXIMUM_CAPACITY) &#123;</span><br><span class="line">                threshold = Integer.MAX_VALUE;</span><br><span class="line">                <span class="keyword">return</span> oldTab;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> ((newCap = oldCap &lt;&lt; <span class="number">1</span>) &lt; MAXIMUM_CAPACITY &amp;&amp;</span><br><span class="line">                     oldCap &gt;= DEFAULT_INITIAL_CAPACITY)</span><br><span class="line">                newThr = oldThr &lt;&lt; <span class="number">1</span>; <span class="comment">// double threshold</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (oldThr &gt; <span class="number">0</span>) <span class="comment">// initial capacity was placed in threshold</span></span><br><span class="line">            newCap = oldThr;</span><br><span class="line">        <span class="keyword">else</span> &#123;               <span class="comment">// zero initial threshold signifies using defaults</span></span><br><span class="line">            newCap = DEFAULT_INITIAL_CAPACITY;</span><br><span class="line">            newThr = (<span class="keyword">int</span>)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (newThr == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">float</span> ft = (<span class="keyword">float</span>)newCap * loadFactor;</span><br><span class="line">            newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (<span class="keyword">float</span>)MAXIMUM_CAPACITY ?</span><br><span class="line">                      (<span class="keyword">int</span>)ft : Integer.MAX_VALUE);</span><br><span class="line">        &#125;</span><br><span class="line">        threshold = newThr;</span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(&#123;<span class="string">"rawtypes"</span>,<span class="string">"unchecked"</span>&#125;)</span><br><span class="line">            Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])<span class="keyword">new</span> Node[newCap];</span><br><span class="line">        table = newTab;</span><br><span class="line">        <span class="keyword">if</span> (oldTab != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; oldCap; ++j) &#123;</span><br><span class="line">                Node&lt;K,V&gt; e;</span><br><span class="line">                <span class="keyword">if</span> ((e = oldTab[j]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    oldTab[j] = <span class="keyword">null</span>;</span><br><span class="line">                    <span class="keyword">if</span> (e.next == <span class="keyword">null</span>)</span><br><span class="line">                        newTab[e.hash &amp; (newCap - <span class="number">1</span>)] = e;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (e <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                        ((TreeNode&lt;K,V&gt;)e).split(<span class="keyword">this</span>, newTab, j, oldCap);</span><br><span class="line">                    <span class="keyword">else</span> &#123; <span class="comment">// preserve order</span></span><br><span class="line">                        Node&lt;K,V&gt; loHead = <span class="keyword">null</span>, loTail = <span class="keyword">null</span>;</span><br><span class="line">                        Node&lt;K,V&gt; hiHead = <span class="keyword">null</span>, hiTail = <span class="keyword">null</span>;</span><br><span class="line">                        Node&lt;K,V&gt; next;</span><br><span class="line">                        <span class="keyword">do</span> &#123;</span><br><span class="line">                            next = e.next;</span><br><span class="line">                            <span class="keyword">if</span> ((e.hash &amp; oldCap) == <span class="number">0</span>) &#123;</span><br><span class="line">                                <span class="keyword">if</span> (loTail == <span class="keyword">null</span>)</span><br><span class="line">                                    loHead = e;</span><br><span class="line">                                <span class="keyword">else</span></span><br><span class="line">                                    loTail.next = e;</span><br><span class="line">                                loTail = e;</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">else</span> &#123;</span><br><span class="line">                                <span class="keyword">if</span> (hiTail == <span class="keyword">null</span>)</span><br><span class="line">                                    hiHead = e;</span><br><span class="line">                                <span class="keyword">else</span></span><br><span class="line">                                    hiTail.next = e;</span><br><span class="line">                                hiTail = e;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; <span class="keyword">while</span> ((e = next) != <span class="keyword">null</span>);</span><br><span class="line">                        <span class="keyword">if</span> (loTail != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            loTail.next = <span class="keyword">null</span>;</span><br><span class="line">                            newTab[j] = loHead;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (hiTail != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            hiTail.next = <span class="keyword">null</span>;</span><br><span class="line">                            newTab[j + oldCap] = hiHead;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> newTab;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>直接讲解源码可能比较难以理解，我们用一个比较经典的例子讲解一下这个过程。假设了我们的hash算法就是简单的用key mod 一下表的大小（也就是数组的长度）。其中的哈希桶数组table的size=2， 所以key = 3、7、5，put顺序依次为 5、7、3。在mod 2以后都冲突在table[1]这里了。这里假设负载因子 loadFactor=1，即当键值对的实际大小size 大于 table的实际大小时进行扩容。接下来的三个步骤是哈希桶数组 resize成4，然后所有的Node重新rehash的过程。<br>如果每次扩容都需要在进行rehash这样太过麻烦，有没有什么比较好的办法呢？sun的工程师在jdk1.8中进行了优化，提出了一个很巧妙的方法，那就是每次扩容的时候容量都是乘以2，这就保证了扩容后的索引要么保持不变要么是在原值的基础上加上了原始数组的容量。在jdk1.8中这个新的索引不需要重新计算，只需要根据hash值新增的那一位判断，如果新增的那一位为0,则保持不变，为1则新索引=旧索引+旧容量；这个设计确实非常的巧妙，既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，因此resize的过程，均匀的把之前的冲突的节点分散到新的bucket了。</p>
-<h4 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h4><p>在jdk1.7中如果进行扩容的话，同一个链表中元素的顺序会倒置主要是因为采用了头部插入，jdk1.8中因为采用的是尾部插入，通过hiHead和loHead两个变量作为首节点保存元素，这就确保了元素顺序的不变。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/23/HashMap源码详解（上）/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/08/23/HashMap源码详解（上）/" itemprop="url">HashMap源码详解（上）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-23T09:32:48+08:00">
-                2018-08-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>有些东西，除了要知其然还要知其所以然，这样才能学到其精髓，做到融汇贯通。HashMap在Java中用处非常广泛，相信很多人都用过，不知道大家有没有存在过疑问：“这个家伙究竟是怎么样实现的，他的底层原理是什么？” 接下来我们就好好探讨一下hashmap的奥秘。</p>
-<h4 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h4><p>在jdk1.8之前HashMap是通过桶（数组）+单向链表实现的，在进行查询操作时，首先根据元素的key值的散列码计算得到hash值，确定其存储在哪一个桶上，当有多个元素hash值相同的时候，就通过链表将他们串联起来（链表的主要作用就是解决hash冲突）。jdk1.8中引入了数组+单向链表+红黑树的实现方式，为何加上红黑树呢？答案就是加快查询的速度（优化查询效率），当单向链表的长度过长时候，遍历查询是相当费时的，采用红黑树的数据结构可以明显加快查询的速度。<br><img src="https://liuwuwu.github.io/picture/原来的实现方式.png" alt="原来的实现方式"><br><img src="https://liuwuwu.github.io/picture/jdk1.8中的实现方式.jpg" alt="JDK1.8中的实现方式"></p>
-<h4 id="HashMap中的字段"><a href="#HashMap中的字段" class="headerlink" title="HashMap中的字段"></a>HashMap中的字段</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;</span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> size;</span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> modCount;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;</span><br></pre></td></tr></table></figure>
-<p>table:也叫桶，是一个存放链表的数组，HashMap的基础设施，所有的节点都放在这里；<br>size:HashMap中存放的键值对的数目，很显然他的值大于等于table的数目（一个table中可能存在多个元素，因为链表和红黑树的存在）；<br>modCount:它的值代表了hashmap被修改的次数，hashmap的迭代循环时主要是通过它实现的fail-fast机制；<br>DEFAULT_INITIAL_CAPACITY，表示默认HashMap数组初始大小为16，并且为了后续的rehash的方便，hash数组进行扩容时乘以2保证数组的大小始终为2的整数次幂；<br>MAXIMUM_CAPACITY，表示Hashmap数组的最大容量，初始值为2^30；<br>DEFAULT_LOAD_FACTOR，表示负载因子，当Hashmap的实际容量超过了(设定容量x负载因子)，就触发rehash操作，默认值为0.75；<br>TREEIFY_THRESHOLD，jkd1.8新增的，如果Hashmap数组元素的链表长度超过这个值，就使用红黑树结构代替链表提高查询效率，默认值为8。</p>
-<h4 id="如何确定Hash桶数组索引"><a href="#如何确定Hash桶数组索引" class="headerlink" title="如何确定Hash桶数组索引"></a>如何确定Hash桶数组索引</h4><p>无论是插入、删除还是查找，我们都要先确定元素的桶数组的索引，这一步是至关重要的。我们希望元素的分布尽可能的均匀最好是一个桶上只有一个元素，这样在进行查询的时候无须遍历，直接可以得到结果。我们来看看hashmap的底层源码是如何为了这个目标而吧努力的(方法1+方法2)：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方法1：</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;   <span class="comment">//jdk1.8 &amp; jdk1.7</span></span><br><span class="line">     <span class="keyword">int</span> h;</span><br><span class="line">     <span class="comment">// h = key.hashCode() 为第一步 取hashCode值</span></span><br><span class="line">     <span class="comment">// h ^ (h &gt;&gt;&gt; 16)  为第二步 高位参与运算</span></span><br><span class="line">     <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//方法2：</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexFor</span><span class="params">(<span class="keyword">int</span> h, <span class="keyword">int</span> length)</span> </span>&#123;  <span class="comment">//jdk1.7的源码，jdk1.8没有这个方法，但是实现原理一样的</span></span><br><span class="line">     <span class="keyword">return</span> h &amp; (length-<span class="number">1</span>);  <span class="comment">//第三步 取模运算</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>详细的过程是：首先得到key的hashcode值，然后将他的高16位和l低16位进行异或运算得到一个hash值，这样做的原因是即使桶数组长度比较小的时候，hashcode的高位依然能够参与到桶数组的索引的确定中，这样可以使得元素的分布更加分散，降低hash冲突，同时不会有太大的开销；最后将上一步得到的hash值与桶数组的长度-1进行&amp;运算，这是hashmap中在速度上进行的优化，当桶数组的长度为2的整数次幂时，hash &amp;(桶的长度-1)与hash%(桶的长度)得到的结果是一样的，但是位运算的速度要比算术运算的速度快。<br><img src="https://liuwuwu.github.io/picture/计算下标的例子.png" alt="计算下标的例子"></p>
-<h4 id="put方法"><a href="#put方法" class="headerlink" title="put方法"></a>put方法</h4><p><img src="https://liuwuwu.github.io/picture/hashmap的put流程.png" alt="hashmap的put流程"><br>put方法的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 对key的hashCode()做hash</span></span><br><span class="line">    <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="function"><span class="params">               <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">// 步骤①：tab为空则创建</span></span><br><span class="line">   <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">       n = (tab = resize()).length;</span><br><span class="line">   <span class="comment">// 步骤②：计算index，并对null做处理 </span></span><br><span class="line">   <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>) </span><br><span class="line">      tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">   <span class="keyword">else</span> &#123;</span><br><span class="line">       Node&lt;K,V&gt; e; K k;</span><br><span class="line">       <span class="comment">// 步骤③：节点key存在，直接覆盖value</span></span><br><span class="line">      <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">           ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">           e = p;</span><br><span class="line">       <span class="comment">// 步骤④：判断该链为红黑树</span></span><br><span class="line">       <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">          e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">      <span class="comment">// 步骤⑤：该链为链表</span></span><br><span class="line">       <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">               <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                  p.next = newNode(hash, key,value,<span class="keyword">null</span>);</span><br><span class="line">                      <span class="comment">//链表长度大于8转换为红黑树进行处理</span></span><br><span class="line">                  <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st  </span></span><br><span class="line">                       treeifyBin(tab, hash);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               &#125;</span><br><span class="line">                  <span class="comment">// key已经存在直接覆盖value</span></span><br><span class="line">              <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">           ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))      <span class="keyword">break</span>;</span><br><span class="line">               p = e;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">      </span><br><span class="line">       <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">           V oldValue = e.value;</span><br><span class="line">           <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">               e.value = value;</span><br><span class="line">           afterNodeAccess(e);</span><br><span class="line">           <span class="keyword">return</span> oldValue;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   ++modCount;</span><br><span class="line">   <span class="comment">// 步骤⑥：超过最大容量 就扩容</span></span><br><span class="line">   <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">       resize();</span><br><span class="line">   afterNodeInsertion(evict);</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">null</span> &#125;</span><br></pre></td></tr></table></figure></p>
-<p>1.首先判断桶数组是否为空，如果为空或者长度为0则新建一个桶数组（初始话长度为16）；<br>2.判断插入元素所对应的桶数组的索引处是否为空，如果为空则说明暂时没有元素与该元素产生hash冲突，直接将元素插入到该位置，在判断hashmap是否需要扩容（比较size和最大容量threashold的大小）；<br>3.如果插入元素所对应的位置不为空，则比较该元素的key和桶所对应的首元素的key是否相等（通过hashcode和equals方法进行判断），如果相等则直接替换他们的；<br>4.如果key和桶中首元素的key不相等，则再判断桶中是否是红黑树，如果是的则直接在红黑树中插入键值对；<br>5.如果不是红黑树则需要遍历桶，如果在遍历过程总找到key相等的就直接替换，否则看桶中的元素是否大于8,大于8则转换为红黑树进行存储，然后在红黑树中进行插入。不大于8则进行链表的插入操作；<br>6.插入成功后判断是否需要扩容；</p>
-<h4 id="get方法"><a href="#get方法" class="headerlink" title="get方法"></a>get方法</h4><p>get方法的源码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">getNode</span><span class="params">(<span class="keyword">int</span> hash, Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; <span class="keyword">int</span> n; K k;</span><br><span class="line">    <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">        (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (first.hash == hash &amp;&amp; <span class="comment">// always check first node</span></span><br><span class="line">            ((k = first.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            <span class="keyword">return</span> first;</span><br><span class="line">        <span class="keyword">if</span> ((e = first.next) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                <span class="keyword">return</span> ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">return</span> e;</span><br><span class="line">            &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>get方法的原理相对来说比较简单，首先计算key的hashcode值，然后进一步计算得到桶数组的索引，相等则返回value不相等则通过遍历来查找（如果为红黑树储存则在红黑树中进行查找，如果为链表则在链表总进行查找）。若找不到则返回null;</p>
-<h4 id="答疑"><a href="#答疑" class="headerlink" title="答疑"></a>答疑</h4><p>不知道大家注意没有jdk1.8之前采用的是头部插入而jdk1.8中采用的是尾部插入，为何会这样呢？本人查看了许多资料发现众说纷纭，有的人说头部插入是为了避免尾部遍历，但是我认为这样的解释有点牵强，我觉得只要还是为了提高效率，可能sun公司的工程师认为后插入的元素使用的概率比较大，放在头部可以提高操作的性能。后来改为尾部插入的原因是因为尾部插入可以保证元素的顺序和插入的顺序相同同时使得hashmap的性能更加稳定。同时插入操作也十分简单方便，只需要将原来链表首元素赋值给待插入元素的next属性即可。</p>
-<h4 id="HashMap的线程安全性分析"><a href="#HashMap的线程安全性分析" class="headerlink" title="HashMap的线程安全性分析"></a>HashMap的线程安全性分析</h4><p>hashmap发生死锁的原因主要是在并发环境中，当有多个线程进行扩容时候形成了一个闭合链条，导致死循环。具体讲解可以参考博客</p>
-<p><a href="https://zhuanlan.zhihu.com/p/21673805" target="_blank" rel="noopener">Java 8系列之重新认识HashMap</a></p>
-<p><a href="https://blog.csdn.net/luxia_24/article/details/52344367" target="_blank" rel="noopener">关于上上文hashmap的深入-hashmap产生死锁的详解</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/11/ConcurrentHashMap/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/11/ConcurrentHashMap/" itemprop="url">ConcurrentHashMap</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-11T19:59:42+08:00">
-                2018-07-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="ConcurrentHashMap如何定位"><a href="#ConcurrentHashMap如何定位" class="headerlink" title="ConcurrentHashMap如何定位"></a>ConcurrentHashMap如何定位</h4><p>我们都知道ConcurrentHashMap中用到了分段锁的技术实现了线程安全性，与HashTable相比，实现了了锁的分离，ConcurrentHashMap在进行元素定位时候首先判断元素位于哪一个Segment上，然后在判断元素具体位于哪一个桶上面。默认的并发级别为16(Segment的个数)，在确定Segment时候，首先将hash值无符号的右移28位，这样仅仅通过高4位就可以确定segment的位置。确定桶的方式和HashMap中的方式很相似，就是通过&amp;运算符。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hash &gt;&gt;&gt; segmentShift &amp; segmentMask　　 <span class="comment">// 定位Segment所使用的hash算法</span></span><br><span class="line"><span class="keyword">int</span> index = hash &amp; (tab.length - <span class="number">1</span>);　　 <span class="comment">// 定位HashEntry所使用的hash算法</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="ConcurrentHashMap如何size"><a href="#ConcurrentHashMap如何size" class="headerlink" title="ConcurrentHashMap如何size"></a>ConcurrentHashMap如何size</h4><p>要统计整个ConcurrentHashMap里元素的数量,就必须统计所有Segment里元素的数量后计总.<br>Segment里的全局变量count是一个volatile,在并发场景下,是不是直接把所有Segment的count相加就可以得到整个ConcurrentHashMap大小了呢?不是的<br>虽然相加时可以获取每个Segment的count的最新值,但是可能累加前使用的count发生了变化,那么统计结果就不准了.<br>所以,最安全的做法是在统计size的时候把所有Segment的put、remove和clean方法全部锁住,但是这种做法显然非常低效.<br>因为在累加count操作过程中,之前累加过的count发生变化的几率非常小,所以<br>ConcurrentHashMap的做法是先尝试2次通过不锁Segment的方式来统计各个Segment大小,如果统计的过程中,count发生了变化,则再采用加锁的方式来统计所有Segment的大小.<br>那么ConcurrentHashMap又是如何判断在统计的时候容器是否发生了变化呢?<br>使用modCount变量,在put、remove和clean方法里操作元素前都会将变量modCount进行加1,那么在统计size前后比较modCount是否发生变化,从而得知容器的大小是否发生变化.</p>
-<h4 id="put-、remove-）、get（）方法"><a href="#put-、remove-）、get（）方法" class="headerlink" title="put()、remove(）、get（）方法"></a>put()、remove(）、get（）方法</h4><p>关于源码的讲解可以参考这几篇文章</p>
-<p><a href="https://www.cnblogs.com/dolphin0520/p/3932905.html" target="_blank" rel="noopener">并发容器之ConcurrentHashMap</a></p>
-<p><a href="https://blog.csdn.net/varyall/article/details/80317467" target="_blank" rel="noopener">ConcurrentHashMap put</a></p>
-<h4 id="对ConcurrentHashMap的迭代遍历"><a href="#对ConcurrentHashMap的迭代遍历" class="headerlink" title="对ConcurrentHashMap的迭代遍历"></a>对ConcurrentHashMap的迭代遍历</h4><p>在对hashmap进行迭代遍历时，一旦迭代器创建了就不能调用hashmap的put和rempve方法进行更改，不然的话就会导致ConcurrentModificationException异常，只能通过调用迭代器的remove方法进行删除，这是因为直接调用map的put或者remove方法将导致modcount和exceptmodcount不一致，而在调用迭代器的remove方法时会对这两者进行同步操作。对concurrenthashmap进行迭代时候，可以对map直接进行修改，并且这些修改在迭代器进行遍历时候也会有体现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcurrentHashMapTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="comment">//一个线程对ConcurrentHashMap中的数据进行修改，一个线程对其中的数据进行遍历</span></span><br><span class="line">        ConcurrentHashMap&lt;Integer,String&gt; concurrentHashMap=<span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line">        concurrentHashMap.put(<span class="number">1</span>,<span class="string">"张三"</span>);</span><br><span class="line">        concurrentHashMap.put(<span class="number">2</span>,<span class="string">"李四"</span>);</span><br><span class="line">        concurrentHashMap.put(<span class="number">3</span>,<span class="string">"王五"</span>);</span><br><span class="line">        concurrentHashMap.put(<span class="number">4</span>,<span class="string">"赵六"</span>);</span><br><span class="line">        System.out.println(<span class="string">"修改前concurrenthashmap中的数据为"</span>+concurrentHashMap);</span><br><span class="line">        <span class="comment">//新建一个线程对map中的数据进行更改</span></span><br><span class="line">        Thread A= <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">4000</span>);</span><br><span class="line">                    concurrentHashMap.put(<span class="number">5</span>,<span class="string">"顺治皇帝"</span>);</span><br><span class="line">                    concurrentHashMap.put(<span class="number">4</span>,<span class="string">"刘武武"</span>);</span><br><span class="line">                    System.out.println(<span class="string">"---------------------数据修改成功了可以进行测试"</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        A.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//新建一个遍历线程</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">                    System.out.println(<span class="string">"迭代器中进行遍历的结果为："</span>);</span><br><span class="line">                    Iterator&lt;Map.Entry&lt;Integer,String&gt;&gt; it=concurrentHashMap.entrySet().iterator();</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span>(Map.Entry entry:concurrentHashMap.entrySet())&#123;</span><br><span class="line">                        System.out.print(entry.getKey());</span><br><span class="line">                        System.out.println(entry.getValue());</span><br><span class="line">                       <span class="comment">// Thread.sleep(500);</span></span><br><span class="line">                        A.join();</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://www.cnblogs.com/zhuawang/p/4779649.html" target="_blank" rel="noopener">ConcurrentHashMap使用要点</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/03/同步工具类之信号量/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/03/同步工具类之信号量/" itemprop="url">同步工具类之信号量</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-03T19:08:32+08:00">
-                2018-07-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="信号量-Semaphore-简介"><a href="#信号量-Semaphore-简介" class="headerlink" title="信号量(Semaphore)简介"></a>信号量(Semaphore)简介</h4><p>Java中的信号量是用来控制多个线程对同一个资源的访问的，每个线程通过acquire()方法获得访问的许可，通过release()方法释放这个许可，当这个许可用完的时候后面的线程将无法访问该资源，被阻塞直到有许可被释放。我们可以这样理解，一个厕所的坑位是有限的，先到先得，后面到的需要等到前面的人处理完了之后才能上。如果前面的人没有上完，没办法你只能在外面等着。那我们就直接以上厕所的例子来讲解这个同步工具类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SemaphoreTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        ExecutorService executorService= Executors.newFixedThreadPool(<span class="number">9</span>);</span><br><span class="line">        Semaphore  s=<span class="keyword">new</span> Semaphore(<span class="number">5</span>,<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">9</span>;i++)&#123;</span><br><span class="line">            executorService.execute(<span class="keyword">new</span> Thread(<span class="keyword">new</span> task(s,i)));</span><br><span class="line">        &#125;</span><br><span class="line">        executorService.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">task</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    Semaphore semaphore;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">task</span><span class="params">(Semaphore semaphore,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.count=count;</span><br><span class="line">      <span class="keyword">this</span>.semaphore=semaphore;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            semaphore.acquire();</span><br><span class="line">            System.out.println(<span class="string">"我是第"</span>+count+<span class="string">"获得许可的"</span>);</span><br><span class="line">            Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">            System.out.println(count+<span class="string">"上完厕所了，感觉很舒服。。。。。"</span>);</span><br><span class="line">            semaphore.release();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1798,7 +1803,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-count">42</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1809,7 +1814,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1820,7 +1825,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -1857,7 +1862,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
