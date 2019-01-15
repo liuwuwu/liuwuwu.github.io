@@ -262,6 +262,156 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/15/背包问题专栏——多重背包问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/15/背包问题专栏——多重背包问题/" itemprop="url">背包问题专栏——多重背包问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-15T21:56:55+08:00">
+                2018-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>很高兴终于进入了背包问题的第三部分了-多重背包问题。所谓的多重背包是指每件物品的数量是有限的，我们如何选择可以使得获得的收益是最大的。为了方便讲解，我们直接从实例出发。</p>
+<h4 id="多重背包的实例"><a href="#多重背包的实例" class="headerlink" title="多重背包的实例"></a>多重背包的实例</h4><p>快过年了，小偷又开始行动起来了，他来到了第三家主人家发现有很多好东西，这一次他发现了很多好东西，和前两次不同的是，每种物品的数量是一定的。问如何选择才能够使得收益最大？</p>
+<h4 id="方法1（一维数组方法）"><a href="#方法1（一维数组方法）" class="headerlink" title="方法1（一维数组方法）"></a>方法1（一维数组方法）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 多重背包：一维法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bag4</span><span class="params">(<span class="keyword">int</span> W, <span class="keyword">int</span>[] w, <span class="keyword">int</span>[] v, <span class="keyword">int</span>[] num)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">int</span> n = w.length - <span class="number">1</span>;<span class="comment">// 第一个值，不算	</span></span><br><span class="line">   <span class="keyword">int</span>[] f = <span class="keyword">new</span> <span class="keyword">int</span>[W + <span class="number">1</span>];	</span><br><span class="line">   <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)	</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> j = W; j &gt;= w[i]; j--)		</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= num[i]; k++) &#123;	</span><br><span class="line">                <span class="keyword">if</span> (j - k * w[i] &gt;= <span class="number">0</span> &amp;&amp; f[j - k * w[i]] + k * v[i] &gt; f[j])	</span><br><span class="line">                   f[j] = f[j - k * w[i]] + k * v[i];	</span><br><span class="line">             &#125; 	</span><br><span class="line">             <span class="keyword">return</span> f[W]; <span class="comment">// 最优解</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法2-根据情况分别转换为01背包问题和完全背包问题"><a href="#方法2-根据情况分别转换为01背包问题和完全背包问题" class="headerlink" title="方法2(根据情况分别转换为01背包问题和完全背包问题)"></a>方法2(根据情况分别转换为01背包问题和完全背包问题)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMax</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w,<span class="keyword">int</span>[] num)</span></span>&#123;</span><br><span class="line">       <span class="keyword">int</span> dp[]=<span class="keyword">new</span> <span class="keyword">int</span>[cap+<span class="number">1</span>];</span><br><span class="line">       <span class="comment">//首先讲解一下优化前的算法</span></span><br><span class="line">       <span class="comment">//1.初始化</span></span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=cap;i++)&#123;</span><br><span class="line">           dp[i]=<span class="number">0</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=v.length;i++)&#123;</span><br><span class="line">           <span class="comment">//进行判断，是否可以转换为完全背包问题进行求解</span></span><br><span class="line">         <span class="keyword">if</span>(num[i]*v[i]&gt;cap)&#123;</span><br><span class="line">           <span class="comment">//可以转换为完全背包问题</span></span><br><span class="line">             <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i-<span class="number">1</span>];j&lt;=cap;j++)&#123;</span><br><span class="line">                 dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">//只能转换为01背包问题进行求解</span></span><br><span class="line">         <span class="keyword">else</span>&#123;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> j=cap;j&gt;=v[i-<span class="number">1</span>];j--)&#123;</span><br><span class="line">               <span class="keyword">for</span>(<span class="keyword">int</span> count=<span class="number">0</span>;count&lt;num[i];i++)&#123;</span><br><span class="line">                   <span class="keyword">if</span>(count&lt;=j/v[i])</span><br><span class="line">                dp[j]=Math.max(dp[j],dp[j-count*v[i]]+w[i]);/</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> dp[v.length];</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法3-二进制优化"><a href="#方法3-二进制优化" class="headerlink" title="方法3(二进制优化)"></a>方法3(二进制优化)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过二进制思想进行优化</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMax1</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w,<span class="keyword">int</span>[] num)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] dp=<span class="keyword">new</span> <span class="keyword">int</span>[cap+<span class="number">1</span>];</span><br><span class="line">        <span class="comment">//首先进行初始化</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cap+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            dp[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;v.length+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="comment">//进行判断，是否可以转换为完全背包问题进行求解</span></span><br><span class="line">            <span class="keyword">if</span>(num[i]*v[i]&gt;cap)&#123;</span><br><span class="line">                <span class="comment">//可以转换为完全背包问题</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i];j&lt;=cap;j++)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//反之接着进行二进制优化</span></span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;num[i];k=<span class="number">2</span>*k)&#123;</span><br><span class="line">                       <span class="keyword">for</span>(<span class="keyword">int</span> j=cap;j&gt;=v[i]*k;j--)&#123;</span><br><span class="line">                       dp[j]=Math.max(dp[j],dp[j-k*v[i-<span class="number">1</span>]]+k*w[i-<span class="number">1</span>]);</span><br><span class="line">                       num[i]=num[i]-k;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=cap;j&gt;=v[i]*num[i];j--)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-num[i]*v[i-<span class="number">1</span>]]+num[i]*w[i-<span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[cap+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="https://blog.csdn.net/xxxslinyue/article/details/65642824" target="_blank" rel="noopener">多重背包的二进制优化</a></p>
+<p><a href="https://blog.csdn.net/jerans/article/details/54916955" target="_blank" rel="noopener">背包模板（01，完全，多重背包的二进制优化和单调队列优化</a></p>
+<p><a href="https://blog.csdn.net/mystery_guest/article/details/51878140" target="_blank" rel="noopener">多重背包二进制优化模板分析</a></p>
+<p><a href="https://blog.csdn.net/qq_19446965/article/details/81349807" target="_blank" rel="noopener">背包问题汇总-01背包、完全背包、多重背包-java</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/背包问题专栏——完全背包问题/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1596,151 +1746,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/03/同步工具类之栅栏/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/03/同步工具类之栅栏/" itemprop="url">同步工具类之栅栏</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-03T15:34:03+08:00">
-                2018-07-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="栅栏简介"><a href="#栅栏简介" class="headerlink" title="栅栏简介"></a>栅栏简介</h3><p>栅栏和闭锁的功能有点相似，但是也有所不同，不然它也就没有存在的必要了。他们之间的差异我们在后文中会进行总结。栅栏就是设置一个关卡， 等所有要到达的线程都到达汇合了之后这些线程才可以同时继续执行，有点不抛弃不放弃任何一个小伙伴的意思。就像在旅游的时候，大巴车肯定会等到所有的人都到达了之后才会出发，不然司机肯定会被投诉的。本文主要介绍两种栅栏：CyclicBarrier和Exchanger。</p>
-<h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><p>CyclicBarrier可以使得一定数量的参与方反复的在栅栏处汇集，他在并行迭代算法中非常有用，我们可以将一个问题划分为几个相互独立的子问题，在不同的线程中进行计算，先到达的线程等待其他线程，当所有的线程都到达栅栏处时一起往下执行。栅栏可以通过重置的方式继续执行。<br>接下来为了讲解问题的方便，我将以旅游团为例进行介绍：出发的时候必须等到所有人到达了之后在开车，每参观完一个景点都要清点人数，确定大家都到齐之后去下一个经典，返回前也要如此。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//首先新建一个CyclicBarrier</span></span><br><span class="line">        CyclicBarrier cb=<span class="keyword">new</span> CyclicBarrier(<span class="number">6</span>);</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">           <span class="keyword">new</span> Thread(<span class="keyword">new</span> beforeTraval(cb,i)).start();</span><br><span class="line">       &#125;</span><br><span class="line">       cb.await();</span><br><span class="line">       System.out.println(<span class="string">"----------------------------"</span>);</span><br><span class="line">        System.out.println(<span class="string">"准备好了，出发....."</span>);</span><br><span class="line">        cb.reset();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Traval1(cb,i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">        cb.await();</span><br><span class="line">        System.out.println(<span class="string">"----------------------------"</span>);</span><br><span class="line">        System.out.println(<span class="string">"都集合完了我们回家....."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">beforeTraval</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CyclicBarrier cb;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">beforeTraval</span><span class="params">(CyclicBarrier cb,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cb=cb;</span><br><span class="line">        <span class="keyword">this</span>.count=count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">500</span>);</span><br><span class="line">            System.out.println(<span class="string">"第"</span>+count+<span class="string">"个游客已经准备就绪了"</span>);</span><br><span class="line">            cb.await();</span><br><span class="line">           <span class="comment">// Thread.currentThread().sleep(1000);</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Traval1</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CyclicBarrier cb;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Traval1</span><span class="params">(CyclicBarrier cb,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cb=cb;</span><br><span class="line">        <span class="keyword">this</span>.count=count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">500</span>);</span><br><span class="line">            System.out.println(<span class="string">"第"</span>+count+<span class="string">"个游客已经游览完长城了"</span>);</span><br><span class="line">            cb.await();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h3><p>Exchanger一般用于两个工作线程之间交换数据,当一个线程先到达后，就会在那里等待，知道另外一个线程出现，是不是有点像香港电影中的黑帮交易，双方汇合之后一手交钱一手交货。 从官方的javadoc可以知道，当一个线程到达exchange调用点时，如果它的伙伴线程此前已经调用了此方法，那么它的伙伴会被调度唤醒并与之进行对象交换，然后各自返回。如果它的伙伴还没到达交换点，那么当前线程将会被挂起，直至伙伴线程到达——完成交换正常返回；或者当前线程被中断——抛出中断异常；又或者是等候超时——抛出超时异常。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExchangerTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        Exchanger ex=<span class="keyword">new</span> Exchanger();</span><br><span class="line">        <span class="comment">//新建一个线程，他有钱，需要与别人交换糖果</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">int</span> money=<span class="number">100</span>;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">"我有钱我想和别人交换糖果"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    String a=(String)ex.exchange(money);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我拿钱换了"</span>+a);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//两外一个线程有糖果想要换钱</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                String suger=<span class="string">"超级好吃的巧克力糖果"</span>;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">"我有糖果我想换钱"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> a=(<span class="keyword">int</span>)ex.exchange(suger);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我拿糖果换了"</span>+a+<span class="string">"元钱"</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="栅栏和闭锁的区别"><a href="#栅栏和闭锁的区别" class="headerlink" title="栅栏和闭锁的区别"></a>栅栏和闭锁的区别</h3><p>1.栅栏主要是等待线程(所有的线程都同时到达了，这些线程才开始往下继续执行)，而闭锁主要是等待事件（一个或者一组线程必须等到某一个或者一组他们需要的事件发生了才继续执行）。栅栏是都到了往下继续进行，闭锁是某一事件发生了（裁判枪响了）继续进行。<br>2.栅栏是可以重复使用的，可以进行重置，而闭锁是一次性的；<br>3.栅栏是通过查看await()的个数决定是否触发，闭锁是通过countdown()方法来决定是否触发。一个是加法计数，一个是减法计数。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1793,7 +1798,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1804,7 +1809,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1815,7 +1820,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

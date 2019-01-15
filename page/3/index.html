@@ -262,6 +262,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/03/同步工具类之栅栏/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/03/同步工具类之栅栏/" itemprop="url">同步工具类之栅栏</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-03T15:34:03+08:00">
+                2018-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/并发编程/" itemprop="url" rel="index">
+                    <span itemprop="name">并发编程</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="栅栏简介"><a href="#栅栏简介" class="headerlink" title="栅栏简介"></a>栅栏简介</h3><p>栅栏和闭锁的功能有点相似，但是也有所不同，不然它也就没有存在的必要了。他们之间的差异我们在后文中会进行总结。栅栏就是设置一个关卡， 等所有要到达的线程都到达汇合了之后这些线程才可以同时继续执行，有点不抛弃不放弃任何一个小伙伴的意思。就像在旅游的时候，大巴车肯定会等到所有的人都到达了之后才会出发，不然司机肯定会被投诉的。本文主要介绍两种栅栏：CyclicBarrier和Exchanger。</p>
+<h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><p>CyclicBarrier可以使得一定数量的参与方反复的在栅栏处汇集，他在并行迭代算法中非常有用，我们可以将一个问题划分为几个相互独立的子问题，在不同的线程中进行计算，先到达的线程等待其他线程，当所有的线程都到达栅栏处时一起往下执行。栅栏可以通过重置的方式继续执行。<br>接下来为了讲解问题的方便，我将以旅游团为例进行介绍：出发的时候必须等到所有人到达了之后在开车，每参观完一个景点都要清点人数，确定大家都到齐之后去下一个经典，返回前也要如此。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//首先新建一个CyclicBarrier</span></span><br><span class="line">        CyclicBarrier cb=<span class="keyword">new</span> CyclicBarrier(<span class="number">6</span>);</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">           <span class="keyword">new</span> Thread(<span class="keyword">new</span> beforeTraval(cb,i)).start();</span><br><span class="line">       &#125;</span><br><span class="line">       cb.await();</span><br><span class="line">       System.out.println(<span class="string">"----------------------------"</span>);</span><br><span class="line">        System.out.println(<span class="string">"准备好了，出发....."</span>);</span><br><span class="line">        cb.reset();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Traval1(cb,i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">        cb.await();</span><br><span class="line">        System.out.println(<span class="string">"----------------------------"</span>);</span><br><span class="line">        System.out.println(<span class="string">"都集合完了我们回家....."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">beforeTraval</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CyclicBarrier cb;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">beforeTraval</span><span class="params">(CyclicBarrier cb,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cb=cb;</span><br><span class="line">        <span class="keyword">this</span>.count=count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">500</span>);</span><br><span class="line">            System.out.println(<span class="string">"第"</span>+count+<span class="string">"个游客已经准备就绪了"</span>);</span><br><span class="line">            cb.await();</span><br><span class="line">           <span class="comment">// Thread.currentThread().sleep(1000);</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Traval1</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CyclicBarrier cb;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Traval1</span><span class="params">(CyclicBarrier cb,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cb=cb;</span><br><span class="line">        <span class="keyword">this</span>.count=count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">500</span>);</span><br><span class="line">            System.out.println(<span class="string">"第"</span>+count+<span class="string">"个游客已经游览完长城了"</span>);</span><br><span class="line">            cb.await();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h3><p>Exchanger一般用于两个工作线程之间交换数据,当一个线程先到达后，就会在那里等待，知道另外一个线程出现，是不是有点像香港电影中的黑帮交易，双方汇合之后一手交钱一手交货。 从官方的javadoc可以知道，当一个线程到达exchange调用点时，如果它的伙伴线程此前已经调用了此方法，那么它的伙伴会被调度唤醒并与之进行对象交换，然后各自返回。如果它的伙伴还没到达交换点，那么当前线程将会被挂起，直至伙伴线程到达——完成交换正常返回；或者当前线程被中断——抛出中断异常；又或者是等候超时——抛出超时异常。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExchangerTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        Exchanger ex=<span class="keyword">new</span> Exchanger();</span><br><span class="line">        <span class="comment">//新建一个线程，他有钱，需要与别人交换糖果</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">int</span> money=<span class="number">100</span>;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">"我有钱我想和别人交换糖果"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    String a=(String)ex.exchange(money);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我拿钱换了"</span>+a);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//两外一个线程有糖果想要换钱</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                String suger=<span class="string">"超级好吃的巧克力糖果"</span>;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">"我有糖果我想换钱"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> a=(<span class="keyword">int</span>)ex.exchange(suger);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我拿糖果换了"</span>+a+<span class="string">"元钱"</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="栅栏和闭锁的区别"><a href="#栅栏和闭锁的区别" class="headerlink" title="栅栏和闭锁的区别"></a>栅栏和闭锁的区别</h3><p>1.栅栏主要是等待线程(所有的线程都同时到达了，这些线程才开始往下继续执行)，而闭锁主要是等待事件（一个或者一组线程必须等到某一个或者一组他们需要的事件发生了才继续执行）。栅栏是都到了往下继续进行，闭锁是某一事件发生了（裁判枪响了）继续进行。<br>2.栅栏是可以重复使用的，可以进行重置，而闭锁是一次性的；<br>3.栅栏是通过查看await()的个数决定是否触发，闭锁是通过countdown()方法来决定是否触发。一个是加法计数，一个是减法计数。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/02/同步工具类之闭锁/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -357,149 +502,6 @@
           
             <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>同步工具类可以是任何一个对象，只要它能够根据自身的状态来协调线程的控制流，常用的同步工具类包括信号量、栅栏、闭锁。所有的同步工具类都包含一些特定的结构工作化属性，他们封装了一些状态，这些状态决定了执行同步工具类的线程是继续执行还是等待。此外还提供了一些方法对状态进行操作，还提供了另外一些方法用于高效的等待同步工具类进入到预期的状态。<br>———— 摘录至并发编程实战</p>
 <h3 id="闭锁"><a href="#闭锁" class="headerlink" title="闭锁"></a>闭锁</h3><p>闭锁就像是一扇门，只有到达了结束状态时这扇门才会打开，换句话说没有接收到开门的指令谁也别想进来。感觉这就像古代的时候的城门，不到某一个具体的时间，不会开门。闭锁主要用来使得一个或者几个线程等待一组事件的发生。闭锁里有个计数器，每当一个事件发生计数器就减一(countdown()方法)，当计数器的值为0的时候就会打开这扇门。若有多条线程，其中一条线程需要等到其他所有线程准备完所需的资源后才能运行，这样的情况可以使用闭锁。接下来我就以赛跑比赛为例介绍一下闭锁的使用。众所周知在赛跑比赛中所有的选手都要等待裁判的发令枪响才能够出发，等到所有的选手都冲过终点比赛就结束了。所以我们可以选择使用两个闭锁，一个控制开始，一个控制结束。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">countdownlatchteat</span> </span>&#123;</span><br><span class="line">    <span class="comment">//static int i=0;</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> num=<span class="number">5</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        <span class="comment">//首先新建两个闭锁，一个控制开始，一个控制结束</span></span><br><span class="line">          CountDownLatch start=<span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</span><br><span class="line">          CountDownLatch end=<span class="keyword">new</span> CountDownLatch(num);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> runner(start,end,i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">10000</span>);</span><br><span class="line">            System.out.println(<span class="string">"比赛开始"</span>);</span><br><span class="line">            start.countDown();</span><br><span class="line">            end.await();</span><br><span class="line">            System.out.println(<span class="string">"比赛结束"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">runner</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CountDownLatch start;</span><br><span class="line">    CountDownLatch end;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">runner</span><span class="params">(<span class="keyword">final</span> CountDownLatch start,<span class="keyword">final</span> CountDownLatch end,<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.end=end;</span><br><span class="line">        <span class="keyword">this</span>.start=start;</span><br><span class="line">        <span class="keyword">this</span>.j=i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">           <span class="comment">// Thread.currentThread().sleep(1000);</span></span><br><span class="line">            System.out.println(<span class="string">"大家好，我是"</span>+j+<span class="string">"号运动员，我准备好了"</span>);</span><br><span class="line">            start.await();</span><br><span class="line">            System.out.println(j+<span class="string">"号运动员正在奋力的向前跑........."</span>);</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">3000</span>);</span><br><span class="line">            System.out.println(j+<span class="string">"号运动员已经到达了终点"</span>);</span><br><span class="line">            end.countDown();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/24/hash冲突详解/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/24/hash冲突详解/" itemprop="url">Hash冲突详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T14:26:20+08:00">
-                2018-06-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="hash冲突简介"><a href="#hash冲突简介" class="headerlink" title="hash冲突简介"></a>hash冲突简介</h4><p>在Java编程语言中，最基本的数据结构有两种，一种是数组，另外一种是模拟引用，所有的数据结构都可以通过这两种数据结构进行构造，HashMap同样如此。HashMap在进行数据的存储的时候是通过hash算法计算键值的hash值来确定元素的储存位置的，如果hash函数设置的不是很合理就会出现不同的键值计算得到的hash值一样，这就是所谓的hash冲突。hash冲突十分普遍，一般来说很难避免，只能通过一定的手段降低冲突的风险。</p>
-<h4 id="hash冲突的解决办法"><a href="#hash冲突的解决办法" class="headerlink" title="hash冲突的解决办法"></a>hash冲突的解决办法</h4><p>1.开放地址法<br>所谓开放地址法就是在新开辟的数组中依次有序寻找空位进行存储。常用的开放地址法有三种：线性探测法、二次探测法、再哈希法。参考博客<a href="https://blog.csdn.net/cai2016/article/details/52728761?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="noopener">哈希表之开放地址的三种方法</a>。本文主要讲述一下线性探测法，所谓线性探测说白了就是看有没有空位置，没有空位置我就按照顺序找下去，知道找到空位置就把元素放进去。取元素的时候就首先根据hash值进行定位，如果那个位置的元素和我们要寻找的元素不相等，就顺序的找下去，不撞南墙不回头，直到找到那个元素为止。<br>2.再散列函数法<br>首先多定义几个函数f1、f2…，当f1函数出现hash冲突的时候就换一个哈希函数f2进行定位如果还是出现冲突再换一个函数….<br>3.链地址法<br>链地址法就是通过数组加链表的方式来处理hash冲突，首先定义一个链表数组，每个数组的元素就是一组hash值相同的链表，通过这种方法可以有效的减小查询的效率同时由于采用了链表的数据结构，元素之间的存储空间并不一定需要是连续的，可以节约内存空间，hashmap就是通过这种方式处理hash冲突的。</p>
 
           
         
@@ -645,6 +647,149 @@
 <h3 id="同步容器"><a href="#同步容器" class="headerlink" title="同步容器"></a>同步容器</h3><h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><p>Java中常见的同步容器大概可以分为两类：<br>1.HashTable、Stack、Vector;<br>2.通过Collections类中的静态方法创建的类；<br>HashTable实现了Map接口，里面的所有方法都都通过内置锁进行了同步;<br><img src="https://liuwuwu.github.io/picture/tongbu.png" alt="">Vector实现了List接口，底层实现也是数组，其中的方法都通过内置锁进行了同步；Stack继承了Vector。这些类有个共同的特点就是里面的方法都是通过Synchornized关键字实现的，是不是这些同步容器类就一定是线程安全的呢？答案是否定的，在多线程环境中使用这些同步容器类时往往需要客户端进行额外的同步，不然还是容易出现线程的安全性。</p>
 <h4 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h4><p>1.因为同步容器类的底层实现是通过Synchornized关键字修饰方法实现的，所以对容器的并发访问都是串行执行的，这就五星之中降低了系统的性能（多个线程同时访问时会出现阻塞等待的情况）；<br>2.同步容器虽然能够确保一个时刻只有一个线程访问它，但是它不能够保证除了其他代码与他构成的整体的原子性，就像一个官员他自己虽然很清廉但是如果他所在部门的他的其他同事的不是很清廉，这仍然会影响整个部门的形象。所以就需要用户添加额外的同步机制进行协调处理；参考博客 <a href="https://www.cnblogs.com/dolphin0520/p/3933404.html" target="_blank" rel="noopener">Java并发编程：同步容器</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Vector&lt;Integer&gt; vector = <span class="keyword">new</span> Vector&lt;Integer&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">                vector.add(i);</span><br><span class="line">            Thread thread1 = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;vector.size();i++)</span><br><span class="line">                        vector.remove(i);</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread thread2 = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;vector.size();i++)</span><br><span class="line">                        vector.get(i);</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;;</span><br><span class="line">            thread1.start();</span><br><span class="line">            thread2.start();</span><br><span class="line">            <span class="keyword">while</span>(Thread.activeCount()&gt;<span class="number">10</span>)   &#123;</span><br><span class="line">                 </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>3.对同步容器进行并发的迭代修改时会报ConcurrentModificationException异常，这个异常的出现原因就是迭代器在进行遍历时候会检查expectedModCount和modCount值是否相等，如果不相等就会抛出这个异常。但是单线程中在迭代器进行删除元素不会抛出这个异常，主要是调用迭代器的删除方法时会对这两个值进行同步。关于这个异常可以参考<a href="https://www.cnblogs.com/dolphin0520/p/3933551.html" target="_blank" rel="noopener">Java ConcurrentModificationException异常原因和解决方法</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/24/hash冲突详解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/24/hash冲突详解/" itemprop="url">Hash冲突详解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T14:26:20+08:00">
+                2018-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="hash冲突简介"><a href="#hash冲突简介" class="headerlink" title="hash冲突简介"></a>hash冲突简介</h4><p>在Java编程语言中，最基本的数据结构有两种，一种是数组，另外一种是模拟引用，所有的数据结构都可以通过这两种数据结构进行构造，HashMap同样如此。HashMap在进行数据的存储的时候是通过hash算法计算键值的hash值来确定元素的储存位置的，如果hash函数设置的不是很合理就会出现不同的键值计算得到的hash值一样，这就是所谓的hash冲突。hash冲突十分普遍，一般来说很难避免，只能通过一定的手段降低冲突的风险。</p>
+<h4 id="hash冲突的解决办法"><a href="#hash冲突的解决办法" class="headerlink" title="hash冲突的解决办法"></a>hash冲突的解决办法</h4><p>1.开放地址法<br>所谓开放地址法就是在新开辟的数组中依次有序寻找空位进行存储。常用的开放地址法有三种：线性探测法、二次探测法、再哈希法。参考博客<a href="https://blog.csdn.net/cai2016/article/details/52728761?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="noopener">哈希表之开放地址的三种方法</a>。本文主要讲述一下线性探测法，所谓线性探测说白了就是看有没有空位置，没有空位置我就按照顺序找下去，知道找到空位置就把元素放进去。取元素的时候就首先根据hash值进行定位，如果那个位置的元素和我们要寻找的元素不相等，就顺序的找下去，不撞南墙不回头，直到找到那个元素为止。<br>2.再散列函数法<br>首先多定义几个函数f1、f2…，当f1函数出现hash冲突的时候就换一个哈希函数f2进行定位如果还是出现冲突再换一个函数….<br>3.链地址法<br>链地址法就是通过数组加链表的方式来处理hash冲突，首先定义一个链表数组，每个数组的元素就是一组hash值相同的链表，通过这种方法可以有效的减小查询的效率同时由于采用了链表的数据结构，元素之间的存储空间并不一定需要是连续的，可以节约内存空间，hashmap就是通过这种方式处理hash冲突的。</p>
 
           
         
@@ -1565,153 +1710,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/12/工厂设计模式/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/12/工厂设计模式/" itemprop="url">工厂模式</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-12T14:15:21+08:00">
-                2018-06-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>工厂模式是设计模式中十分重要的一种，在程序开发中具有广泛的应用，工厂模式分为三种：简单工厂模式（静态工厂模式）、工厂方法模式、抽象工厂模式。本文将结合自己的理解对这三种模式进行详细介绍。</p>
-<h3 id="简单工厂模式"><a href="#简单工厂模式" class="headerlink" title="简单工厂模式"></a>简单工厂模式</h3><p>简单工厂模式又叫静态工厂模式，顾名思义它是通过静态方法进行对象创建的。它的工厂类既不是抽象类也没有实现某一个工厂接口，而是一个实实在在具体的类。里面可以通过case或者if-else语句根据传入的参数选择创建的对象。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> Electric&#123;</span><br><span class="line">    <span class="function">String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">diannao</span> <span class="keyword">implements</span> <span class="title">Electric</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"电脑价格为"</span>+i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bingxiang</span> <span class="keyword">implements</span> <span class="title">Electric</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">price</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"冰箱价格为"</span>+i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SimpleFactory</span> </span>&#123;</span><br><span class="line">    <span class="comment">//i=1的时候新建冰箱，等于2的时候新建电脑；</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  Electric <span class="title">create</span><span class="params">(<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">switch</span> (i)&#123;</span><br><span class="line">            <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">            <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> <span class="keyword">new</span> diannao();</span><br><span class="line">            <span class="keyword">default</span>: <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        Electric a= SimpleFactory.create(<span class="number">1</span>);</span><br><span class="line">        System.out.println(a.price(<span class="number">4500</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h3><p>工厂方法设计模式去掉了简单工厂模式中工厂方法（create方法）的静态属性，使得它可以被子类继承。在简单工厂模式中需要在工厂方法中集中处理的压力可以分散在工厂方法模式中，工厂方法模式也就是通过继承将对象创建的任务延时到子类工厂中。工厂方法模式的特点是一类对象（抽象对象）,一个抽象工厂和若干个具体工厂（用来创建具体的对象）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> <span class="class"><span class="keyword">interface</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function">Electric <span class="title">create</span> <span class="params">()</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//通过factory接口的实现类来创建对象</span></span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">bingxiangfactory</span> <span class="keyword">implements</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Electric <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">    &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="class"><span class="keyword">class</span> <span class="title">diannaofactory</span> <span class="keyword">implements</span> <span class="title">factory</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Electric <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> bingxiang();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="抽象工厂模式"><a href="#抽象工厂模式" class="headerlink" title="抽象工厂模式"></a>抽象工厂模式</h3><p>抽象工厂模式是工厂方法模式的升级版，在工厂方法模式中只能创建某一类对象，当需要创建某几类互相关联或者互相依赖的对象时候，工厂方法模式需要创建的子类太多，不是很方便。所以就出现了抽象工厂模式，它的特点是几个互相关联或者依赖的抽象类（A、B、C）、一个抽象工厂、若干个具体工厂。只不过具体工厂中可以创建多种实例对象(A1、B1、C1)或(A2、B2、C2)。具体的例子我就不写了可以参考这篇博客 <a href="https://blog.csdn.net/jason0539/article/details/44976775" target="_blank" rel="noopener">JAVA设计模式之抽象工厂模式</a></p>
-<h3 id="工厂模式的应用场景"><a href="#工厂模式的应用场景" class="headerlink" title="工厂模式的应用场景"></a>工厂模式的应用场景</h3><p>1.对象的创建过程十分复杂，需要初始化很多参数、甚至需要查询数据库等；<br>2.某个类有很多子类，这些类的创建过程在业务中有很多改变；</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>工厂模式能够实现对象的创建和使用分离，在使用对象时不需要关心对象是如何创建的，降低耦合度的同时提高了代码的复用性，提高程序的扩展性。简单工厂设计模式虽然能够将对象的创建和使用分离但是它的扩展能力不强，当用户需要创建新的具体对象时（如上例中想创建吹风机对象）需要修改原始代码。所以它并不能满足开闭原则（对扩展开放，对修改关闭）。于是就有了工厂方法设计模式，首先定义一个抽象的工厂类（或者接口），将具体的对象创建任务交给具体的子类工厂。当需要创建新的具体对象时，仅需要添加一个对应的子类工厂就可以了，完全符合开闭原则。但是工厂方法的设计模式有个缺点就是当我们需要创建几类互相依赖或者关联的对象时会定义大量的子类使得代码变得十分冗余。于是抽象工厂模式便隆重登场了，它可以理解为工厂方法模式的升级版。也是通过子类工厂来创建对象只不过子类工厂可以创建多种互相关联的实例对象(A1、B1、C1)或(A2、B2、C2)。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1764,7 +1762,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">42</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1775,7 +1773,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1786,7 +1784,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-count">13</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
