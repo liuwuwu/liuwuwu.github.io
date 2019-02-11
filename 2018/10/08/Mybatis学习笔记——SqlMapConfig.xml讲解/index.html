@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mybatis学习笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SqlMapConfig.xml是mybatis的全局配置文件，他是满足dtd约束的，其中配置的内容和顺序如下：  properities（属性） settings (全局配置参数) typeAliases (类型别名) typeHandlers （类型处理器） objectFactory （对象工厂） plugins (插件) environments (环境集合属性对象)   environm">
+<meta name="keywords" content="Mybatis学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis学习笔记——SqlMapConfig.xml讲解">
+<meta property="og:url" content="http://yoursite.com/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="SqlMapConfig.xml是mybatis的全局配置文件，他是满足dtd约束的，其中配置的内容和顺序如下：  properities（属性） settings (全局配置参数) typeAliases (类型别名) typeHandlers （类型处理器） objectFactory （对象工厂） plugins (插件) environments (环境集合属性对象)   environm">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-29T07:55:29.787Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mybatis学习笔记——SqlMapConfig.xml讲解">
+<meta name="twitter:description" content="SqlMapConfig.xml是mybatis的全局配置文件，他是满足dtd约束的，其中配置的内容和顺序如下：  properities（属性） settings (全局配置参数) typeAliases (类型别名) typeHandlers （类型处理器） objectFactory （对象工厂） plugins (插件) environments (环境集合属性对象)   environm">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/">
+
+
+
+
+
+  <title>Mybatis学习笔记——SqlMapConfig.xml讲解 | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mybatis学习笔记——SqlMapConfig.xml讲解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T20:54:19+08:00">
+                2018-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>SqlMapConfig.xml是mybatis的全局配置文件，他是满足dtd约束的，其中配置的内容和顺序如下：</p>
+<ol>
+<li>properities（属性）</li>
+<li>settings (全局配置参数)</li>
+<li>typeAliases (类型别名)</li>
+<li>typeHandlers （类型处理器）</li>
+<li>objectFactory （对象工厂）</li>
+<li>plugins (插件)</li>
+<li>environments (环境集合属性对象)<br>   environment（环境子属性对象）<pre><code>transactionManager (事务管理)
+    dataSource (数据源)
+</code></pre></li>
+<li>mappers (映射器)<h4 id="properities-属性"><a href="#properities-属性" class="headerlink" title="properities(属性)"></a>properities(属性)</h4>需求：将数据库连接参数单独配置在jdbc.properties中，只需要在SqlMapConfig.xml中加载jdbc.properties的属性值。在SqlMapConfig.xml中就不需要对数据库连接参数进行硬编码。将数据库连接参数只配置在jdbc.properties中，原因：方便对参数进行统一管理，其他xml可以引用该jdbc.properties。<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties resource="jdbc.properties"&gt;&lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>配置文件中的内容：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">driver=com.mysql.cj.jdbc.Driver</span><br><span class="line">url=jdbc:mysql:<span class="comment">//127.0.0.1:3306/User?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=GMT</span></span><br><span class="line">username=root</span><br><span class="line">password=<span class="number">123456</span></span><br></pre></td></tr></table></figure></p>
+<p>应用属性的方式如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataSource type=<span class="string">"POOLED"</span>&gt;</span><br><span class="line">                 &lt;property name=<span class="string">"driver"</span> value=<span class="string">"$&#123;driver&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"url"</span> value=<span class="string">"$&#123;url&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"username"</span> value=<span class="string">"$&#123;username&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"password"</span> value=<span class="string">"$&#123;password&#125;"</span>/&gt;</span><br><span class="line">            &lt;/dataSource&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>注意：Mybatis中将按照如下顺序加载属性</strong></p>
+<ol>
+<li><p>在properties元素体内定义的属性首先被读取；</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties resource=<span class="string">"jdbc.properties"</span>&gt;</span><br><span class="line">        &lt;property name="name" value="hello"&gt;&lt;/property&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后会读取properities元素中resource或url加载的属性，他会覆盖已经读取的同名属性；</p>
+</li>
+<li><p>最后读取parameterType传递的属性，他会覆盖已经读取的同名属性；<br>因此，通过parameterType传递的属性具有最高的优先级，resource或者url加载的属性次之，最低优先级的是properties元素体内定义的属性；</p>
+</li>
+</ol>
+<p><strong>建议</strong>：不要在properties元素体内添加任何属性值，只将属性值定义在properties文件中，在properties文件中定义的属性名要有一定的特殊性，如XXXX.XXXX.XXXX;</p>
+<h4 id="settings全局参数配置"><a href="#settings全局参数配置" class="headerlink" title="settings全局参数配置"></a>settings全局参数配置</h4><p>mybatis框架在运行时可以调整一些运行参数。<br>比如：开启二级缓存、开启延迟加载…</p>
+<h4 id="typeAliases-别名-重点"><a href="#typeAliases-别名-重点" class="headerlink" title="typeAliases(别名)重点"></a>typeAliases(别名)重点</h4><p>在mapper.xml中定义了很多statement，statement需要parameterType指定输入的参数的类型，需要resultType指定输出结果的映射类型。如果在指定类型时输入类型全路径，不方便进行开发，可以针对parameterType或者resultType指定的类型定义一些别名，在mapper.xml中通过别名定义，方便开发。<br>单个别名的定义方式如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;typeAliases&gt;</span><br><span class="line">        &lt;!--单个别名的定义--&gt;</span><br><span class="line">        &lt;typeAlias type="po.User" alias="user"&gt;&lt;/typeAlias&gt;</span><br><span class="line">    &lt;/typeAliases&gt;</span><br><span class="line"><span class="comment">//type：表示类的路径，alias:表示类的别名。</span></span><br></pre></td></tr></table></figure></p>
+<p>批量定义别名的定义方法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;typeAliases&gt;</span><br><span class="line">        &lt;package name="po" &gt;&lt;/package&gt;</span><br><span class="line">    &lt;/typeAliases&gt;</span><br><span class="line"><span class="comment">//mybatis自动扫描包中的pojo类，自动定义别名，别名就是类名(首字母大写或者小写都可以)</span></span><br></pre></td></tr></table></figure></p>
+<p>很显然批量别名的定义比较常用。</p>
+<h4 id="typeHandlers-类型处理器"><a href="#typeHandlers-类型处理器" class="headerlink" title="typeHandlers(类型处理器)"></a>typeHandlers(类型处理器)</h4><p>mybatis中通过typeHandlers完成jdbc类型和Java类型的转换。通常情况下，mybatis提供的类型处理器满足日常需要，不要我们自定义。</p>
+<h4 id="mappers-映射配置"><a href="#mappers-映射配置" class="headerlink" title="mappers(映射配置)"></a>mappers(映射配置)</h4><p>1.通过resource加载单个映射文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;mappers&gt;</span><br><span class="line">        &lt;!-- 加载映射文件--&gt;</span><br><span class="line">        &lt;mapper resource=<span class="string">"User.xml"</span>/&gt;</span><br><span class="line">    &lt;/mappers&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2.通过mapper接口加载单个映射文件<br>需要遵循一些规范：需要将mapper接口类名和mapper.xml映射文件名保持一致，且在同一个目录中，上边的规范的前提是：使用的是mapper代理的方法。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper class="dao.mapper.UserMapper" &gt;&lt;/mapper&gt;</span><br></pre></td></tr></table></figure></p>
+<p>3.批量加载mapper(推荐使用)<br>指定mapper的接口的包名，mybatis自动扫描包下的所有mapper接口进行加载，遵循一些规范：需要将mapper接口和mapper.xml映射文件名称保持一致，且在一个目录中，上边规范的前提是：使用的是mapper代理方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">package</span> name=<span class="string">"dao.mapper"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mybatis学习笔记/" rel="tag"># Mybatis学习笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/06/Mybatis学习笔记——mapper代理方法/" rel="next" title="Mybatis学习笔记——mapper代理方法">
+                <i class="fa fa-chevron-left"></i> Mybatis学习笔记——mapper代理方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/09/Mybatis学习笔记——输入输出映射/" rel="prev" title="Mybatis学习笔记——输入输出映射">
+                Mybatis学习笔记——输入输出映射 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#properities-属性"><span class="nav-number">1.</span> <span class="nav-text">properities(属性)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#settings全局参数配置"><span class="nav-number">2.</span> <span class="nav-text">settings全局参数配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#typeAliases-别名-重点"><span class="nav-number">3.</span> <span class="nav-text">typeAliases(别名)重点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#typeHandlers-类型处理器"><span class="nav-number">4.</span> <span class="nav-text">typeHandlers(类型处理器)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mappers-映射配置"><span class="nav-number">5.</span> <span class="nav-text">mappers(映射配置)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mybatis学习笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="思路：程序员只用编写mapper接口(相当于dao接口)和mapper.xml映射文件。mybatis可以自动生成mapper接口实现类代理对象，但是要遵守如下开发规范：  在mapper.xml中namespace等于mapper接口地址； mapper接口中方法名和mapper.xml中statement的id保持一致； mapper接口中的方法的输入参数类型和mapper.xml中state">
+<meta name="keywords" content="Mybatis学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis学习笔记——mapper代理方法">
+<meta property="og:url" content="http://yoursite.com/2018/10/06/Mybatis学习笔记——mapper代理方法/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="思路：程序员只用编写mapper接口(相当于dao接口)和mapper.xml映射文件。mybatis可以自动生成mapper接口实现类代理对象，但是要遵守如下开发规范：  在mapper.xml中namespace等于mapper接口地址； mapper接口中方法名和mapper.xml中statement的id保持一致； mapper接口中的方法的输入参数类型和mapper.xml中state">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-29T11:43:54.190Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mybatis学习笔记——mapper代理方法">
+<meta name="twitter:description" content="思路：程序员只用编写mapper接口(相当于dao接口)和mapper.xml映射文件。mybatis可以自动生成mapper接口实现类代理对象，但是要遵守如下开发规范：  在mapper.xml中namespace等于mapper接口地址； mapper接口中方法名和mapper.xml中statement的id保持一致； mapper接口中的方法的输入参数类型和mapper.xml中state">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/06/Mybatis学习笔记——mapper代理方法/">
+
+
+
+
+
+  <title>Mybatis学习笔记——mapper代理方法 | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/Mybatis学习笔记——mapper代理方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mybatis学习笔记——mapper代理方法</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-06T08:31:43+08:00">
+                2018-10-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>思路：程序员只用编写mapper接口(相当于dao接口)和mapper.xml映射文件。mybatis可以自动生成mapper接口实现类代理对象，但是要遵守如下开发规范：</p>
+<ol>
+<li>在mapper.xml中namespace等于mapper接口地址；</li>
+<li>mapper接口中方法名和mapper.xml中statement的id保持一致；</li>
+<li>mapper接口中的方法的输入参数类型和mapper.xml中statement的paramemterType指定的类型一致；</li>
+<li>mapper接口的方法的返回类型和mapper.xml中statement的resultType指定的类型一致；<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><h5 id="创建mapper-xml文件"><a href="#创建mapper-xml文件" class="headerlink" title="创建mapper.xml文件"></a>创建mapper.xml文件</h5></li>
+</ol>
+<p><strong><strong>主要需要注意的是mapper.xml文件中的namespace要和mapper接口的地址一致</strong></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;!--namespace命名空间，作用就是对sql进行分类管理，可以简单的理解为sql隔离</span><br><span class="line">注意：使用mapper代理的方法进行开发，namespace有特殊的作用--&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"dao.mapper.UserMapper"</span>&gt;</span><br><span class="line">    &lt;!--在映射文件中配置很多sql语句，通过select执行数据库查询；id:标识映射文件中的sql,称为statement的id</span><br><span class="line">    将sql语句封装到mappedStatement对象中,所以将它称为Statement的id--&gt;</span><br><span class="line">    &lt;!--parameterType:指定输入的参数的类型，在这里指定<span class="keyword">int</span>型</span><br><span class="line">        resultType：指定sql输出的结果所映射的Java对象类型，select指定resultType表示将单条记录映射成Java对象；</span><br><span class="line">    #&#123;&#125;表示一个占位符号</span><br><span class="line">    #&#123;id&#125;:其中的id表示接收输入的参数，参数的名称为id,如果输入的参数是基本数据类型，#&#123;&#125;中的参数名可以任意，--&gt;</span><br><span class="line">    &lt;select id=<span class="string">"findUserById"</span> parameterType=<span class="string">"int"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">select * from user  where id=#&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--根据用户名称模糊查询用户信息,可能返回多条记录</span><br><span class="line">    resultType:指定单条记录所映射的Java对象类型--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"java.lang.String"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        select * from user where name like #&#123;value&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--添加用户</span><br><span class="line">    paraterType:指定输入的参数类型是pojo(包括用户信息)</span><br><span class="line">    #&#123;&#125;中指定pojo的属性名，接收到pojo对象的属性值，mybatis通过OGNL获取对象的属性值</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>:得到刚insert进去的记录的主键值只适用于自增主键值</span></span><br><span class="line"><span class="function">            keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span></span><br><span class="line"><span class="function">            order:select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">            resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"AFTER"</span> resultType=<span class="string">"java.lang.Integer"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age,id)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;,#&#123;id&#125;)</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br><span class="line"><span class="function">&lt;/mapper&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="创建mapper接口"><a href="#创建mapper接口" class="headerlink" title="创建mapper接口"></a>创建mapper接口</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="comment">//需要满足几个规范1.mapper接口名和mapper.xml配置文件中的namespace保持一致、</span></span><br><span class="line">    <span class="comment">// 方法的名称和statementid一致、输入输出参数和mapper.xml配置文件中的一致</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">findUserByName</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImplTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"><span class="meta">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//mybatis配置文件</span></span><br><span class="line">    String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">    <span class="comment">//得到配置文件流</span></span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">    <span class="comment">//创建sqlsessionfactory</span></span><br><span class="line">    sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">&#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//创建UserDao的对象</span></span><br><span class="line">        UserDao userDao = <span class="keyword">new</span> UserDaoImpl(sqlSessionFactory);</span><br><span class="line">        User user=userDao.findUserById(<span class="number">3</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="几个常见的问题"><a href="#几个常见的问题" class="headerlink" title="几个常见的问题"></a>几个常见的问题</h4><ol>
+<li>mapper接口方法参数只能有一个是否影响系统的开发？<br>这个问题相当于：mapper接口中的方法参数只能有一个，系统是否不利于扩展维护。要知道系统开发中，dao层的代码是被业务层公用的，即使mapper接口只有一个参数，可以使用包装类型的pojo满足不同的业务需求。注意：持久层方法的参数可以使用包装类型，service方法中建议不要使用包装类型(不利于业务层的扩展)；</li>
+<li>代理对象内部调用 selectOne或selectList<br>如果mapper方法返回单个pojo对象(非集合对象)，代理内部通过selectOne查询数据库；<br>如果mapper方法返回集合对象，代理内部通过selectList查询数据库；</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mybatis学习笔记/" rel="tag"># Mybatis学习笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/05/Mybatis学习笔记——原始dao开发方法/" rel="next" title="Mybatis学习笔记——原始dao开发方法">
+                <i class="fa fa-chevron-left"></i> Mybatis学习笔记——原始dao开发方法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/" rel="prev" title="Mybatis学习笔记——SqlMapConfig.xml讲解">
+                Mybatis学习笔记——SqlMapConfig.xml讲解 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#具体代码"><span class="nav-number">1.</span> <span class="nav-text">具体代码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#创建mapper-xml文件"><span class="nav-number">1.1.</span> <span class="nav-text">创建mapper.xml文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建mapper接口"><span class="nav-number">1.2.</span> <span class="nav-text">创建mapper接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#测试代码"><span class="nav-number">1.3.</span> <span class="nav-text">测试代码</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#几个常见的问题"><span class="nav-number">2.</span> <span class="nav-text">几个常见的问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

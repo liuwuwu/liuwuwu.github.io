@@ -408,304 +408,6 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/Mybatis学习笔记——Mybatis框架简介/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/02/Mybatis学习笔记——Mybatis框架简介/" itemprop="url">Mybatis学习笔记——Mybatis框架简介</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-02T15:33:27+08:00">
-                2019-01-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Mybatis框架的基础知识"><a href="#Mybatis框架的基础知识" class="headerlink" title="Mybatis框架的基础知识"></a>Mybatis框架的基础知识</h4><p>sqlMapConfig.xml:mybatis全局配置文件，配置数据源、事务等运行环境，配置映射文件(配置了sql语句)；<br>SqlSessionFactory:会话工厂，创建SqlSession；<br>SqlSession：会话，操作数据库(发出sql增、删、改、查)内部通过Executor操作数据库，mappedstatement(底层封装对象)，对数据库存储封装，包括sql语句，输入输出参数；</p>
-<h4 id="和-的区别与联系"><a href="#和-的区别与联系" class="headerlink" title="#{}和\${}的区别与联系"></a>#{}和\${}的区别与联系</h4><p>$#{} 表示占位符，接收输入参数，类型可以是简单类型、pojo、hashmap；如果为简单类型，#{}中可以写成value或其他名称，通过ONGL读取对象中的属性值；<br>$${}表示一个拼接符号，会引起sql注入所以不建议使用\${}，接收输入参数，类型可以为简单类型、pojo、hashmap；如果为简单类型${}只能写为value;</p>
-<h4 id="OGNL简介"><a href="#OGNL简介" class="headerlink" title="OGNL简介"></a>OGNL简介</h4><p>OGNL的全称是Object Graph Navigation Language(对象图导航语言)，它是一种强大的表达式语言，让你通过简单一致的表达式语法来读取和设置Java对象的属性值，调用对象的方法，遍历整个对象的结构图，实现字段类型转换等功能。<br>相对于其它的表达式语言，OGNL的功能更为强大，它提供了很多高级而必需的特性，例如强大的类型转换功能、静态或实例方法的执行、跨集合投影，以及动态lambda表达式定义等。<br>OGNL基础：OGNL表达式的计算都是围绕OGNL上下文来进行的，OGNL上下文实际上就是一个Map对象，由ognl.OgnlContext类(实现了java.util.Map接口)来表示。OGNL上下文可以包含一个或多个JavaBean对象，在这些对象中有一个是特殊的，这个对象就是上下文的根(root)对象。如果在写表达式的时候，没有指定使用上下文中的哪一个对象，那么根对象将被假定为表达式所依据的对象。在OGNL上下文中，只能有一个根对象，如果你访问根对象，那么在写表达式的时候，直接写对象的属性就可以了；否则，你需要使用“#key”前缀，例如表达式#namager.name。<br>OGNL表达式:OGNL表达式的基础单元就是导航链，通常简称为链(chain)。最简单的链由下列部分组成：<br>１、属性名：如name和manager.name；</p>
-<p>２、方法调用：如manager.hashCode()，返回manager对象的散列码；</p>
-<p>３、数组索引：如emals[0]，返回当前对象的邮件列表中的第一个邮件地址。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/Mybatis学习笔记——原生态JDBC的介绍/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/01/02/Mybatis学习笔记——原生态JDBC的介绍/" itemprop="url">Mybatis学习笔记——原生态JDBC的介绍</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-02T08:43:27+08:00">
-                2019-01-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="JDBC编程步骤"><a href="#JDBC编程步骤" class="headerlink" title="JDBC编程步骤"></a>JDBC编程步骤</h4><p>1.加载数据库驱动；</p>
-<p>2.获得数据库连接；</p>
-<p>3.创建Statment对象，执行sql语句；</p>
-<p>4.设置sql语句；</p>
-<p>5.执行sql语句，得到结果集；</p>
-<p>6.对结果集进行分析处理；</p>
-<p>7.释放资源；</p>
-<h4 id="原生态JDBC存在如下问题："><a href="#原生态JDBC存在如下问题：" class="headerlink" title="原生态JDBC存在如下问题："></a>原生态JDBC存在如下问题：</h4><p>1.每一个连接的在使用时候创建，不用的时候需要释放，如果使用频繁的话，频繁的建立和释放连接会浪费系统的资源，影响数据库的性能；<strong>使用数据库连接池解决</strong></p>
-<p>2.将sql语句硬编码到Java代码中，修改sql语句需要重新编译，不利于系统的维护；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
-<p>3.向PrepareStatment中设置参数，会对占位符位置和参数值硬编码，不利于系统的维护；；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
-<p>4.从result中遍历结果集数据时存在硬编码，主要体现在将获取字段进行硬编码不利于系统维护。<strong>将查询结果集自动映射为Java对象</strong></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/26/@AspectJ进阶/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1747,11 +1449,309 @@
 
 
     
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/15/背包问题专栏——多重背包问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/15/背包问题专栏——多重背包问题/" itemprop="url">背包问题专栏——多重背包问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-15T21:56:55+08:00">
+                2018-12-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>很高兴终于进入了背包问题的第三部分了-多重背包问题。所谓的多重背包是指每件物品的数量是有限的，我们如何选择可以使得获得的收益是最大的。为了方便讲解，我们直接从实例出发。</p>
+<h4 id="多重背包的实例"><a href="#多重背包的实例" class="headerlink" title="多重背包的实例"></a>多重背包的实例</h4><p>快过年了，小偷又开始行动起来了，他来到了第三家主人家发现有很多好东西，这一次他发现了很多好东西，和前两次不同的是，每种物品的数量是一定的。问如何选择才能够使得收益最大？</p>
+<h4 id="方法1（一维数组方法）"><a href="#方法1（一维数组方法）" class="headerlink" title="方法1（一维数组方法）"></a>方法1（一维数组方法）</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 多重背包：一维法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bag4</span><span class="params">(<span class="keyword">int</span> W, <span class="keyword">int</span>[] w, <span class="keyword">int</span>[] v, <span class="keyword">int</span>[] num)</span> </span>&#123;</span><br><span class="line">   <span class="keyword">int</span> n = w.length - <span class="number">1</span>;<span class="comment">// 第一个值，不算	</span></span><br><span class="line">   <span class="keyword">int</span>[] f = <span class="keyword">new</span> <span class="keyword">int</span>[W + <span class="number">1</span>];	</span><br><span class="line">   <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; i++)	</span><br><span class="line">      <span class="keyword">for</span> (<span class="keyword">int</span> j = W; j &gt;= w[i]; j--)		</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt;= num[i]; k++) &#123;	</span><br><span class="line">                <span class="keyword">if</span> (j - k * w[i] &gt;= <span class="number">0</span> &amp;&amp; f[j - k * w[i]] + k * v[i] &gt; f[j])	</span><br><span class="line">                   f[j] = f[j - k * w[i]] + k * v[i];	</span><br><span class="line">             &#125; 	</span><br><span class="line">             <span class="keyword">return</span> f[W]; <span class="comment">// 最优解</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法2-根据情况分别转换为01背包问题和完全背包问题"><a href="#方法2-根据情况分别转换为01背包问题和完全背包问题" class="headerlink" title="方法2(根据情况分别转换为01背包问题和完全背包问题)"></a>方法2(根据情况分别转换为01背包问题和完全背包问题)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMax</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w,<span class="keyword">int</span>[] num)</span></span>&#123;</span><br><span class="line">       <span class="keyword">int</span> dp[]=<span class="keyword">new</span> <span class="keyword">int</span>[cap+<span class="number">1</span>];</span><br><span class="line">       <span class="comment">//首先讲解一下优化前的算法</span></span><br><span class="line">       <span class="comment">//1.初始化</span></span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;=cap;i++)&#123;</span><br><span class="line">           dp[i]=<span class="number">0</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=v.length;i++)&#123;</span><br><span class="line">           <span class="comment">//进行判断，是否可以转换为完全背包问题进行求解</span></span><br><span class="line">         <span class="keyword">if</span>(num[i]*v[i]&gt;cap)&#123;</span><br><span class="line">           <span class="comment">//可以转换为完全背包问题</span></span><br><span class="line">             <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i-<span class="number">1</span>];j&lt;=cap;j++)&#123;</span><br><span class="line">                 dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="comment">//只能转换为01背包问题进行求解</span></span><br><span class="line">         <span class="keyword">else</span>&#123;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> j=cap;j&gt;=v[i-<span class="number">1</span>];j--)&#123;</span><br><span class="line">               <span class="keyword">for</span>(<span class="keyword">int</span> count=<span class="number">0</span>;count&lt;num[i];i++)&#123;</span><br><span class="line">                   <span class="keyword">if</span>(count&lt;=j/v[i])</span><br><span class="line">                dp[j]=Math.max(dp[j],dp[j-count*v[i]]+w[i]);/</span><br><span class="line">               &#125;</span><br><span class="line">           &#125;</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> dp[v.length];</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="方法3-二进制优化"><a href="#方法3-二进制优化" class="headerlink" title="方法3(二进制优化)"></a>方法3(二进制优化)</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过二进制思想进行优化</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMax1</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w,<span class="keyword">int</span>[] num)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] dp=<span class="keyword">new</span> <span class="keyword">int</span>[cap+<span class="number">1</span>];</span><br><span class="line">        <span class="comment">//首先进行初始化</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cap+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            dp[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;v.length+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            <span class="comment">//进行判断，是否可以转换为完全背包问题进行求解</span></span><br><span class="line">            <span class="keyword">if</span>(num[i]*v[i]&gt;cap)&#123;</span><br><span class="line">                <span class="comment">//可以转换为完全背包问题</span></span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i];j&lt;=cap;j++)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//反之接着进行二进制优化</span></span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> k=<span class="number">1</span>;k&lt;num[i];k=<span class="number">2</span>*k)&#123;</span><br><span class="line">                       <span class="keyword">for</span>(<span class="keyword">int</span> j=cap;j&gt;=v[i]*k;j--)&#123;</span><br><span class="line">                       dp[j]=Math.max(dp[j],dp[j-k*v[i-<span class="number">1</span>]]+k*w[i-<span class="number">1</span>]);</span><br><span class="line">                       num[i]=num[i]-k;</span><br><span class="line">                   &#125;</span><br><span class="line">               &#125;</span><br><span class="line">                <span class="keyword">for</span>(<span class="keyword">int</span> j=cap;j&gt;=v[i]*num[i];j--)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-num[i]*v[i-<span class="number">1</span>]]+num[i]*w[i-<span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[cap+<span class="number">1</span>];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="https://blog.csdn.net/xxxslinyue/article/details/65642824" target="_blank" rel="noopener">多重背包的二进制优化</a></p>
+<p><a href="https://blog.csdn.net/jerans/article/details/54916955" target="_blank" rel="noopener">背包模板（01，完全，多重背包的二进制优化和单调队列优化</a></p>
+<p><a href="https://blog.csdn.net/mystery_guest/article/details/51878140" target="_blank" rel="noopener">多重背包二进制优化模板分析</a></p>
+<p><a href="https://blog.csdn.net/qq_19446965/article/details/81349807" target="_blank" rel="noopener">背包问题汇总-01背包、完全背包、多重背包-java</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/14/背包问题专栏——完全背包问题/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/12/14/背包问题专栏——完全背包问题/" itemprop="url">背包问题专栏——完全背包问题</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-12-14T14:51:42+08:00">
+                2018-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法/" itemprop="url" rel="index">
+                    <span itemprop="name">算法</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在上一篇文章中我们总结了一下01背包问题，接下来我们介绍背包家族中的另外一个重要成员完全背包。</p>
+<h4 id="完全背包的例子"><a href="#完全背包的例子" class="headerlink" title="完全背包的例子"></a>完全背包的例子</h4><p>上一次小偷得手后，尝到了甜头，打算接着作案。这一次他来到了另外一个人的家里，与上次不同的是，这次主人家每件东西都有无数件（当然这个条件是我们假设的），小偷的包的容量是有限的，问如何选择才能使得所获得的利益是最大的？</p>
+<h4 id="理论分析"><a href="#理论分析" class="headerlink" title="理论分析"></a>理论分析</h4><p>假设第i件物品的体积为v[i],价值为w[i]。完全背包问题可以转换为01背包进行求解，状态转移方程为dp[i][v]=max{dp[i-1][v],dp[i-k<em>v[i]+k</em>w[i] (k&gt;=1&amp;k&lt;=(v/v[i]))},这种思路是基于01背包问题的解决办法，比较容易理解，我们在这里就不在赘述。另外一种思路就是dp[i][v]=max{dp[i-1][v],dp[i][i-v[i]]+w[i]}。dp[i][v]表示当背包容量为v时，尽可能的多添加i种物品所能获得的最大收益。它与之前i的添加情况有关。与01背包问题一样，我们也可以对空间复杂度进行优化，优化的状态转移方程为dp[v]=max{dp[v],dp[v-v[i]]+w[i]},有没有一种很熟悉的感觉，是的，这就是01背包中优化后的表达式。但是与01背包不同的是我们的内循环是从v-&gt;v[i]的，01背包中是从v[i]-&gt;v的。主要原因就是01中的i件物品只有一件，只有选或者不选两种选择，而完全背包则不同。</p>
+<h4 id="具体的Java代码"><a href="#具体的Java代码" class="headerlink" title="具体的Java代码"></a>具体的Java代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FullBag</span> </span>&#123;</span><br><span class="line">    <span class="comment">//有三种物品，每种物品的数量不限，体积分别为[3,2,2]、重量为[5,10,20]。小偷的包的体积为5。如何选择才能使得价值最高。</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> result=getMaxValue(<span class="number">5</span>,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">3</span>,<span class="number">2</span>,<span class="number">2</span>&#125;,<span class="keyword">new</span> <span class="keyword">int</span>[]&#123;<span class="number">5</span>,<span class="number">10</span>,<span class="number">20</span>&#125;);</span><br><span class="line">        System.out.println(result);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMaxValue</span><span class="params">(<span class="keyword">int</span> cap,<span class="keyword">int</span>[] v,<span class="keyword">int</span>[] w)</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span>[] dp=<span class="keyword">new</span> <span class="keyword">int</span>[cap+<span class="number">1</span>];</span><br><span class="line">        <span class="comment">//首先进行初始化</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;cap+<span class="number">1</span>;i++)&#123;</span><br><span class="line">            dp[i]=<span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//接着就是根据状态转移方程进行选择</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=v.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i-<span class="number">1</span>];j&lt;cap+<span class="number">1</span>;j++)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> dp[cap];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果为：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">40</span></span><br><span class="line">Process finished with exit code <span class="number">0</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="判断选择了哪些物品"><a href="#判断选择了哪些物品" class="headerlink" title="判断选择了哪些物品"></a>判断选择了哪些物品</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//接着就是根据状态转移方程进行选择</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=v.length;i++)&#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=v[i-<span class="number">1</span>];j&lt;cap+<span class="number">1</span>;j++)&#123;</span><br><span class="line">                    dp[j]=Math.max(dp[j],dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>]);</span><br><span class="line">                    <span class="keyword">if</span>(dp[j]==dp[j-v[i-<span class="number">1</span>]]+w[i-<span class="number">1</span>])&#123;</span><br><span class="line">                        path[i][j]=<span class="number">1</span>;</span><br><span class="line">                       <span class="comment">// System.out.println(i);</span></span><br><span class="line">                    &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//打印路劲</span></span><br><span class="line">        <span class="keyword">int</span> i=v.length;</span><br><span class="line">        <span class="keyword">int</span> j=cap;</span><br><span class="line">        <span class="keyword">while</span>(i&gt;<span class="number">0</span>&amp;&amp;j&gt;<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">if</span>(path[i][j]==<span class="number">1</span>)&#123;</span><br><span class="line">                System.out.println(i);</span><br><span class="line">                j=j-v[i-<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                i--;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<p>参考文献：<br><a href="https://blog.csdn.net/qq_34374664/article/details/52232590" target="_blank" rel="noopener">完全背包详解（最优方法）</a><br><a href="https://blog.csdn.net/zhou_yujia/article/details/47841829" target="_blank" rel="noopener">“完全背包”详解及实现（包含背包具体物品的求解）</a><br><a href="https://blog.csdn.net/ling_du/article/details/41594767" target="_blank" rel="noopener">背包九讲</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1799,7 +1799,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">70</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1810,7 +1810,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -1821,7 +1821,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mybatis学习笔记,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="parameterType和resultType parameterType:在映射文件中指定输入参数类型； resultType:在映射文件中指定输出参数类型；/#{}和/${}/#{}和/${}的区别：前者表示一个占位符，会在传入的参数上加双引号，会被解析为“？”,能够有效抵御注入攻击，类型可以为简单类型，pojo、hashmap如果接收简单类型可以为任何值而后者只能为value；而后者表示一">
+<meta name="keywords" content="Mybatis学习笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis学习笔记——入门程序总结">
+<meta property="og:url" content="http://yoursite.com/2018/10/04/Mybatis学习笔记——入门程序总结/index.html">
+<meta property="og:site_name" content="Coder Paradise">
+<meta property="og:description" content="parameterType和resultType parameterType:在映射文件中指定输入参数类型； resultType:在映射文件中指定输出参数类型；/#{}和/${}/#{}和/${}的区别：前者表示一个占位符，会在传入的参数上加双引号，会被解析为“？”,能够有效抵御注入攻击，类型可以为简单类型，pojo、hashmap如果接收简单类型可以为任何值而后者只能为value；而后者表示一">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-28T13:20:22.650Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mybatis学习笔记——入门程序总结">
+<meta name="twitter:description" content="parameterType和resultType parameterType:在映射文件中指定输入参数类型； resultType:在映射文件中指定输出参数类型；/#{}和/${}/#{}和/${}的区别：前者表示一个占位符，会在传入的参数上加双引号，会被解析为“？”,能够有效抵御注入攻击，类型可以为简单类型，pojo、hashmap如果接收简单类型可以为任何值而后者只能为value；而后者表示一">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"right","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/04/Mybatis学习笔记——入门程序总结/">
+
+
+
+
+
+  <title>Mybatis学习笔记——入门程序总结 | Coder Paradise</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Coder Paradise</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">I am coding, I am happy.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/04/Mybatis学习笔记——入门程序总结/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mybatis学习笔记——入门程序总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-04T22:05:46+08:00">
+                2018-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="parameterType和resultType"><a href="#parameterType和resultType" class="headerlink" title="parameterType和resultType"></a>parameterType和resultType</h4><ol>
+<li>parameterType:在映射文件中指定输入参数类型；</li>
+<li>resultType:在映射文件中指定输出参数类型；<h4 id="和"><a href="#和" class="headerlink" title="/#{}和/${}"></a>/#{}和/${}</h4>/#{}和/${}的区别：前者表示一个占位符，会在传入的参数上加双引号，会被解析为“？”,能够有效抵御注入攻击，类型可以为简单类型，pojo、hashmap如果接收简单类型可以为任何值而后者只能为value；而后者表示一个字符串拼接符，会引入注入攻击，存在安全隐患，不建议使用；<h4 id="selsectOne和selectList"><a href="#selsectOne和selectList" class="headerlink" title="selsectOne和selectList"></a>selsectOne和selectList</h4>selectOne表示查询出一条记录进行映射，如果使用selectOne可以实现，使用selectList也可以实现(List中只有一个对象)；<br>selectList表示查询出一个列表(多条记录)进行映射，如果selectList可以查询多条记录，不能使用selectOne；<h4 id="自增主键返回"><a href="#自增主键返回" class="headerlink" title="自增主键返回"></a>自增主键返回</h4>mysql自增主键，执行insert提交之前自动生成一个自增主键，通过mysql函数获取到刚刚插入记录的自增主键：last_insert_id();<br>在insert之后调用此函数；<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">   &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">       <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>:得到刚insert进去的记录的主键值只适用于自增主键值</span></span><br><span class="line"><span class="function">       keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span></span><br><span class="line"><span class="function">       order:select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">       resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"AFTER"</span> resultType=<span class="string">"java.lang.Integer"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;)</span> <span class="comment">//可以不用传入主键值id，主键值自动生成</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//通过调用输入参数user的getId()就可以得到自增主键的返回值</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="非自增主键的返回"><a href="#非自增主键的返回" class="headerlink" title="非自增主键的返回"></a>非自增主键的返回</h4><p>通过函数select UUID()生成主键，需要修改表中id字段类型为String,长度设置为35位。<br>执行思路：先通过UUID()查询到主键，将主键输入到sql语句中；<br>执行相对于insert之前；<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">   &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">       使用uuid生成主键，将主键设置到user对象的id属性中</span><br><span class="line">       其次在insert执行时，从user对象中取出id属性值</span><br><span class="line">       keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span><br><span class="line">       order:<span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">       resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"before"</span> resultType=<span class="string">"java.lang.String"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">UUID</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age,id)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;,#&#123;id&#125;)</span> <span class="comment">//必须传入主键值</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景"><a href="#Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景" class="headerlink" title="Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景"></a>Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景</h4><p>Hibernate:是一个标准的ORM框架(对象关系映射)，入门的门槛较高，不需要程序员写sql,sql语句自动生成。对sql语句进行优化，修改比较困难；<br>应用场景：适用于需求变化不多的中小型项目，比如后台管理系统；</p>
+<p>mysql:专注是sql本身，需要程序员自己写sql语句，sql修改、优化比较方便；mybatis是一个不完全的ORM框架，虽然程序员自己写sql，mybatis也可以实现映射（输入映射、输出映射）。<br>应用场景：适用与需求变化较多的项目，比如：互联网项目。<br>企业进行技术选型，以低成本、高回报作为技术选型的原则，根据项目组的技术力量进行选型</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mybatis学习笔记/" rel="tag"># Mybatis学习笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/04/Mybatis学习笔记——入门程序/" rel="next" title="Mybatis学习笔记——入门程序">
+                <i class="fa fa-chevron-left"></i> Mybatis学习笔记——入门程序
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/05/Mybatis学习笔记——原始dao开发方法/" rel="prev" title="Mybatis学习笔记——原始dao开发方法">
+                Mybatis学习笔记——原始dao开发方法 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/liuwuwu.jpg" alt="LiuWuWu">
+            
+              <p class="site-author-name" itemprop="name">LiuWuWu</p>
+              <p class="site-description motion-element" itemprop="description">Tomorrow will be better</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#parameterType和resultType"><span class="nav-number">1.</span> <span class="nav-text">parameterType和resultType</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#和"><span class="nav-number">2.</span> <span class="nav-text">/#{}和/${}</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#selsectOne和selectList"><span class="nav-number">3.</span> <span class="nav-text">selsectOne和selectList</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自增主键返回"><span class="nav-number">4.</span> <span class="nav-text">自增主键返回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非自增主键的返回"><span class="nav-number">5.</span> <span class="nav-text">非自增主键的返回</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景"><span class="nav-number">6.</span> <span class="nav-text">Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">LiuWuWu</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
