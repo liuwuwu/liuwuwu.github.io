@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/11/Mybatis学习笔记——一对一查询/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/08/包装类型和集合类型的参数绑定/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/11/Mybatis学习笔记——一对一查询/" itemprop="url">Mybatis学习笔记——一对一查询</a></h1>
+                <a class="post-title-link" href="/2018/11/08/包装类型和集合类型的参数绑定/" itemprop="url">Springmvc学习笔记——包装类型和集合类型的参数绑定</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-11T13:24:01+08:00">
-                2018-10-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-08T16:11:23+08:00">
+                2018-11-08
               </time>
             
 
@@ -316,8 +316,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
+                  <a href="/categories/Springmvc学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Springmvc学习笔记</span>
                   </a>
                 </span>
 
@@ -355,22 +355,20 @@
       
         
           
-            <h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><p>查询订单信息，关联查询创建订单的用户信息</p>
-<h4 id="resultType的实现"><a href="#resultType的实现" class="headerlink" title="resultType的实现"></a>resultType的实现</h4><h5 id="sql语句"><a href="#sql语句" class="headerlink" title="sql语句"></a>sql语句</h5><ol>
-<li>确定查询的主表：订单表</li>
-<li>确定查询的关联表：用户表</li>
-<li>关联查询使用内链接还是外连接？ 由于orders表中有一个外键（user_id），通过外键关联查询用户表只能查询出一条记录，可以使用内连接。</li>
-</ol>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> orders.* ,user.username, user.sex,user.address <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> orders.user_id=user.id</span><br></pre></td></tr></table></figure>
-<h5 id="创建pojo"><a href="#创建pojo" class="headerlink" title="创建pojo"></a>创建pojo</h5><p>将上边sql查询的结果映射到pojo中，pojo中必须包括所有查询的列名。原始的Orders.java类不能映射全部的字段，需要创建新的pojo。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrdersCustom</span> <span class="keyword">extends</span> <span class="title">Orders</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//添加用户属性</span></span><br><span class="line">	<span class="comment">/*USER.username,</span></span><br><span class="line"><span class="comment">	  USER.sex,</span></span><br><span class="line"><span class="comment">	  USER.address */</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> String username;</span><br><span class="line">	<span class="keyword">private</span> String sex;</span><br><span class="line">	<span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getUsername</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> username;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUsername</span><span class="params">(String username)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.username = username;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getSex</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> sex;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(String sex)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.sex = sex;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getAddress</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> address;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAddress</span><span class="params">(String address)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.address = address;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="创建mapper-xml"><a href="#创建mapper-xml" class="headerlink" title="创建mapper.xml"></a>创建mapper.xml</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"findOrdersUser"</span>  resultType=<span class="string">"com.iot.mybatis.po.OrdersCustom"</span>&gt;</span><br><span class="line">  SELECT</span><br><span class="line">      orders.*,</span><br><span class="line">      user.username,</span><br><span class="line">      user.sex,</span><br><span class="line">      user.address</span><br><span class="line">    FROM</span><br><span class="line">      orders,</span><br><span class="line">      user</span><br><span class="line">    WHERE orders.user_id = user.id</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="mapper-java"><a href="#mapper-java" class="headerlink" title="mapper.java"></a>mapper.java</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询订单关联查询用户信息</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;OrdersCustom&gt; <span class="title">findOrdersUser</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="resultMap的实现"><a href="#resultMap的实现" class="headerlink" title="resultMap的实现"></a>resultMap的实现</h4><h5 id="sql语句-1"><a href="#sql语句-1" class="headerlink" title="sql语句"></a>sql语句</h5><p>同resultType实现的sql</p>
-<h5 id="使用resultMap的思路"><a href="#使用resultMap的思路" class="headerlink" title="使用resultMap的思路"></a>使用resultMap的思路</h5><p>使用resultMap将查询结果中的订单信息映射到Orders对象中，在orders类中添加User属性，将关联查询出来的用户信息映射到orders对象中的user属性中。</p>
-<h5 id="mapper-xml"><a href="#mapper-xml" class="headerlink" title="mapper.xml"></a>mapper.xml</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 订单查询关联用户的resultMap</span><br><span class="line">将整个查询的结果映射到com.iot.mybatis.po.Orders中</span><br><span class="line"> --&gt;</span><br><span class="line">&lt;resultMap type=<span class="string">"com.iot.mybatis.po.Orders"</span> id=<span class="string">"OrdersUserResultMap"</span>&gt;</span><br><span class="line">    &lt;!-- 配置映射的订单信息 --&gt;</span><br><span class="line">    &lt;!-- id：指定查询列中的唯一标识，订单信息的中的唯 一标识，如果有多个列组成唯一标识，配置多个id</span><br><span class="line">        column：订单信息的唯一标识列</span><br><span class="line">        property：订单信息的唯一标识列所映射到Orders中哪个属性</span><br><span class="line">      --&gt;</span><br><span class="line">    &lt;id column=<span class="string">"id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"user_id"</span> property=<span class="string">"userId"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"number"</span> property=<span class="string">"number"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"createtime"</span> property=<span class="string">"createtime"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"note"</span> property=<span class="string">"note"</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 配置映射的关联的用户信息 --&gt;</span><br><span class="line">    &lt;!-- association：用于映射关联查询单个对象的信息</span><br><span class="line">    property：要将关联查询的用户信息映射到Orders中哪个属性</span><br><span class="line">     --&gt;</span><br><span class="line">    &lt;association property=<span class="string">"user"</span>  javaType=<span class="string">"com.iot.mybatis.po.User"</span>&gt;</span><br><span class="line">        &lt;!-- id：关联查询用户的唯 一标识</span><br><span class="line">        column：指定唯 一标识用户信息的列</span><br><span class="line">        javaType：映射到user的哪个属性</span><br><span class="line">         --&gt;</span><br><span class="line">        &lt;id column=<span class="string">"user_id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"username"</span> property=<span class="string">"username"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"sex"</span> property=<span class="string">"sex"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"address"</span> property=<span class="string">"address"</span>/&gt;</span><br><span class="line">    &lt;/association&gt;</span><br><span class="line">&lt;/resultMap&gt;</span><br></pre></td></tr></table></figure>
-<h5 id="mapper-java-1"><a href="#mapper-java-1" class="headerlink" title="mapper.java"></a>mapper.java</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询订单关联查询用户使用resultMap</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Orders&gt; <span class="title">findOrdersUserResultMap</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
-<h4 id="resultType和resultMap实现一对一查询总结"><a href="#resultType和resultMap实现一对一查询总结" class="headerlink" title="resultType和resultMap实现一对一查询总结"></a>resultType和resultMap实现一对一查询总结</h4><p>实现一对一查询：<br>resultType:使用resultType实现较为简单，如果pojo中没有包括查询出来的列名，需要增强列名对应的属性，即可完成映射。如果没有查询结果的特殊的要求建议使用resultType。<br>resultMap:需要单独定义resultMap，实现起来优点麻烦，如果对查询结果有特殊要求，使用resultMap可以完成将关联查询映射到pojo属性中。<br>resultMap可以实现延迟加载，resultType无法实现。</p>
+            <h4 id="包装类型的参数绑定"><a href="#包装类型的参数绑定" class="headerlink" title="包装类型的参数绑定"></a>包装类型的参数绑定</h4><p>需求：商品查询的controller方法中实现商品查询条件传入。<br>第一种方法：在形参中添加HttpServletRequest request参数，通过request接收查询条件参数；<br>第二种方法：在形参中让包装类型的pojo接收查询条件参数；<br>分析：页面传参数的特点：复杂、多样性。条件包括：用户账号、商品编号、订单信息…<br>如果将用户的账号、商品编号、订单信息放在简单的pojo(属性是简单类型)中，pojo类型属性比较多，比较乱。建议使用包装类型的pojo，pojo中的属性是pojo。</p>
+<h5 id="页面参数和controller方法形参的定义"><a href="#页面参数和controller方法形参的定义" class="headerlink" title="页面参数和controller方法形参的定义"></a>页面参数和controller方法形参的定义</h5><p>页面参数：商品名称：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input name=<span class="string">"itemsCustom.name"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>注意：itemsCustom和包装pojo中的属性名一致即可。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//controller方法形参：</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ModelAndView <span class="title">queryItems</span><span class="params">(HttpServletRequest request,ItemsQueryVo itemsQueryVo)</span> <span class="keyword">throws</span> Exception</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//包装类型ItemsQueryVo中部分属性</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemsQueryVo</span></span>&#123;</span><br><span class="line"><span class="comment">//商品信息</span></span><br><span class="line"><span class="keyword">private</span> Items items;</span><br><span class="line"><span class="comment">//为了系统可扩展性，对原始生成的po进行扩展</span></span><br><span class="line"><span class="keyword">private</span> ItemsCustom itemsCustom;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可见，ItemsQueryVo中属性itemsCustom和页面参数中一致。</p>
+<h4 id="集合类型参数绑定"><a href="#集合类型参数绑定" class="headerlink" title="集合类型参数绑定"></a>集合类型参数绑定</h4><h5 id="数组绑定"><a href="#数组绑定" class="headerlink" title="数组绑定"></a>数组绑定</h5><p>需求：商品批量删除，用户在页面选择多个商品，批量删除。<br>表现层实现：关键将页面选择(多选商品id，传到controller方法的形参中，方法形参使用数组接收页面请求的多个商品id)</p>
+<p>controller方法的定义<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//批量删除商品信息</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/deleteItems"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">deleteItems</span><span class="params">(Integer[] items_id)</span> <span class="keyword">throws</span> Exception</span></span><br></pre></td></tr></table></figure></p>
+<p>页面定义<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;c:forEach items=<span class="string">"$&#123;itemsList &#125;"</span> <span class="keyword">var</span>=<span class="string">"item"</span>&gt;</span><br><span class="line">&lt;tr&gt;</span><br><span class="line">    &lt;td&gt;&lt;input type="checkbox" name="items_id" value="$&#123;item.id&#125;"/&gt;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;$&#123;item.name &#125;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;$&#123;item.price &#125;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;&lt;fmt:formatDate value="$&#123;item.createtime&#125;" pattern="yyyy-MM-dd HH:mm:ss"/&gt;&lt;/td&gt;</span><br><span class="line">	&lt;td&gt;$&#123;item.detail &#125;&lt;/td&gt;</span><br><span class="line"></span><br><span class="line">	&lt;td&gt;&lt;a href="$&#123;pageContext.request.contextPath &#125;/items/editItems.action?id=$&#123;item.id&#125;"&gt;修改&lt;/a&gt;&lt;/td&gt;</span><br><span class="line"></span><br><span class="line">&lt;/tr&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="list绑定"><a href="#list绑定" class="headerlink" title="list绑定"></a>list绑定</h5><p>需求：通常在需要批量提交数据时，将提交的数据绑定到list<pojo>中，比如：成绩录入(录入多门成绩，批量提交)，本例子需求：批量商品修改，在页面输入多个商品信息，将多个商品信息提交到controller方法中。</pojo></p>
+<p>表现层实现：controler方法的定义：1. 进入批量商品修改页面(页面样式参考商品列表实现)；2.批量修改商品提交；<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用List接收页面提交的批量数据，通过包装pojo接收，在包装pojo中定义list&lt;pojo&gt;属性</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemsQueryVo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//商品信息</span></span><br><span class="line">    <span class="keyword">private</span> Items items;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//为了系统 可扩展性，对原始生成的po进行扩展</span></span><br><span class="line">    <span class="keyword">private</span> ItemsCustom itemsCustom;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//批量商品信息</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;ItemsCustom&gt; itemsList;</span><br><span class="line"><span class="comment">// 批量修改商品提交</span></span><br><span class="line"><span class="comment">// 通过ItemsQueryVo接收批量提交的商品信息，将商品信息存储到itemsQueryVo中itemsList属性中。</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/editItemsAllSubmit"</span>)</span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">editItemsAllSubmit</span><span class="params">(ItemsQueryVo itemsQueryVo)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"success"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>页面定义:<br><figure class="highlight cs"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;c:forEach items=<span class="string">"$&#123;itemsList &#125;"</span> <span class="keyword">var</span>=<span class="string">"item"</span> varStatus=<span class="string">"status"</span>&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line"></span><br><span class="line">        &lt;td&gt;&lt;input name=<span class="string">"itemsList[$&#123;status.index &#125;].name"</span> <span class="keyword">value</span>=<span class="string">"$&#123;item.name &#125;"</span>/&gt;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;&lt;input name=<span class="string">"itemsList[$&#123;status.index &#125;].price"</span> <span class="keyword">value</span>=<span class="string">"$&#123;item.price &#125;"</span>/&gt;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;&lt;input name=<span class="string">"itemsList[$&#123;status.index &#125;].createtime"</span> <span class="keyword">value</span>=<span class="string">"&lt;fmt:formatDate value="</span>$&#123;item.createtime&#125;<span class="string">" pattern="</span>yyyy-MM-dd HH:mm:ss<span class="string">"/&gt;"</span>/&gt;&lt;/td&gt;</span><br><span class="line">        &lt;td&gt;&lt;input name=<span class="string">"itemsList[$&#123;status.index &#125;].detail"</span> <span class="keyword">value</span>=<span class="string">"$&#123;item.detail &#125;"</span>/&gt;&lt;/td&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">&lt;/c:forEach&gt;</span><br></pre></td></tr></table></figure></p>
+<p>name的格式：对应的pojo中的list类型属性名[下标(从0开始).包装pojo中List类型的属性中的pojo的属性名]<br>例子：”name=”itemsList[${status.index }].price”。可以和包装类型的参数绑定归纳对比一下，其实就是在包装类的pojo基础上多了个下标。只不过包装类参数绑定时，要和包装pojo中的pojo类性的属性名一致，而list参数绑定时，要和包装pojo中的list类型的属性名一致。</p>
+<h4 id="map绑定"><a href="#map绑定" class="headerlink" title="map绑定"></a>map绑定</h4><p>也通过在包装pojo中定义map类型属性。<br>在包装类中定义Map对象，并添加get/set方法，action使用包装对象接收。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Public <span class="class"><span class="keyword">class</span> <span class="title">QueryVo</span> </span>&#123;</span><br><span class="line"><span class="keyword">private</span> Map&lt;String, Object&gt; itemInfo = <span class="keyword">new</span> HashMap&lt;String, Object&gt;();</span><br><span class="line">  <span class="comment">//get/set方法..</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//controller方法的定义如下：</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">useraddsubmit</span><span class="params">(Model model,QueryVo queryVo)</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">System.out.println(queryVo.getStudentinfo());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>页面定义：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="selector-tag">tr</span>&gt;</span><br><span class="line">&lt;td&gt;学生信息：&lt;/td&gt;</span><br><span class="line">&lt;<span class="selector-tag">td</span>&gt;</span><br><span class="line">姓名：&lt;inputtype="text"name="itemInfo['name']"/&gt;</span><br><span class="line">年龄：&lt;inputtype="text"name="itemInfo['price']"/&gt;</span><br><span class="line">.. .. ..</span><br><span class="line">&lt;/td&gt;</span><br><span class="line">&lt;/tr&gt;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -419,7 +417,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/10/Mybatis学习笔记——动态sql/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/07/Springmvc学习笔记——注解开发之参数绑定/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -438,7 +436,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/10/Mybatis学习笔记——动态sql/" itemprop="url">Mybatis学习笔记——动态sql</a></h1>
+                <a class="post-title-link" href="/2018/11/07/Springmvc学习笔记——注解开发之参数绑定/" itemprop="url">Springmvc学习笔记——注解开发之参数绑定</a></h1>
         
 
         <div class="post-meta">
@@ -450,8 +448,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-10T09:13:37+08:00">
-                2018-10-10
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-07T08:49:43+08:00">
+                2018-11-07
               </time>
             
 
@@ -473,8 +471,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
+                  <a href="/categories/Springmvc学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Springmvc学习笔记</span>
                   </a>
                 </span>
 
@@ -512,340 +510,188 @@
       
         
           
-            <h4 id="什么是动态sql"><a href="#什么是动态sql" class="headerlink" title="什么是动态sql"></a>什么是动态sql</h4><p>mybatis核心是对sql语句进行灵活的操作，动态sql就是通过表达式进行判断，对sql进行灵活的拼接、组装。</p>
-<h4 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h4><h5 id="需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql"><a href="#需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql" class="headerlink" title="需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql"></a>需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql</h5><p>对查询的条件进行判断，如果输入的参数不为空才进行查询条件的拼接。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> &lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"cn.itcast.mybatis.po.UserQueryVo"</span> resultType=<span class="string">"int"</span>&gt;</span><br><span class="line">    <span class="function">select <span class="title">count</span><span class="params">(*)</span> from user</span></span><br><span class="line"><span class="function">&lt;!--where可以自动去掉条件中的第一个and--&gt;</span></span><br><span class="line"><span class="function">&lt;where&gt;</span></span><br><span class="line"><span class="function">    &lt;<span class="keyword">if</span> test</span>=<span class="string">"userCustom.sex!=null"</span> and userCustom.sex!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.sex = #&#123;userCustom.sex&#125;</span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> test=<span class="string">"userCustom.username!=null"</span> and userCustom.username!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.username like <span class="string">'%$&#123;userCustom.username&#125;'</span> </span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">&lt;/where&gt;</span><br><span class="line">   &lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
-<h5 id="需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。"><a href="#需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。" class="headerlink" title="需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。"></a>需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--定义sql片段</span><br><span class="line">      id:sql片段的唯一标识</span><br><span class="line">经验：基于单表来定义sql片段，这样的化这个sql片段可重用性才高，在sql片段中不要包括where--&gt;</span><br><span class="line">&lt;sql id=<span class="string">"query_user_where"</span>&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> test=<span class="string">"userCustom.sex!=null"</span> and userCustom.sex!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.sex = #&#123;userCustom.sex&#125;</span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> test=<span class="string">"userCustom.username!=null"</span> and userCustom.username!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.username like <span class="string">'%$&#123;userCustom.username&#125;'</span> </span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">&lt;/sql&gt;</span><br></pre></td></tr></table></figure>
-<p>接下来引用sql片段<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"cn.itcast.mybatis.po.UserQueryVo"</span> resultType=<span class="string">"int"</span>&gt;</span><br><span class="line">    <span class="function">select <span class="title">count</span><span class="params">(*)</span> from user</span></span><br><span class="line"><span class="function">&lt;!--where可以自动去掉条件中的第一个and--&gt;</span></span><br><span class="line"><span class="function">&lt;where&gt;</span></span><br><span class="line"><span class="function">   &lt;!--引用sql片段的id,如果refid指定的id不在本mapper中，需要在前边加namespace--&gt;</span></span><br><span class="line">&lt;include refid = "query_user_where"&gt;&lt;/include&gt;</span><br><span class="line">   &lt;在这里还可能引用其他的sql片段，所以sql片段中不要加where&gt;</span><br><span class="line">&lt;/where&gt;</span><br><span class="line">   &lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
-<h5 id="foreach标签"><a href="#foreach标签" class="headerlink" title="foreach标签"></a>foreach标签</h5><p>向sql传递数组或者List，mybatis使用foreach解析<br>需求：在用户的查询列表和查询总数的statement中增加多个id输入查询。<br>sql语句如下：select * from user where age=3 and (id =1 or id =10 or id =16)<br>在输入的参数类型中要添加List<integer> dis 传入多个id。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">if</span> test=<span class="string">"ids!=null"</span>&gt;</span><br><span class="line">&lt;!--使用foreach遍历输入ids,collecton:指定输入对象中集合属性</span><br><span class="line">itme:每次遍历生成对象名</span><br><span class="line">open:开始遍历时的拼接的串</span><br><span class="line">close:结束遍历时拼接的串</span><br><span class="line">separator：遍历两个对象中需要拼接的串</span><br><span class="line">--&gt;</span><br><span class="line">&lt;!--实现如下拼接and (id =<span class="number">1</span> or id =<span class="number">10</span> or id =<span class="number">16</span>)--&gt;</span><br><span class="line">&lt;foreach collection=<span class="string">"ids"</span> item=<span class="string">"item_id"</span> open=<span class="string">" and ("</span> close=<span class="string">")"</span> separator=<span class="string">"or"</span>&gt;</span><br><span class="line">   &lt;!--每个遍历需要拼接的串--&gt;</span><br><span class="line">  id=#&#123;item_id&#125;</span><br><span class="line">&lt;/foreach&gt;</span><br></pre></td></tr></table></figure></integer></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/09/Mybatis学习笔记——输入输出映射/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/09/Mybatis学习笔记——输入输出映射/" itemprop="url">Mybatis学习笔记——输入输出映射</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-09T20:54:19+08:00">
-                2018-10-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="输入映射"><a href="#输入映射" class="headerlink" title="输入映射"></a>输入映射</h4><p>通过parameterType指定输入的参数的类型，类型可以是简单类型、hashmap、pojo自定义的包装类型。</p>
-<h5 id="输入参数为hashmap"><a href="#输入参数为hashmap" class="headerlink" title="输入参数为hashmap"></a>输入参数为hashmap</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"selectTeacher"</span> parameterType=<span class="string">"hashmap"</span> resultType=<span class="string">"com.myapp.domain.Teacher"</span>&gt;  </span><br><span class="line">    select * from Teacher where c_id=#&#123;id&#125; and sex=#&#123;sex&#125;  </span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
-<h6 id="输入参数为包装类型"><a href="#输入参数为包装类型" class="headerlink" title="输入参数为包装类型"></a>输入参数为包装类型</h6><p>完成用户信息的综合查询，需要传入的查询条件很复杂（可能包含用户的信息、其他信息，比如订单、商品）。针对上面这种需求，建议使用自定义的包装类型的pojo。在pojo中将复杂的查询条件包<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserQueryVo</span></span>&#123;</span><br><span class="line"><span class="comment">//在这里包装所需要的查询条件</span></span><br><span class="line"><span class="comment">//用户查询条件</span></span><br><span class="line"><span class="keyword">private</span> User user;</span><br><span class="line"><span class="comment">//可以包装其他的查询条件，订单、商品</span></span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h4 id="输出映射"><a href="#输出映射" class="headerlink" title="输出映射"></a>输出映射</h4><h5 id="resultType"><a href="#resultType" class="headerlink" title="resultType"></a>resultType</h5><p>使用result进行输出映射，<strong>只有查询出的列名和pojo中的属性名一致，该列可以成功映射</strong>，如果查询出的列名和属性名全部不一致，没有创建pojo对象。只要查询出来的列名和pojo中的属性名有一个一致，就会创建pojo对象。<br>输出简单类型：<br>用户的信息的综合查询列表总数，通过查询总数和用户综合查询列表才可以实现分页；<br>小结：只有查询出来的结果集只有一行和一列才可以使用简单类型，不管输出的pojo单个对象还是一个列表(list中包括pojo)，在mapper.xml中resultType指定的类型是一样的。在mapper接口中指定的方法返回值类型不一样：</p>
+            <h4 id="spring参数绑定过程"><a href="#spring参数绑定过程" class="headerlink" title="spring参数绑定过程"></a>spring参数绑定过程</h4><p>从客户端请求key/value数据，经过参数绑定，将key/value数据绑定到controller方法的形参上。springmvc中，接受页面提交的数据是通过方法的形参来接收。而不是在controller类中定义成员变量接收！！！！</p>
 <ol>
-<li>输出单个pojo对象，方法返回值为单个对象类型；</li>
-<li>输出pojo对象的list，方法的返回值为list<pojo>;                     <h5 id="resultMap"><a href="#resultMap" class="headerlink" title="resultMap"></a>resultMap</h5>mybatis中使用resultMap完成高级输出结果映射。<br>如果查询出来的列明和pojo属性名不一致，通过定义一个resultMap对列明和pojo属性名之间作一个映射关系。</pojo></li>
-<li>定义resultMap；</li>
-<li>使用resultMap作为statement的输出映射类型；<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"dao.mapper.UserMapper"</span>&gt;</span><br><span class="line">    &lt;!--定义resultMap</span><br><span class="line">    select id id_ ,age age_ from user where id = #&#123;value&#125;和user类中的属性做一个映射关系</span><br><span class="line">    type:resultMap最终映射的java对象类型，可以使用别名</span><br><span class="line">    id:对resultMap的唯一标识--&gt;</span><br><span class="line">    &lt;resultMap id=<span class="string">"useResultMap"</span> type=<span class="string">"user"</span>&gt;</span><br><span class="line">        &lt;!--id表示查询结果集中的唯一标识，column：查询出来的列名</span><br><span class="line">        property:type指定的pojo类型中的属性名</span><br><span class="line">        最终resultMap对column和property作一个映射关系(对应关系)--&gt;</span><br><span class="line">        &lt;id column="id_" property="id"&gt;&lt;/id&gt;</span><br><span class="line">        &lt;!--result:对普通列的映射的定义，column：查询出来的列名</span><br><span class="line">        property:type指定的pojo类型中的属性名</span><br><span class="line">        最终resultMap对column和property作一个映射关系(对应的关系)--&gt;</span><br><span class="line">        &lt;result column="age_" property="age"&gt;&lt;/result&gt;</span><br><span class="line">    &lt;/resultMap&gt;</span><br><span class="line">    &lt;!--使用resultMap进行输出映射</span><br><span class="line">    resultMap：指定定义的resultMap的id，如果这个resultMap在其他的mapper文件中，前面需要加namespace--&gt;</span><br><span class="line">    &lt;select id=<span class="string">"findUserById2"</span> parameterType=<span class="string">"int"</span> resultMap=<span class="string">"useResultMap"</span>&gt;</span><br><span class="line">        select id id_,age age_ from user where id = #&#123;value&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
-</li>
+<li>客户端请求(key/value);</li>
+<li>处理器适配器调用springmvc提供参数绑定组件将key/value数据转成controller方法的形参，参数绑定的组件：在spring早期版本使用PropertyEditor(只能将字符串转成Java对象)后期使用converter(进行任意类型的转换)。springmvc提供了很多converter(转换器)，在特殊情况下需要自定义converter(例如对日期数据的绑定）;</li>
+<li>controller方法（形参）；</li>
 </ol>
-<p>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建sqlsession对象</span></span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//获得mapper代理对象</span></span><br><span class="line">        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);</span><br><span class="line">        User user = userMapper.findUserById2(<span class="number">1</span>);</span><br><span class="line">        sqlSession.close();</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/" itemprop="url">Mybatis学习笔记——SqlMapConfig.xml讲解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T20:54:19+08:00">
-                2018-10-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>SqlMapConfig.xml是mybatis的全局配置文件，他是满足dtd约束的，其中配置的内容和顺序如下：</p>
+<h4 id="参数绑定默认支持的类型"><a href="#参数绑定默认支持的类型" class="headerlink" title="参数绑定默认支持的类型"></a>参数绑定默认支持的类型</h4><p>直接在controller方法形参上定义下边类型的对象,就可以使用这些对象，在参数绑定的过程中如果遇到下边的类型直接进行绑定。</p>
 <ol>
-<li>properities（属性）</li>
-<li>settings (全局配置参数)</li>
-<li>typeAliases (类型别名)</li>
-<li>typeHandlers （类型处理器）</li>
-<li>objectFactory （对象工厂）</li>
-<li>plugins (插件)</li>
-<li>environments (环境集合属性对象)<br>   environment（环境子属性对象）<pre><code>transactionManager (事务管理)
-    dataSource (数据源)
-</code></pre></li>
-<li>mappers (映射器)<h4 id="properities-属性"><a href="#properities-属性" class="headerlink" title="properities(属性)"></a>properities(属性)</h4>需求：将数据库连接参数单独配置在jdbc.properties中，只需要在SqlMapConfig.xml中加载jdbc.properties的属性值。在SqlMapConfig.xml中就不需要对数据库连接参数进行硬编码。将数据库连接参数只配置在jdbc.properties中，原因：方便对参数进行统一管理，其他xml可以引用该jdbc.properties。<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties resource="jdbc.properties"&gt;&lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+<li>HttpServletRequest：通过request对象获得请求信息；</li>
+<li>HttpServletResponse:通过response处理响应信息；</li>
+<li>HttpServletSession：通过session对象得到session中存放的对象；</li>
+<li>Model/ModelMap：model是一个接口，modelMap是一个接口实现，作用：将model数据填充到request域；</li>
+<li>简单类型：通过@RequestParam对简单类型的参数进行绑定，<strong>如果不使用@RequestParam，要求request传入的参数名称和controller方法的形参名称一致，方可绑定成功</strong>，如果使用@RequestParam注解，不用限制request传入的参数名称和controller方法的形参名称一致。另外通过required属性指定参数是否必须要传入，如果设置为true则必须要传入否则会报错。它还有一个defaultValue属性，如果设置了这个属性，不传值的话，该形参就会和默认值绑定。</li>
+<li>pojo绑定:页面中的input的name和controller的pojo形参的属性名称一致，将页面中的数据绑定到pojo。注意：这里只是要求name和形参的属性名一致，而不是要求和形参名称一致，这点不要混淆，框架会进入参数内部，自动匹配pojo类的属性名。</li>
+<li>对于controller形参中pojo对象，如果属性中有日期类型，需要自定义参数绑定。<br>将请求日期数据串传成日期类型，要转换的日期类型和pojo中日期属性的类型保持一致。本文示例中，自定义参数绑定将日期串转成java.util.Date类型。<br>需要向处理器适配器中注入自定义的参数绑定组件。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//自定义日期类型绑定</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CustomDateConverter</span> <span class="keyword">implements</span> <span class="title">Converter</span>&lt;<span class="title">String</span>,<span class="title">Date</span>&gt;</span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Date <span class="title">convert</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//实现 将日期串转成日期类型(格式是yyyy-MM-dd HH:mm:ss)</span></span><br><span class="line"></span><br><span class="line">        SimpleDateFormat simpleDateFormat = <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy-MM-dd HH:mm:ss"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//转成直接返回</span></span><br><span class="line">            <span class="keyword">return</span> simpleDateFormat.parse(s);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ParseException e) &#123;</span><br><span class="line">            <span class="comment">// TODO Auto-generated catch block</span></span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//如果参数绑定失败返回null</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>配置文件中的内容：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">driver=com.mysql.cj.jdbc.Driver</span><br><span class="line">url=jdbc:mysql:<span class="comment">//127.0.0.1:3306/User?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=GMT</span></span><br><span class="line">username=root</span><br><span class="line">password=<span class="number">123456</span></span><br></pre></td></tr></table></figure></p>
-<p>应用属性的方式如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataSource type=<span class="string">"POOLED"</span>&gt;</span><br><span class="line">                 &lt;property name=<span class="string">"driver"</span> value=<span class="string">"$&#123;driver&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"url"</span> value=<span class="string">"$&#123;url&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"username"</span> value=<span class="string">"$&#123;username&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"password"</span> value=<span class="string">"$&#123;password&#125;"</span>/&gt;</span><br><span class="line">            &lt;/dataSource&gt;</span><br></pre></td></tr></table></figure></p>
-<p><strong>注意：Mybatis中将按照如下顺序加载属性</strong></p>
+<p>配置方式<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;mvc:annotation-driven conversion-service="conversionService"&gt;&lt;/mvc:annotation-driven&gt;</span><br><span class="line">&lt;!-- 自定义参数绑定 --&gt;</span><br><span class="line">    &lt;bean id=<span class="string">"conversionService"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.format.support.FormattingConversionServiceFactoryBean"</span>&gt;</span><br><span class="line">        &lt;!-- 转换器 --&gt;</span><br><span class="line">        &lt;property name=<span class="string">"converters"</span>&gt;</span><br><span class="line">            &lt;list&gt;</span><br><span class="line">                &lt;!-- 日期类型转换 --&gt;</span><br><span class="line">                &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.iot.learnssm.firstssm.controller.converter.CustomDateConverter"</span>/&gt;</span><br><span class="line">           &lt;/list&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/03/Springmvc学习笔记——注解开发之RequestMapping注解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/11/03/Springmvc学习笔记——注解开发之RequestMapping注解/" itemprop="url">Springmvc学习笔记——注解开发之RequestMapping注解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-03T12:17:25+08:00">
+                2018-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Springmvc学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Springmvc学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="RequestMapping"><a href="#RequestMapping" class="headerlink" title="@RequestMapping"></a>@RequestMapping</h4><p>定义controller方法对应的url，进行处理器映射使用。</p>
 <ol>
-<li><p>在properties元素体内定义的属性首先被读取；</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties resource=<span class="string">"jdbc.properties"</span>&gt;</span><br><span class="line">        &lt;property name="name" value="hello"&gt;&lt;/property&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+<li><p>窄化请求映射</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用@Controller来标识它是一个控制器</span></span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="comment">//为了对url进行分类管理 ，可以在这里定义根路径，最终访问url是根路径+子路径</span></span><br><span class="line"><span class="comment">//比如：商品列表：/items/queryItems.action</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/items"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemsController</span> </span>&#123;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>然后会读取properities元素中resource或url加载的属性，他会覆盖已经读取的同名属性；</p>
-</li>
-<li><p>最后读取parameterType传递的属性，他会覆盖已经读取的同名属性；<br>因此，通过parameterType传递的属性具有最高的优先级，resource或者url加载的属性次之，最低优先级的是properties元素体内定义的属性；</p>
+<li><p>限制http请求方法，出于安全考虑，对http请求的链接进行方法限制。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//商品信息修改页面显示</span></span><br><span class="line">    <span class="comment">//@RequestMapping("/editItems")</span></span><br><span class="line">    <span class="comment">//限制http请求方法，可以post和get</span></span><br><span class="line">	<span class="meta">@RequestMapping</span>(value=<span class="string">"/editItems"</span>,method=&#123;RequestMethod.POST, RequestMethod.GET&#125;)</span><br><span class="line">	<span class="function"><span class="keyword">public</span> ModelAndView <span class="title">editItems</span><span class="params">()</span><span class="keyword">throws</span> Exception </span>&#123;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p><strong>建议</strong>：不要在properties元素体内添加任何属性值，只将属性值定义在properties文件中，在properties文件中定义的属性名要有一定的特殊性，如XXXX.XXXX.XXXX;</p>
-<h4 id="settings全局参数配置"><a href="#settings全局参数配置" class="headerlink" title="settings全局参数配置"></a>settings全局参数配置</h4><p>mybatis框架在运行时可以调整一些运行参数。<br>比如：开启二级缓存、开启延迟加载…</p>
-<h4 id="typeAliases-别名-重点"><a href="#typeAliases-别名-重点" class="headerlink" title="typeAliases(别名)重点"></a>typeAliases(别名)重点</h4><p>在mapper.xml中定义了很多statement，statement需要parameterType指定输入的参数的类型，需要resultType指定输出结果的映射类型。如果在指定类型时输入类型全路径，不方便进行开发，可以针对parameterType或者resultType指定的类型定义一些别名，在mapper.xml中通过别名定义，方便开发。<br>单个别名的定义方式如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;typeAliases&gt;</span><br><span class="line">        &lt;!--单个别名的定义--&gt;</span><br><span class="line">        &lt;typeAlias type="po.User" alias="user"&gt;&lt;/typeAlias&gt;</span><br><span class="line">    &lt;/typeAliases&gt;</span><br><span class="line"><span class="comment">//type：表示类的路径，alias:表示类的别名。</span></span><br></pre></td></tr></table></figure></p>
-<p>批量定义别名的定义方法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;typeAliases&gt;</span><br><span class="line">        &lt;package name="po" &gt;&lt;/package&gt;</span><br><span class="line">    &lt;/typeAliases&gt;</span><br><span class="line"><span class="comment">//mybatis自动扫描包中的pojo类，自动定义别名，别名就是类名(首字母大写或者小写都可以)</span></span><br></pre></td></tr></table></figure></p>
-<p>很显然批量别名的定义比较常用。</p>
-<h4 id="typeHandlers-类型处理器"><a href="#typeHandlers-类型处理器" class="headerlink" title="typeHandlers(类型处理器)"></a>typeHandlers(类型处理器)</h4><p>mybatis中通过typeHandlers完成jdbc类型和Java类型的转换。通常情况下，mybatis提供的类型处理器满足日常需要，不要我们自定义。</p>
-<h4 id="mappers-映射配置"><a href="#mappers-映射配置" class="headerlink" title="mappers(映射配置)"></a>mappers(映射配置)</h4><p>1.通过resource加载单个映射文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;mappers&gt;</span><br><span class="line">        &lt;!-- 加载映射文件--&gt;</span><br><span class="line">        &lt;mapper resource=<span class="string">"User.xml"</span>/&gt;</span><br><span class="line">    &lt;/mappers&gt;</span><br></pre></td></tr></table></figure></p>
-<p>2.通过mapper接口加载单个映射文件<br>需要遵循一些规范：需要将mapper接口类名和mapper.xml映射文件名保持一致，且在同一个目录中，上边的规范的前提是：使用的是mapper代理的方法。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper class="dao.mapper.UserMapper" &gt;&lt;/mapper&gt;</span><br></pre></td></tr></table></figure></p>
-<p>3.批量加载mapper(推荐使用)<br>指定mapper的接口的包名，mybatis自动扫描包下的所有mapper接口进行加载，遵循一些规范：需要将mapper接口和mapper.xml映射文件名称保持一致，且在一个目录中，上边规范的前提是：使用的是mapper代理方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">package</span> name=<span class="string">"dao.mapper"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>如果限制请求为post方法，进行get请求即将上面的代码注解改为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>（(value=<span class="string">"/editItems"</span>,method=&#123;RequestMethod.POST&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>报错，状态码405</p>
+<h4 id="Controller方法的返回值"><a href="#Controller方法的返回值" class="headerlink" title="Controller方法的返回值"></a>Controller方法的返回值</h4><ol>
+<li><p>返回ModelAndView,<br>需要在方法结束时定义ModelAndView,将model和View分别进行设置；</p>
+</li>
+<li><p>返回String,如果controller方法返回String，表示返回逻辑视图名。真正视图(jsp路径)=前缀+逻辑视图名+后缀</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequestMapping</span>(value=<span class="string">"/editItems"</span>,method=&#123;RequestMethod.POST,RequestMethod.GET&#125;)</span><br><span class="line"><span class="comment">//@RequestParam里边指定request传入参数名称和形参进行绑定。</span></span><br><span class="line"><span class="comment">//通过required属性指定参数是否必须要传入</span></span><br><span class="line"><span class="comment">//通过defaultValue可以设置默认值，如果id参数没有传入，将默认值和形参绑定。</span></span><br><span class="line"><span class="comment">//public String editItems(Model model, @RequestParam(value="id",required=true) Integer items_id)throws Exception &#123;</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">editItems</span><span class="params">(Model model)</span><span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//调用service根据商品id查询商品信息</span></span><br><span class="line">    ItemsCustom itemsCustom = itemsService.findItemsById(<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//通过形参中的model将model数据传到页面</span></span><br><span class="line">    <span class="comment">//相当于modelAndView.addObject方法</span></span><br><span class="line">    model.addAttribute(<span class="string">"itemsCustom"</span>, itemsCustom);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="string">"items/editItems"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><strong>redirect重定向</strong>：redirect重定向特点为浏览器地址栏中的url会变化，修改已经提交的request数据无法传到重定向的地址，因为重定向后重新进行request(request无法共享)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="string">"redirect:queryItems.action"</span>;</span><br></pre></td></tr></table></figure></p>
+<p><strong>forward页面转发</strong>：通过forwa进行页面转发url地址栏不变，request可以共享<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> <span class="string">"forward:queryItems.action"</span>;</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li>返回void，在controller方法的形参上可以定义request和response,使用request或者response指定响应结果：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//1.使用request转向页面，如下：</span></span><br><span class="line">request.getRequestDispacher(<span class="string">"页面路径"</span>).forward(request,response);</span><br><span class="line"><span class="comment">//2.也可以通过response页面重定向：</span></span><br><span class="line">response.sendRedirect(<span class="string">"url"</span>);</span><br><span class="line"><span class="comment">//3. 也可以通过response指定响应结果，例如响应json数据如下：</span></span><br><span class="line">response.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">response.setContentType(<span class="string">"application/json;charset=utf-8"</span>);</span><br><span class="line">reponse.getWriter().write(<span class="string">"json串"</span>);</span><br></pre></td></tr></table></figure></li>
+</ol>
 
           
         
@@ -894,7 +740,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/Mybatis学习笔记——mapper代理方法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/01/Springmvc学习笔记——注解映射器和适配器/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -913,7 +759,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/06/Mybatis学习笔记——mapper代理方法/" itemprop="url">Mybatis学习笔记——mapper代理方法</a></h1>
+                <a class="post-title-link" href="/2018/11/01/Springmvc学习笔记——注解映射器和适配器/" itemprop="url">Springmvc学习笔记——注解映射器和适配器</a></h1>
         
 
         <div class="post-meta">
@@ -925,8 +771,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-06T08:31:43+08:00">
-                2018-10-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-01T16:42:31+08:00">
+                2018-11-01
               </time>
             
 
@@ -948,8 +794,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
+                  <a href="/categories/Springmvc学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Springmvc学习笔记</span>
                   </a>
                 </span>
 
@@ -987,322 +833,27 @@
       
         
           
-            <p>思路：程序员只用编写mapper接口(相当于dao接口)和mapper.xml映射文件。mybatis可以自动生成mapper接口实现类代理对象，但是要遵守如下开发规范：</p>
+            <h4 id="默认加载"><a href="#默认加载" class="headerlink" title="默认加载"></a>默认加载</h4><p>前端控制器从\org\springframework\web\servlet\DispatcherServlet.properties中加载处理器映射器、适配器、视图解析器等组件，如果不在springmvc.xml中进行配置，则使用默认加载的注解处理器映射器和适配器。</p>
 <ol>
-<li>在mapper.xml中namespace等于mapper接口地址；</li>
-<li>mapper接口中方法名和mapper.xml中statement的id保持一致；</li>
-<li>mapper接口中的方法的输入参数类型和mapper.xml中statement的paramemterType指定的类型一致；</li>
-<li>mapper接口的方法的返回类型和mapper.xml中statement的resultType指定的类型一致；<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><h5 id="创建mapper-xml文件"><a href="#创建mapper-xml文件" class="headerlink" title="创建mapper.xml文件"></a>创建mapper.xml文件</h5></li>
+<li>在spring3.1之前使用org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping注解映射器;<ol start="2">
+<li>org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter;</li>
 </ol>
-<p><strong><strong>主要需要注意的是mapper.xml文件中的namespace要和mapper接口的地址一致</strong></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;!--namespace命名空间，作用就是对sql进行分类管理，可以简单的理解为sql隔离</span><br><span class="line">注意：使用mapper代理的方法进行开发，namespace有特殊的作用--&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"dao.mapper.UserMapper"</span>&gt;</span><br><span class="line">    &lt;!--在映射文件中配置很多sql语句，通过select执行数据库查询；id:标识映射文件中的sql,称为statement的id</span><br><span class="line">    将sql语句封装到mappedStatement对象中,所以将它称为Statement的id--&gt;</span><br><span class="line">    &lt;!--parameterType:指定输入的参数的类型，在这里指定<span class="keyword">int</span>型</span><br><span class="line">        resultType：指定sql输出的结果所映射的Java对象类型，select指定resultType表示将单条记录映射成Java对象；</span><br><span class="line">    #&#123;&#125;表示一个占位符号</span><br><span class="line">    #&#123;id&#125;:其中的id表示接收输入的参数，参数的名称为id,如果输入的参数是基本数据类型，#&#123;&#125;中的参数名可以任意，--&gt;</span><br><span class="line">    &lt;select id=<span class="string">"findUserById"</span> parameterType=<span class="string">"int"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">select * from user  where id=#&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--根据用户名称模糊查询用户信息,可能返回多条记录</span><br><span class="line">    resultType:指定单条记录所映射的Java对象类型--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"java.lang.String"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        select * from user where name like #&#123;value&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--添加用户</span><br><span class="line">    paraterType:指定输入的参数类型是pojo(包括用户信息)</span><br><span class="line">    #&#123;&#125;中指定pojo的属性名，接收到pojo对象的属性值，mybatis通过OGNL获取对象的属性值</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>:得到刚insert进去的记录的主键值只适用于自增主键值</span></span><br><span class="line"><span class="function">            keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span></span><br><span class="line"><span class="function">            order:select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">            resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"AFTER"</span> resultType=<span class="string">"java.lang.Integer"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age,id)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;,#&#123;id&#125;)</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br><span class="line"><span class="function">&lt;/mapper&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h5 id="创建mapper接口"><a href="#创建mapper接口" class="headerlink" title="创建mapper接口"></a>创建mapper接口</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="comment">//需要满足几个规范1.mapper接口名和mapper.xml配置文件中的namespace保持一致、</span></span><br><span class="line">    <span class="comment">// 方法的名称和statementid一致、输入输出参数和mapper.xml配置文件中的一致</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">findUserByName</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<h5 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImplTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"><span class="meta">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//mybatis配置文件</span></span><br><span class="line">    String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">    <span class="comment">//得到配置文件流</span></span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">    <span class="comment">//创建sqlsessionfactory</span></span><br><span class="line">    sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">&#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//创建UserDao的对象</span></span><br><span class="line">        UserDao userDao = <span class="keyword">new</span> UserDaoImpl(sqlSessionFactory);</span><br><span class="line">        User user=userDao.findUserById(<span class="number">3</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="几个常见的问题"><a href="#几个常见的问题" class="headerlink" title="几个常见的问题"></a>几个常见的问题</h4><ol>
-<li>mapper接口方法参数只能有一个是否影响系统的开发？<br>这个问题相当于：mapper接口中的方法参数只能有一个，系统是否不利于扩展维护。要知道系统开发中，dao层的代码是被业务层公用的，即使mapper接口只有一个参数，可以使用包装类型的pojo满足不同的业务需求。注意：持久层方法的参数可以使用包装类型，service方法中建议不要使用包装类型(不利于业务层的扩展)；</li>
-<li>代理对象内部调用 selectOne或selectList<br>如果mapper方法返回单个pojo对象(非集合对象)，代理内部通过selectOne查询数据库；<br>如果mapper方法返回集合对象，代理内部通过selectList查询数据库；</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/Mybatis学习笔记——原始dao开发方法/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/05/Mybatis学习笔记——原始dao开发方法/" itemprop="url">Mybatis学习笔记——原始dao开发方法</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-05T09:41:53+08:00">
-                2018-10-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="相关类介绍"><a href="#相关类介绍" class="headerlink" title="相关类介绍"></a>相关类介绍</h4><h5 id="SqlSessionFactoryBuilder"><a href="#SqlSessionFactoryBuilder" class="headerlink" title="SqlSessionFactoryBuilder"></a>SqlSessionFactoryBuilder</h5><p>通过SqlSessionFactoryBuilder创建会话工厂SqlSessionFactory,将SqlSessionFactoryBuilder当成一个工具类使用即可，不需要使用单例管理SqlSessionFactoryBuilder。在需要创建SqlSessionFactory时候，只需要new一次SqlSessionFactoryBuilder即可。</p>
-<h5 id="SqlSessionFactory"><a href="#SqlSessionFactory" class="headerlink" title="SqlSessionFactory"></a>SqlSessionFactory</h5><p>通过SqlSessionFactory创建SqlSession，使用单例模式管理SqlSessionFactory(工厂一旦创建，使用一个实例)。将mybatis和spring整合后，使用单例模式管理SqlSessionFactory。</p>
-<h5 id="SqlSession"><a href="#SqlSession" class="headerlink" title="SqlSession"></a>SqlSession</h5><p>SqlSession是一个面向用户(程序员)的接口，SqlSession中提供了很多操作数据库的方法如select(返回单个对象)、select(返回单个或者多个对象)。SqlSession是线程不安全的，在SqlSession实现类中除了有接口中的方法(操作数据库的方法)还有数据域属性。所以它的最佳应用场合在方法体中，定义成局部变量。</p>
-<h4 id="原始dao开发方法（程序员需要写dao接口和dao实现类）"><a href="#原始dao开发方法（程序员需要写dao接口和dao实现类）" class="headerlink" title="原始dao开发方法（程序员需要写dao接口和dao实现类）"></a>原始dao开发方法（程序员需要写dao接口和dao实现类）</h4><p>思路：程序员需要写dao接口和dao实现类。需要向dao实现类中注入sqlSessionFactory,在方法体内通过sqlsessionfactory创建sqlsession。</p>
-<h5 id="创建dao接口"><a href="#创建dao接口" class="headerlink" title="创建dao接口"></a>创建dao接口</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="comment">//根据id查询用户的id</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception </span>;</span><br><span class="line">    <span class="comment">//添加用户的信息</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">insertUser</span><span class="params">(User user)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="comment">//删除用户信息</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="创建dao实现类"><a href="#创建dao实现类" class="headerlink" title="创建dao实现类"></a>创建dao实现类</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span></span>&#123;</span><br><span class="line">    <span class="comment">//需要向dao实现类中注入SqlSessionFactory,在spring中可以直接通过IOC注入；</span></span><br><span class="line">    <span class="comment">//这里通过构造方法注入</span></span><br><span class="line">    <span class="keyword">private</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserDaoImpl</span><span class="params">(SqlSessionFactory sqlSessionFactory)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sqlSessionFactory=sqlSessionFactory;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        User user = sqlSession.selectOne(<span class="string">"test.findUserbyId"</span>);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertUser</span><span class="params">(User user)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//执行插入</span></span><br><span class="line">        sqlSession.insert(<span class="string">"test.insertUser"</span>,user);</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        sqlSession.commit();</span><br><span class="line">        <span class="comment">//释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h5 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line"><span class="keyword">import</span> org.junit.Before;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImplTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"><span class="meta">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//mybatis配置文件</span></span><br><span class="line">    String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">    <span class="comment">//得到配置文件流</span></span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">    <span class="comment">//创建sqlsessionfactory</span></span><br><span class="line">    sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">&#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//创建UserDao的对象</span></span><br><span class="line">        UserDao userDao = <span class="keyword">new</span> UserDaoImpl(sqlSessionFactory);</span><br><span class="line">        User user=userDao.findUserById(<span class="number">1</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="原始dao开发的问题"><a href="#原始dao开发的问题" class="headerlink" title="原始dao开发的问题"></a>原始dao开发的问题</h4><ol>
-<li>dao接口实现类的方法中存在大量的模板方法，设想能否将这些代码提取出来大大减少程序员的工作量；</li>
-<li>调用sqlsession方法时将statement的id硬编码了；</li>
-<li>调用sqlsession方法时传入的变量，由于sqlsession使用泛型，即使变量类型传入错误，在编译阶段也不报错，不利于程序员开发；</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/04/Mybatis学习笔记——入门程序总结/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/10/04/Mybatis学习笔记——入门程序总结/" itemprop="url">Mybatis学习笔记——入门程序总结</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-04T22:05:46+08:00">
-                2018-10-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Mybatis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="parameterType和resultType"><a href="#parameterType和resultType" class="headerlink" title="parameterType和resultType"></a>parameterType和resultType</h4><ol>
-<li>parameterType:在映射文件中指定输入参数类型；</li>
-<li>resultType:在映射文件中指定输出参数类型；<h4 id="和"><a href="#和" class="headerlink" title="/#{}和/${}"></a>/#{}和/${}</h4>/#{}和/${}的区别：前者表示一个占位符，会在传入的参数上加双引号，会被解析为“？”,能够有效抵御注入攻击，类型可以为简单类型，pojo、hashmap如果接收简单类型可以为任何值而后者只能为value；而后者表示一个字符串拼接符，会引入注入攻击，存在安全隐患，不建议使用；<h4 id="selsectOne和selectList"><a href="#selsectOne和selectList" class="headerlink" title="selsectOne和selectList"></a>selsectOne和selectList</h4>selectOne表示查询出一条记录进行映射，如果使用selectOne可以实现，使用selectList也可以实现(List中只有一个对象)；<br>selectList表示查询出一个列表(多条记录)进行映射，如果selectList可以查询多条记录，不能使用selectOne；<h4 id="自增主键返回"><a href="#自增主键返回" class="headerlink" title="自增主键返回"></a>自增主键返回</h4>mysql自增主键，执行insert提交之前自动生成一个自增主键，通过mysql函数获取到刚刚插入记录的自增主键：last_insert_id();<br>在insert之后调用此函数；<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">   &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">       <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>:得到刚insert进去的记录的主键值只适用于自增主键值</span></span><br><span class="line"><span class="function">       keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span></span><br><span class="line"><span class="function">       order:select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">       resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"AFTER"</span> resultType=<span class="string">"java.lang.Integer"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;)</span> <span class="comment">//可以不用传入主键值id，主键值自动生成</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//通过调用输入参数user的getId()就可以得到自增主键的返回值</span></span></span><br></pre></td></tr></table></figure>
 </li>
+<li>在spring3.1之前使用org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter注解适配器;</li>
+<li>在spring3.1之后org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter注解适配器。</li>
 </ol>
-<h4 id="非自增主键的返回"><a href="#非自增主键的返回" class="headerlink" title="非自增主键的返回"></a>非自增主键的返回</h4><p>通过函数select UUID()生成主键，需要修改表中id字段类型为String,长度设置为35位。<br>执行思路：先通过UUID()查询到主键，将主键输入到sql语句中；<br>执行相对于insert之前；<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">   &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">       使用uuid生成主键，将主键设置到user对象的id属性中</span><br><span class="line">       其次在insert执行时，从user对象中取出id属性值</span><br><span class="line">       keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span><br><span class="line">       order:<span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">       resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"before"</span> resultType=<span class="string">"java.lang.String"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">UUID</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age,id)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;,#&#123;id&#125;)</span> <span class="comment">//必须传入主键值</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景"><a href="#Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景" class="headerlink" title="Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景"></a>Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景</h4><p>Hibernate:是一个标准的ORM框架(对象关系映射)，入门的门槛较高，不需要程序员写sql,sql语句自动生成。对sql语句进行优化，修改比较困难；<br>应用场景：适用于需求变化不多的中小型项目，比如后台管理系统；</p>
-<p>mysql:专注是sql本身，需要程序员自己写sql语句，sql修改、优化比较方便；mybatis是一个不完全的ORM框架，虽然程序员自己写sql，mybatis也可以实现映射（输入映射、输出映射）。<br>应用场景：适用与需求变化较多的项目，比如：互联网项目。<br>企业进行技术选型，以低成本、高回报作为技术选型的原则，根据项目组的技术力量进行选型</p>
+<h4 id="注解的处理器映射器和适配器"><a href="#注解的处理器映射器和适配器" class="headerlink" title="注解的处理器映射器和适配器"></a>注解的处理器映射器和适配器</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 注解的映射器 --&gt;</span><br><span class="line">    &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 注解的适配器 --&gt;</span><br><span class="line">    &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>或者<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 使用mvc:annotation-driven代替上面两个注解映射器和注解适配的配置</span><br><span class="line">     mvc:annotation-driven默认加载很多的参数绑定方法，</span><br><span class="line">     比如json转换解析器默认加载了，如果使用mvc:annotation-driven则不用配置上面的RequestMappingHandlerMapping和RequestMappingHandlerAdapter</span><br><span class="line">     实际开发时使用mvc:annotation-driven</span><br><span class="line">     --&gt;</span><br><span class="line">    &lt;mvc:annotation-driven&gt;&lt;/mvc:annotation-driven&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="开发注解的Handler"><a href="#开发注解的Handler" class="headerlink" title="开发注解的Handler"></a>开发注解的Handler</h4><p>使用注解的映射器和注解的适配器。(使用注解的映射器和使用注解的适配器必须配对使用)<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> controller;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Controller;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line"><span class="keyword">import</span> org.springframework.web.servlet.ModelAndView;</span><br><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemsController2</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(<span class="string">"/queryItems5"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">queryItems5</span><span class="params">()</span></span>&#123;</span><br><span class="line">        ModelAndView modleAndView = <span class="keyword">new</span> ModelAndView();</span><br><span class="line">        modleAndView.addObject(<span class="string">"name"</span>,<span class="string">"gogogo"</span>);</span><br><span class="line">        modleAndView.setViewName(<span class="string">"/jsp/hello.jsp"</span>);</span><br><span class="line">        <span class="keyword">return</span> modleAndView;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="在spring容器中加载Handler"><a href="#在spring容器中加载Handler" class="headerlink" title="在spring容器中加载Handler"></a>在spring容器中加载Handler</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 对于注解的Handler 可以单个配置</span><br><span class="line">    实际开发中加你使用组件扫描</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;!--  &lt;bean  <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.iot.ssm.controller.ItemsController3"</span>/&gt; --&gt;</span><br><span class="line">    &lt;!-- 可以扫描controller、service、...</span><br><span class="line">	这里让扫描controller，指定controller的包</span><br><span class="line">	 --&gt;</span><br><span class="line">    &lt;context:component-scan base-package="com.iot.ssm.controller"&gt;&lt;/context:component-scan&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="入门程序小结"><a href="#入门程序小结" class="headerlink" title="入门程序小结"></a>入门程序小结</h4><ol>
+<li>通过入门程序理解springmvc的前端控制器、处理器映射器、处理器适配器、视图解析器。</li>
+<li>前端控制器的配置方法：第一种：*.action，访问以.action结尾 由DispatcherServlet进行解析<br>第二种：/，所以访问的地址都由DispatcherServlet进行解析，对于静态文件的解析需要配置不让DispatcherServlet进行解析,使用此种方式可以实现RESTful风格的url。</li>
+</ol>
+<h5 id="处理器映射器："><a href="#处理器映射器：" class="headerlink" title="处理器映射器："></a>处理器映射器：</h5><p>非注解的处理器映射器(了解)；<br>注解的处理器映射器(掌握)；’</p>
+<p>对标记@Controller类中标识有@RequestMapping的方法进行映射。在@RequestMapping里边定义映射的url。使用注解的映射器不用在xml中配置url和Handler的映射关系。</p>
+<h5 id="处理器适配器"><a href="#处理器适配器" class="headerlink" title="处理器适配器"></a>处理器适配器</h5><p>非注解处理器适配器（了解） 注解的处理器适配器（掌握） 注解处理器适配器和注解的处理器映射器是配对使用。理解为不能使用非注解映射器进行映射。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;mvc:annotation-driven&gt;&lt;/mvc:annotation-driven&gt;</span><br></pre></td></tr></table></figure></p>
+<p>可以替代下边的配置<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--注解映射器 --&gt;  </span><br><span class="line">    &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"</span>/&gt;  </span><br><span class="line">    &lt;!--注解适配器 --&gt;  </span><br><span class="line">    &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -1351,7 +902,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/04/Mybatis学习笔记——入门程序/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/01/Springmvc学习笔记——非注解映射器和适配器/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -1370,7 +921,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/04/Mybatis学习笔记——入门程序/" itemprop="url">Mybatis学习笔记——入门程序</a></h1>
+                <a class="post-title-link" href="/2018/11/01/Springmvc学习笔记——非注解映射器和适配器/" itemprop="url">Springmvc学习笔记——非注解映射器和适配器</a></h1>
         
 
         <div class="post-meta">
@@ -1382,8 +933,467 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-04T11:19:21+08:00">
-                2018-10-04
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-11-01T16:42:31+08:00">
+                2018-11-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Springmvc学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Springmvc学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="非注解的处理器映射器"><a href="#非注解的处理器映射器" class="headerlink" title="非注解的处理器映射器"></a>非注解的处理器映射器</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 配置Handler --&gt;</span><br><span class="line">&lt;bean id=<span class="string">"itemsController"</span> name=<span class="string">"/queryItems.action"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"com.iot.ssm.controller.ItemsController"</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 处理器映射器</span><br><span class="line">将bean的name作为url进行查找，需要在配置Handler时指定beanname(就是url)</span><br><span class="line"> --&gt;</span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"</span>/&gt;</span><br><span class="line"></span><br><span class="line">&lt;!-- 简单url映射--&gt;</span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">"mappings"</span>&gt;</span><br><span class="line">        &lt;props&gt;</span><br><span class="line">            &lt;!-- 对 itemsController进行url映射--&gt;</span><br><span class="line">            &lt;prop key="/queryItems1.action"&gt;itemsController&lt;/prop&gt;</span><br><span class="line">            &lt;prop key="/queryItems2.action"&gt;itemsController&lt;/prop&gt;</span><br><span class="line">        &lt;/props&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure>
+<p>多个映射器可以并存，前端控制器判断url能让哪些映射器处理就让正确的映射器处理</p>
+<h4 id="非注解的处理器适配器"><a href="#非注解的处理器适配器" class="headerlink" title="非注解的处理器适配器"></a>非注解的处理器适配器</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 处理器适配器</span><br><span class="line">     所有处理器适配器都实现了HandlerAdapter接口</span><br><span class="line">     --&gt;</span><br><span class="line">    &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"</span>/&gt;</span><br></pre></td></tr></table></figure>
+<p>要求编写的Handler实现Controller接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<p>要求编写的Handler实现HttpRequestHandler接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemsController2</span> <span class="keyword">implements</span> <span class="title">HttpRequestHandler</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">handleRequest</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="comment">//调用service查找数据库，查询商品列表，这里使用静态数据模拟</span></span><br><span class="line">        List&lt;Items&gt; itemsList = <span class="keyword">new</span> ArrayList&lt;Items&gt;();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//向list中填充静态数据</span></span><br><span class="line">        Items items_1 = <span class="keyword">new</span> Items();</span><br><span class="line">        items_1.setName(<span class="string">"联想笔记本"</span>);</span><br><span class="line">        items_1.setPrice(<span class="number">6000f</span>);</span><br><span class="line">        items_1.setDetail(<span class="string">"ThinkPad T430 联想笔记本电脑！"</span>);</span><br><span class="line"></span><br><span class="line">        Items items_2 = <span class="keyword">new</span> Items();</span><br><span class="line">        items_2.setName(<span class="string">"苹果手机"</span>);</span><br><span class="line">        items_2.setPrice(<span class="number">5000f</span>);</span><br><span class="line">        items_2.setDetail(<span class="string">"iphone6苹果手机！"</span>);</span><br><span class="line"></span><br><span class="line">        itemsList.add(items_1);</span><br><span class="line">        itemsList.add(items_2);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置模型数据</span></span><br><span class="line">        httpServletRequest.setAttribute(<span class="string">"itemsList"</span>,itemsList);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//设置转发的视图</span></span><br><span class="line">        httpServletRequest.getRequestDispatcher(<span class="string">"/WEB-INF/jsp/items/itemsList.jsp"</span>).forward(httpServletRequest,httpServletResponse);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>HttpRequestHandler适配器的handleRequest方法返回为void,没有返回ModelAndView，可通过response修改响应内容,比如返回json数据：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">response.setCharacterEncoding(<span class="string">"utf-8"</span>);</span><br><span class="line">response.setContentType(<span class="string">"application/json;charset=utf-8"</span>);</span><br><span class="line">response.getWriter().write(<span class="string">"json串"</span>);</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/28/Springmvc学习笔记——入门程序/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/28/Springmvc学习笔记——入门程序/" itemprop="url">Springmvc学习笔记——入门程序</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-28T14:51:19+08:00">
+                2018-10-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Springmvc学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Springmvc学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><p>springmvc和mybatis使用同一个案例(商品订单管理)。具体的功能需求为商品的列表查询。</p>
+<h4 id="配置前端控制器"><a href="#配置前端控制器" class="headerlink" title="配置前端控制器"></a>配置前端控制器</h4><p>在web.xml中配置前端控制器<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--springmvc前端控制器--&gt;</span><br><span class="line">  &lt;servlet&gt;</span><br><span class="line">    &lt;servlet-name&gt;springmvc&lt;/servlet-name&gt;</span><br><span class="line">    &lt;servlet-<span class="class"><span class="keyword">class</span>&gt;<span class="title">org</span>.<span class="title">springframework</span>.<span class="title">web</span>.<span class="title">servlet</span>.<span class="title">DispatcherServlet</span>&lt;/<span class="title">servlet</span>-<span class="title">class</span>&gt;</span></span><br><span class="line"><span class="class">    &lt;!--<span class="title">contextConfigLocation</span>配置<span class="title">springmvc</span>加载的配置文件(配置处理器、适配器等等)</span></span><br><span class="line"><span class="class">    如果不配置<span class="title">contextConfigLocation</span>,默认加载的是/<span class="title">WEB</span>-<span class="title">INF</span>/<span class="title">servlet</span>名称-<span class="title">servlet</span>.<span class="title">xml</span>(<span class="title">springmvc</span>-<span class="title">servlet</span>.<span class="title">xml</span>)--&gt;</span></span><br><span class="line"><span class="class">    &lt;<span class="title">init</span>-<span class="title">param</span>&gt;</span></span><br><span class="line"><span class="class">      &lt;<span class="title">param</span>-<span class="title">name</span>&gt;<span class="title">contextConfigLocation</span>&lt;/<span class="title">param</span>-<span class="title">name</span>&gt;</span></span><br><span class="line">      &lt;param-value&gt;classpath:springmvc.xml &lt;/param-value&gt;</span><br><span class="line">    &lt;/init-param&gt;</span><br><span class="line">  &lt;/servlet&gt;</span><br><span class="line">  &lt;servlet-mapping&gt;</span><br><span class="line">    &lt;servlet-name&gt;springmvc&lt;/servlet-name&gt;</span><br><span class="line">    &lt;!--</span><br><span class="line">    第一种：*.action,所有以.action结尾，由DispatcherServler进行解析</span><br><span class="line">    第二种：/，所有访问的地址由DispatcherServler进行解析，对静态文件的解析需要配置不让DispatcherServler进行解析</span><br><span class="line">    使用此种方式可以实现Restful风格的url</span><br><span class="line">    第三种方式：<span class="comment">/*，这样配置不对，使用这种配置最终要转发到一个jsp页面时，仍然会由DispatcherServlet解析jsp地址，</span></span><br><span class="line"><span class="comment">    不能根据jspyemian找到handler,会报错--&gt;</span></span><br><span class="line"><span class="comment">    &lt;url-pattern&gt;/&lt;/url-pattern&gt;</span></span><br><span class="line"><span class="comment">  &lt;/servlet-mapping&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="开发Handler"><a href="#开发Handler" class="headerlink" title="开发Handler"></a>开发Handler</h4><p>需要实现controller接口，才能由SimpleControllerHandlerAdapter适配器执行<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* 这是实现Controller接口的处理器*/</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemsController1</span> <span class="keyword">implements</span> <span class="title">Controller</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ModelAndView <span class="title">handleRequest</span><span class="params">(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="comment">//调用service查找数据库，查询商品的列表，这里使用静态数据模拟</span></span><br><span class="line">        System.out.println(<span class="string">"1111111111111111111111111111111111111111111"</span>);</span><br><span class="line">        ModelAndView modleAndView = <span class="keyword">new</span> ModelAndView();</span><br><span class="line">        modleAndView.addObject(<span class="string">"name"</span>,<span class="string">"liuwuwu"</span>);</span><br><span class="line">        modleAndView.setViewName(<span class="string">"/jsp/hello.jsp"</span>);</span><br><span class="line">        <span class="keyword">return</span> modleAndView;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="配置处理器映射器"><a href="#配置处理器映射器" class="headerlink" title="配置处理器映射器"></a>配置处理器映射器</h4><p>在classpath下的springmvc.xml配置处理器映射器<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">  &lt;!--配置Handler--&gt;</span><br><span class="line">    &lt;bean name=<span class="string">"/queryItems.action"</span> <span class="class"><span class="keyword">class</span></span>=<span class="string">"ItemsController1"</span>/&gt;</span><br><span class="line">&lt;!--处理器映射器--&gt;</span><br><span class="line">&lt;!--处理器映射器</span><br><span class="line">将bean的name作为url进行查找，需要在配置Handler时指定beanname(k)--&gt;</span><br><span class="line">    &lt;bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"&gt;&lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="配置处理器适配器"><a href="#配置处理器适配器" class="headerlink" title="配置处理器适配器"></a>配置处理器适配器</h4><p>通过查看源代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">supports</span><span class="params">(Object handler)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> handler <span class="keyword">instanceof</span> Controller;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></p>
+<p>此适配器能执行实现Controller接口的Handler。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--处理器适配器</span><br><span class="line">所有的适配器都实现了HandlerAdapter接口--&gt;</span><br><span class="line">&lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="配置视图解析器"><a href="#配置视图解析器" class="headerlink" title="配置视图解析器"></a>配置视图解析器</h4><p>需要配置解析jsp的视图解析器。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--视图解析器</span><br><span class="line">解析jsp视图，默认使用jstl标签，classpath下得有jstl包--&gt;</span><br><span class="line">    &lt;bean <span class="class"><span class="keyword">class</span></span>=<span class="string">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/25/Springmvc学习笔记——Springmvc介绍/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/25/Springmvc学习笔记——Springmvc介绍/" itemprop="url">Springmvc学习笔记——Springmvc介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-25T10:22:01+08:00">
+                2018-10-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Springmvc学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Springmvc学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="什么是springmvc？"><a href="#什么是springmvc？" class="headerlink" title="什么是springmvc？"></a>什么是springmvc？</h5><p>springmvc是spring框架的一个模块，springmvc和spring无需通过中间整合层进行整合。springmvc是一个基于mvc的web框架</p>
+<h5 id="springmvc架构的原理"><a href="#springmvc架构的原理" class="headerlink" title="springmvc架构的原理"></a>springmvc架构的原理</h5><ol>
+<li>发起请求到前端控制器(dispacherServlet);</li>
+<li>前端控制器请求HandlerMapping查找Handler(可以根据xml配置、注解进行查找)</li>
+<li>处理器映射器HandlerMapping向前端控制器返回Handler;</li>
+<li>前端控制器调用处理器适配器去执行Handler;</li>
+<li>处理器适配器去执行Handler;</li>
+<li>Handler执行完成给适配器返回ModelAndView；</li>
+<li>处理器适配器向前端控制器返回ModelAndView,ModelAndView是spring框架的一个底层对象，包括Model和View;</li>
+<li>前端控制器请求视图解析器去进行视图解析，根据逻辑视图名解析成真正的视图(如jsp)；</li>
+<li>视图解析器向前端控制器返回view;</li>
+<li>前端控制器进行视图渲染，视图渲染将模型数据(在ModelAndView对象中)填充到request域中；</li>
+<li>前端控制器向用户响应结果。</li>
+</ol>
+<p><strong>重要的组件</strong>：</p>
+<ol>
+<li>前端控制器DispacherServlet(不需要程序员开发),作用：接收请求，响应结果，相当于转发器,中央处理器，有了DispacherServlet减少了其他组件之间的耦合度；</li>
+<li>处理器映射器HandlerMapping(不需要程序员开发),作用： 根据请求url查找Handler;</li>
+<li>处理器适配器HandlerAdapter,作用：按照特定规则(HandlerAdapter要求的规则)去执行Handler,<br><strong>注意</strong>：编写Handler时按照HandlerAdapter的要求去做，这样适配器才可以正确的执行Handler;</li>
+<li>处理器Handler(需要程序员开发)；</li>
+<li>视图解析器View resolver(不需要程序员开发),作用：进行视图解析，根据逻辑视图名解析成真正的视图(View)</li>
+<li>视图view(需要程序员开发jsp),view一个是接口，实现类支持不同的view类型(jsp、freemarker、pdf…)</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/16/Mybatis学习笔记——二级缓存/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/16/Mybatis学习笔记——二级缓存/" itemprop="url">Mybatis学习笔记——二级缓存</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-16T09:34:31+08:00">
+                2018-10-16
               </time>
             
 
@@ -1444,10 +1454,20 @@
       
         
           
-            <h4 id="配置pom-xml文件"><a href="#配置pom-xml文件" class="headerlink" title="配置pom.xml文件"></a>配置pom.xml文件</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;project xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span><br><span class="line">         xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">         xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line"></span><br><span class="line">    &lt;groupId&gt;mybatisTest&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mybatistest&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;</span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">   &lt;!--导入mabatis依赖的jar包--&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.mybatis&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;mybatis&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;3.4.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">  &lt;!--导入jdbc依赖的jar包--&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;8.0.11&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;4.12&lt;/version&gt;</span><br><span class="line">        &lt;scope&gt;compile&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br><span class="line">``` </span><br><span class="line">#### 配置全局配置文件</span><br><span class="line">```java</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;!DOCTYPE configuration PUBLIC <span class="string">"-//mybatis.org//DTD Config 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-config.dtd"</span>&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;!--引用jdbc.properties配置文件--&gt;</span><br><span class="line">    &lt;properties resource="jdbc.properties"&gt;&lt;/properties&gt;</span><br><span class="line">    &lt;environments <span class="keyword">default</span>=<span class="string">"development"</span>&gt;</span><br><span class="line">        &lt;environment id=<span class="string">"development"</span>&gt;</span><br><span class="line">            &lt;!--使用jdbc事务管理--&gt;</span><br><span class="line">            &lt;transactionManager type=<span class="string">"JDBC"</span>/&gt;</span><br><span class="line">            &lt;!-- 配置数据库连接信息,事务的控制由mybatis --&gt;</span><br><span class="line">            &lt;!--数据库连接池--&gt;</span><br><span class="line">            &lt;dataSource type=<span class="string">"POOLED"</span>&gt;</span><br><span class="line">                 &lt;property name=<span class="string">"driver"</span> value=<span class="string">"$&#123;driver&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"url"</span> value=<span class="string">"$&#123;url&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"username"</span> value=<span class="string">"$&#123;username&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"password"</span> value=<span class="string">"$&#123;password&#125;"</span>/&gt;</span><br><span class="line">            &lt;/dataSource&gt;</span><br><span class="line">        &lt;/environment&gt;</span><br><span class="line">    &lt;/environments&gt;</span><br><span class="line"></span><br><span class="line">    &lt;mappers&gt;</span><br><span class="line">        &lt;!-- 加载映射文件--&gt;</span><br><span class="line">        &lt;mapper resource=<span class="string">"User.xml"</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/mappers&gt;</span><br><span class="line"></span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="建立Pojo类用来存储查询结果"><a href="#建立Pojo类用来存储查询结果" class="headerlink" title="建立Pojo类用来存储查询结果"></a>建立Pojo类用来存储查询结果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> po;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"><span class="comment">//属性与数据库表的字段对应</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"User&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">", id="</span> + id +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="新建映射文件"><a href="#新建映射文件" class="headerlink" title="新建映射文件"></a>新建映射文件</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;!--namespace命名空间，作用就是对sql进行分类管理，可以简单的理解为sql隔离</span><br><span class="line">注意：使用mapper代理的方法进行开发，namespace有特殊的作用--&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"test"</span>&gt;</span><br><span class="line">    &lt;!--在映射文件中配置很多sql语句，通过select执行数据库查询；id:标识映射文件中的sql,称为statement的id</span><br><span class="line">    将sql语句封装到mappedStatement对象中,所以将它称为Statement的id--&gt;</span><br><span class="line">    &lt;!--parameterType:指定输入的参数的类型，在这里指定<span class="keyword">int</span>型</span><br><span class="line">        resultType：指定sql输出的结果所映射的Java对象类型，select指定resultType表示将单条记录映射成Java对象；</span><br><span class="line">    #&#123;&#125;表示一个占位符号</span><br><span class="line">    #&#123;id&#125;:其中的id表示接收输入的参数，参数的名称为id,如果输入的参数是基本数据类型，#&#123;&#125;中的参数名可以任意，--&gt;</span><br><span class="line">    &lt;select id=<span class="string">"findUserById"</span> parameterType=<span class="string">"int"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">select * from user  where id=#&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--根据用户名称模糊查询用户信息,可能返回多条记录</span><br><span class="line">    resultType:指定单条记录所映射的Java对象类型--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"java.lang.String"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        select * from user where name like #&#123;value&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
-<h4 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisFirst</span> </span>&#123;</span><br><span class="line">    <span class="comment">//根据id查询用户信息，得到一条信息</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserByIdTest</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//mybatis配置文件的信息</span></span><br><span class="line">        String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">        <span class="comment">//得到配置文件流</span></span><br><span class="line">        InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="comment">//创建会话工厂,传入mybatis配置文件的信息</span></span><br><span class="line">        SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        <span class="comment">//通过工厂得到SqlSession(面向用户的接口)</span></span><br><span class="line">        SqlSession sqlSession =sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//通过SqlSession操作数据库</span></span><br><span class="line">        <span class="comment">//第一个参数：映射文件中statement的id,等于“namesapce”+"."+statement的id</span></span><br><span class="line">        <span class="comment">//第二个参数：指定和映射文件中和parameterType类型匹配的参数</span></span><br><span class="line">        <span class="comment">//sqlSession.selectOne的结果是与映射文件中resultType类型相匹配的对象</span></span><br><span class="line">        <span class="comment">//selectonef方法用来查询单条记录</span></span><br><span class="line">        User user = sqlSession.selectOne(<span class="string">"findUserById"</span>,<span class="number">1</span>);</span><br><span class="line">         System.out.println(user);</span><br><span class="line">         <span class="comment">//释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//根据用户的名称模糊查询用户列表</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserByNameTest</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//mybatis的配置文件</span></span><br><span class="line">        String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">        <span class="comment">//得到配置文件流</span></span><br><span class="line">        InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="comment">//创建sqlSessionfactory</span></span><br><span class="line">        SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        <span class="comment">//通过sqlsessionfactory创建sqlsession</span></span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//list中的user和映射文件中的resulttype所指定的类型一致</span></span><br><span class="line">        List&lt;User&gt; list = sqlSession.selectList(<span class="string">"test.findUserByName"</span>,<span class="string">"%小明"</span>);</span><br><span class="line">        System.out.println(list);</span><br><span class="line">        <span class="comment">//最后关闭</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+            <p>二级缓存是mapper级别的缓存，多个SqlSession去操作同一个Mapper的sql语句，多个SqlSession可以共用二级缓存，二级缓存是跨SqlSession的。</p>
+<h4 id="二级缓存的原理"><a href="#二级缓存的原理" class="headerlink" title="二级缓存的原理"></a>二级缓存的原理</h4><p>首先开启mybatis的二级缓存.<br>sqlSession1去查询用户id为1的用户信息，查询到用户信息会将查询数据存储到二级缓存中。<br>如果SqlSession3去执行相同mapper下sql，执行commit提交，清空该mapper下的二级缓存区域的数据。<br>sqlSession2去查询用户id为1的用户信息，去缓存中找是否存在数据，如果存在直接从缓存中取出数据。<br>二级缓存与一级缓存区别，二级缓存的范围更大，多个sqlSession可以共享一个UserMapper的二级缓存区域。<br>UserMapper有一个二级缓存区域（按namespace分），其它mapper也有自己的二级缓存区域（按namespace分）。每一个namespace的mapper都有一个二缓存区域，两个mapper的namespace如果相同，这两个mapper执行sql查询到数据将存在相同的二级缓存区域中。</p>
+<h4 id="开启二级缓存"><a href="#开启二级缓存" class="headerlink" title="开启二级缓存"></a>开启二级缓存</h4><p>mybaits的二级缓存是mapper范围级别，除了在SqlMapConfig.xml设置二级缓存的总开关，还要在具体的mapper.xml中开启二级缓存。在核心配置文件SqlMapConfig.xml中加入<setting name="cacheEnabled" value="true"><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 开启二级缓存 --&gt;</span><br><span class="line">&lt;setting name=<span class="string">"cacheEnabled"</span> value=<span class="string">"true"</span>/&gt;</span><br></pre></td></tr></table></figure></setting></p>
+<p>在UserMapper.xml中开启二缓存，UserMapper.xml下的sql执行完成会存储到它的缓存区域（HashMap）。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper namespace=<span class="string">"com.iot.mybatis.mapper.UserMapper"</span>&gt;</span><br><span class="line">&lt;!-- 开启本mapper的namespace下的二级缓存--&gt;</span><br><span class="line">&lt;cache /&gt;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure></p>
+<h4 id="调用pojo类实现序列化接口"><a href="#调用pojo类实现序列化接口" class="headerlink" title="调用pojo类实现序列化接口"></a>调用pojo类实现序列化接口</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    ....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>为了将缓存数据取出执行反序列化操作，因为二级缓存数据存储介质多种多样，不一定在内存。</p>
+<h4 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 二级缓存测试</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCache2</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	SqlSession sqlSession1 = sqlSessionFactory.openSession();</span><br><span class="line">	SqlSession sqlSession2 = sqlSessionFactory.openSession();</span><br><span class="line">	SqlSession sqlSession3 = sqlSessionFactory.openSession();</span><br><span class="line">	<span class="comment">// 创建代理对象</span></span><br><span class="line">	UserMapper userMapper1 = sqlSession1.getMapper(UserMapper.class);</span><br><span class="line">	<span class="comment">// 第一次发起请求，查询id为1的用户</span></span><br><span class="line">	User user1 = userMapper1.findUserById(<span class="number">1</span>);</span><br><span class="line">	System.out.println(user1);</span><br><span class="line"></span><br><span class="line">	<span class="comment">//这里执行关闭操作，将sqlsession中的数据写到二级缓存区域</span></span><br><span class="line">	sqlSession1.close();</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//		//使用sqlSession3执行commit()操作</span></span><br><span class="line"><span class="comment">//		UserMapper userMapper3 = sqlSession3.getMapper(UserMapper.class);</span></span><br><span class="line"><span class="comment">//		User user  = userMapper3.findUserById(1);</span></span><br><span class="line"><span class="comment">//		user.setUsername("张明明");</span></span><br><span class="line"><span class="comment">//		userMapper3.updateUser(user);</span></span><br><span class="line"><span class="comment">//		//执行提交，清空UserMapper下边的二级缓存</span></span><br><span class="line"><span class="comment">//		sqlSession3.commit();</span></span><br><span class="line"><span class="comment">//		sqlSession3.close();</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	UserMapper userMapper2 = sqlSession2.getMapper(UserMapper.class);</span><br><span class="line">	<span class="comment">// 第二次发起请求，查询id为1的用户</span></span><br><span class="line">	User user2 = userMapper2.findUserById(<span class="number">1</span>);</span><br><span class="line">	System.out.println(user2);</span><br><span class="line"></span><br><span class="line">	sqlSession2.close();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="usercache配置"><a href="#usercache配置" class="headerlink" title="usercache配置"></a>usercache配置</h4><p>在statement中设置useCache=false可以禁用当前select语句的二级缓存，即每次查询都会发出sql去查询，默认情况是true，即该sql使用二级缓存。</p>
+<p><select id="findOrderListResultMap" resultmap="ordersUserMap" usecache="false"><br>总结：针对每次查询都需要最新的数据sql，要设置成useCache=false，禁用二级缓存。</select></p>
+<h4 id="刷新缓存"><a href="#刷新缓存" class="headerlink" title="刷新缓存"></a>刷新缓存</h4><p>刷新缓存就是清空缓存。在mapper的同一个namespace中，如果有其它insert、update、delete操作数据后需要刷新缓存，如果不执行刷新缓存会出现脏读。<br>设置statement配置中的flushCache=”true”属性，默认情况下为true即刷新缓存，如果改成false则不会刷新。使用缓存时如果手动修改数据库表中的查询数据会出现脏读。如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"cn.itcast.mybatis.po.User"</span> flushCache=<span class="string">"true"</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<p>总结：一般下执行完commit操作都需要刷新缓存，flushCache=true表示刷新缓存，这样可以避免数据库脏读。</p>
+<h4 id="应用场景和局限性"><a href="#应用场景和局限性" class="headerlink" title="应用场景和局限性"></a>应用场景和局限性</h4><h5 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h5><p>对于访问多的查询请求且用户对查询结果实时性要求不高，此时可采用mybatis二级缓存技术降低数据库访问量，提高访问速度，业务场景比如：耗时较高的统计分析sql、电话账单查询sql等。<br>实现方法如下：通过设置刷新间隔时间，由mybatis每隔一段时间自动清空缓存，根据数据变化频率设置缓存刷新间隔flushInterval，比如设置为30分钟、60分钟、24小时等，根据需求而定。</p>
+<h5 id="局限性"><a href="#局限性" class="headerlink" title="局限性"></a>局限性</h5><p>mybatis二级缓存对细粒度的数据级别的缓存实现不好，比如如下需求：对商品信息进行缓存，由于商品信息查询访问量大，但是要求用户每次都能查询最新的商品信息，此时如果使用mybatis的二级缓存就无法实现当一个商品变化时只刷新该商品的缓存信息而不刷新其它商品的信息，因为mybaits的二级缓存区域以mapper为单位划分，当一个商品信息变化会将所有商品信息的缓存数据全部清空。解决此类问题需要在业务层根据需求对数据有针对性缓存。</p>
+
           
         
       
@@ -1495,7 +1515,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Mybatis学习笔记——Mybatis框架简介/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/15/Mybatis学习笔记——一级缓存/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -1514,7 +1534,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/02/Mybatis学习笔记——Mybatis框架简介/" itemprop="url">Mybatis学习笔记——Mybatis框架简介</a></h1>
+                <a class="post-title-link" href="/2018/10/15/Mybatis学习笔记——一级缓存/" itemprop="url">Mybatis学习笔记——一级缓存</a></h1>
         
 
         <div class="post-meta">
@@ -1526,8 +1546,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-02T15:33:27+08:00">
-                2018-10-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-15T09:34:31+08:00">
+                2018-10-15
               </time>
             
 
@@ -1588,12 +1608,12 @@
       
         
           
-            <h4 id="Mybatis是什么"><a href="#Mybatis是什么" class="headerlink" title="Mybatis是什么"></a>Mybatis是什么</h4><p>Mybatis是apache下的顶级项目，让程序员将主要精力放在sql上，通过提供mybatis提供的映射方式，自动灵活的生成(半自动化，大部分需要程序员自己编写sql)满足需要的sql语句。可以将向perpareStatement中输入的参数自动进行输入映射，将查询的结果集灵活的映射成java对象(输出映射)。</p>
-<h4 id="Mybatis框架的基础知识"><a href="#Mybatis框架的基础知识" class="headerlink" title="Mybatis框架的基础知识"></a>Mybatis框架的基础知识</h4><p>sqlMapConfig.xml:mybatis全局配置文件，配置数据源、事务等运行环境，配置映射文件mapper.xml(配置了sql语句)；<br>SqlSessionFactory:会话工厂，创建SqlSession；<br>SqlSession：会话，操作数据库(发出sql增、删、改、查)内部通过Executor操作数据库，mappedstatement(底层封装对象)，对数据库存储封装，包括sql语句，输入参数、输出结果类型；<br>mybatis中支持的输入参数类型(输出结果类型)：Java简单类型、hashmap、pojo自定义类型</p>
-<h4 id="和-的区别与联系"><a href="#和-的区别与联系" class="headerlink" title="#{}和\${}的区别与联系"></a>#{}和\${}的区别与联系</h4><p>$#{} 表示占位符，接收输入参数，类型可以是简单类型、pojo、hashmap；如果为简单类型，#{}中可以写成value或其他名称，通过ONGL读取对象中的属性值；<br>$${}表示一个拼接符号，会引起sql注入所以不建议使用\${}，接收输入参数，类型可以为简单类型、pojo、hashmap；如果为简单类型${}只能写为value;</p>
-<h4 id="OGNL简介"><a href="#OGNL简介" class="headerlink" title="OGNL简介"></a>OGNL简介</h4><p>OGNL的全称是Object Graph Navigation Language(对象图导航语言)，它是一种强大的表达式语言，让你通过简单一致的表达式语法来读取和设置Java对象的属性值，调用对象的方法，遍历整个对象的结构图，实现字段类型转换等功能。<br>相对于其它的表达式语言，OGNL的功能更为强大，它提供了很多高级而必需的特性，例如强大的类型转换功能、静态或实例方法的执行、跨集合投影，以及动态lambda表达式定义等。<br>OGNL基础：OGNL表达式的计算都是围绕OGNL上下文来进行的，OGNL上下文实际上就是一个Map对象，由ognl.OgnlContext类(实现了java.util.Map接口)来表示。OGNL上下文可以包含一个或多个JavaBean对象，在这些对象中有一个是特殊的，这个对象就是上下文的根(root)对象。如果在写表达式的时候，没有指定使用上下文中的哪一个对象，那么根对象将被假定为表达式所依据的对象。在OGNL上下文中，只能有一个根对象，如果你访问根对象，那么在写表达式的时候，直接写对象的属性就可以了；否则，你需要使用“#key”前缀，例如表达式#namager.name。<br>OGNL表达式:OGNL表达式的基础单元就是导航链，通常简称为链(chain)。最简单的链由下列部分组成：<br>１、属性名：如name和manager.name；</p>
-<p>２、方法调用：如manager.hashCode()，返回manager对象的散列码；</p>
-<p>３、数组索引：如emals[0]，返回当前对象的邮件列表中的第一个邮件地址。</p>
+            <h4 id="什么是缓存"><a href="#什么是缓存" class="headerlink" title="什么是缓存"></a>什么是缓存</h4><p>mybatis提供查询缓存，用于减轻数据压力，提高数据库性能。<br>mybatis提供一级缓存，和二级缓存<br>一级缓存：在操作数据库的时候需要构造sqlSession对象，在对象中有一个数据结构(hashmap)，用于存储缓存数据。不同的sqlsession之间缓存数据的区域(hashmap)是互不影响的。<br>一级缓存是sqlsession级别的缓存；<br>二级缓存：是mapper级别的缓存，多个sqlsession去操作同一个mapper的sql语句，多个sqlsession可以共用二级缓存，二级缓存是跨sqlsession的。<br>为什么要用缓存？<br>如果缓存中有数据，就不用从数据库中获取，大大提高系统的性能。</p>
+<h4 id="一级缓存"><a href="#一级缓存" class="headerlink" title="一级缓存"></a>一级缓存</h4><h5 id="一级缓存的工作原理"><a href="#一级缓存的工作原理" class="headerlink" title="一级缓存的工作原理"></a>一级缓存的工作原理</h5><p>第一次发起查询用户id为1的用户信息，先去找缓存中是否有id为1的用户的信息，如果没有，从数据库中查询用户信息得到用户信息，将用户信息储存在一级缓存中。</p>
+<p>如果sqlSession去执行commit操作(执行插入、更新、删除)，清空sqlsession中的一级缓存，这样做的目的是为了让缓存中存储的是最新的信息避免脏读。</p>
+<p>第二次发起查询用户id为1的用户信息，先去找缓存中是否有id为1的用户的信息，缓存中有，直接从缓存中获取用户信息。</p>
+<h4 id="一级缓存的测试"><a href="#一级缓存的测试" class="headerlink" title="一级缓存的测试"></a>一级缓存的测试</h4><p>mybatis默认是支持一级缓存的，不需要在配置文件中配置。<br>按照上边的一级缓存的原理的步骤进行测试<br>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 一级缓存测试</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testCache1</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	SqlSession sqlSession = sqlSessionFactory.openSession();<span class="comment">// 创建代理对象</span></span><br><span class="line">	UserMapper userMapper = sqlSession.getMapper(UserMapper.class);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 下边查询使用一个SqlSession</span></span><br><span class="line">	<span class="comment">// 第一次发起请求，查询id为1的用户</span></span><br><span class="line">	User user1 = userMapper.findUserById(<span class="number">1</span>);</span><br><span class="line">	System.out.println(user1);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 如果sqlSession去执行commit操作（执行插入、更新、删除），清空SqlSession中的一级缓存，这样做的目的为了让缓存中存储的是最新的信息，避免脏读。</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 更新user1的信息</span></span><br><span class="line">	<span class="comment">// user1.setUsername("测试用户22");</span></span><br><span class="line">	<span class="comment">// userMapper.updateUser(user1);</span></span><br><span class="line">	<span class="comment">// //执行commit操作去清空缓存</span></span><br><span class="line">	<span class="comment">// sqlSession.commit();</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 第二次发起请求，查询id为1的用户</span></span><br><span class="line">	User user2 = userMapper.findUserById(<span class="number">1</span>);</span><br><span class="line">	System.out.println(user2);</span><br><span class="line"></span><br><span class="line">	sqlSession.close();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="一级缓存的应用"><a href="#一级缓存的应用" class="headerlink" title="一级缓存的应用"></a>一级缓存的应用</h4><p>正式开发，是将mybatis和spring进行整合开发，事务控制在service中。<br>一个service方法中包括 很多mapper方法调用。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">service&#123;</span><br><span class="line">	<span class="comment">//开始执行时，开启事务，创建SqlSession对象</span></span><br><span class="line">	<span class="comment">//第一次调用mapper的方法findUserById(1)</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">//第二次调用mapper的方法findUserById(1)，从一级缓存中取数据</span></span><br><span class="line">	<span class="comment">//方法结束，sqlSession关闭</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -1642,7 +1662,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Mybatis学习笔记——原生态JDBC的介绍/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/14/Mybatis学习笔记——延迟加载/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -1661,7 +1681,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/10/02/Mybatis学习笔记——原生态JDBC的介绍/" itemprop="url">Mybatis学习笔记——原生态JDBC的介绍</a></h1>
+                <a class="post-title-link" href="/2018/10/14/Mybatis学习笔记——延迟加载/" itemprop="url">Mybatis学习笔记——延迟加载</a></h1>
         
 
         <div class="post-meta">
@@ -1673,8 +1693,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-02T08:43:27+08:00">
-                2018-10-02
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-14T13:12:41+08:00">
+                2018-10-14
               </time>
             
 
@@ -1735,17 +1755,27 @@
       
         
           
-            <h4 id="JDBC编程步骤"><a href="#JDBC编程步骤" class="headerlink" title="JDBC编程步骤"></a>JDBC编程步骤</h4><p>1.加载数据库驱动；</p>
-<p>2.获得数据库连接；</p>
-<p>3.创建Statment对象，执行sql语句；</p>
-<p>4.设置sql语句；</p>
-<p>5.执行sql语句，得到结果集；</p>
-<p>6.对结果集进行分析处理；</p>
-<p>7.释放资源；</p>
-<h4 id="原生态JDBC存在如下问题："><a href="#原生态JDBC存在如下问题：" class="headerlink" title="原生态JDBC存在如下问题："></a>原生态JDBC存在如下问题：</h4><p>1.每一个连接的在使用时候创建，不用的时候需要释放，如果使用频繁的话，频繁的建立和释放连接会浪费系统的资源，影响数据库的性能；<strong>使用数据库连接池解决</strong></p>
-<p>2.将sql语句硬编码到Java代码中，修改sql语句需要重新编译，不利于系统的维护；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
-<p>3.向PrepareStatment中设置参数，会对占位符位置和参数值硬编码，不利于系统的维护；；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
-<p>4.从result中遍历结果集数据时存在硬编码，主要体现在将获取字段进行硬编码不利于系统维护。<strong>将查询结果集自动映射为Java对象</strong></p>
+            <h4 id="什么是延迟加载"><a href="#什么是延迟加载" class="headerlink" title="什么是延迟加载"></a>什么是延迟加载</h4><p>reusltMap可以实现高级映射(使用association、collection实现一对一及一对多映射)，<strong>association、collection具备延迟加载功能。</strong><br>需求：如果要查询订单并且关联查询用户信息。如果先查询订单信息即可满足要求，当我们需要查询用户信息时再查询用户信息，把对用户信息的按需去查询就是延迟加载。<br>延迟加载：先从单表查询，需要时再从关联表去查询，大大提高数据库性能，因为查询单表要比查询多张表的速度要快。</p>
+<h4 id="使用association实现延迟加载"><a href="#使用association实现延迟加载" class="headerlink" title="使用association实现延迟加载"></a>使用association实现延迟加载</h4><h5 id="mapper-xml"><a href="#mapper-xml" class="headerlink" title="mapper.xml"></a>mapper.xml</h5><p>需要定义两个mapper的方法对应的statement。</p>
+<p>1.只查询订单信息<br>SELECT * FROM orders<br>在查询订单的statement中使用association去延迟加载（执行）下边的satatement(关联查询用户信息)<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 查询订单关联查询用户，用户信息需要延迟加载 --&gt;</span><br><span class="line">&lt;select id=<span class="string">"findOrdersUserLazyLoading"</span> resultMap=<span class="string">"OrdersUserLazyLoadingResultMap"</span>&gt;</span><br><span class="line">    SELECT * FROM orders</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2.关联查询用户信息</p>
+<p>通过上边查询到的订单信息中user_id去关联查询用户信息,使用UserMapper.xml中的findUserById<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"findUserById"</span> parameterType=<span class="string">"int"</span> resultType=<span class="string">"com.iot.mybatis.po.User"</span>&gt;</span><br><span class="line">    SELECT * FROM  user  WHERE id=#&#123;value&#125;</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<p>上边先去执行findOrdersUserLazyLoading，当需要去查询用户的时候再去执行findUserById，通过resultMap的定义将延迟加载执行配置起来。</p>
+<h5 id="延迟加载resultMap"><a href="#延迟加载resultMap" class="headerlink" title="延迟加载resultMap"></a>延迟加载resultMap</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 延迟加载的resultMap --&gt;</span><br><span class="line">&lt;resultMap type=<span class="string">"com.iot.mybatis.po.Orders"</span> id=<span class="string">"OrdersUserLazyLoadingResultMap"</span>&gt;</span><br><span class="line">    &lt;!--对订单信息进行映射配置  --&gt;</span><br><span class="line">    &lt;id column=<span class="string">"id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"user_id"</span> property=<span class="string">"userId"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"number"</span> property=<span class="string">"number"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"createtime"</span> property=<span class="string">"createtime"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"note"</span> property=<span class="string">"note"</span>/&gt;</span><br><span class="line">    &lt;!-- 实现对用户信息进行延迟加载</span><br><span class="line">    select：指定延迟加载需要执行的statement的id（是根据user_id查询用户信息的statement）</span><br><span class="line">    要使用userMapper.xml中findUserById完成根据用户id(user_id)用户信息的查询，如果findUserById不在本mapper中需要前边加namespace</span><br><span class="line">    column：订单信息中关联用户信息查询的列，是user_id</span><br><span class="line">    关联查询的sql理解为：</span><br><span class="line">    SELECT orders.*,</span><br><span class="line">    (SELECT username FROM USER WHERE orders.user_id = user.id)username,</span><br><span class="line">    (SELECT sex FROM USER WHERE orders.user_id = user.id)sex</span><br><span class="line">     FROM orders</span><br><span class="line">     --&gt;</span><br><span class="line">    &lt;association property=<span class="string">"user"</span>  javaType=<span class="string">"com.iot.mybatis.po.User"</span></span><br><span class="line">                 select=<span class="string">"com.iot.mybatis.mapper.UserMapper.findUserById"</span></span><br><span class="line">                 column=<span class="string">"user_id"</span>&gt;</span><br><span class="line">     &lt;!-- 实现对用户信息进行延迟加载 --&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/association&gt;</span><br><span class="line"></span><br><span class="line">&lt;/resultMap&gt;</span><br></pre></td></tr></table></figure>
+<p>与非延迟加载的主要区别就在association标签属性多了select和column<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;association property=<span class="string">"user"</span>  javaType=<span class="string">"com.iot.mybatis.po.User"</span></span><br><span class="line">             select=<span class="string">"com.iot.mybatis.mapper.UserMapper.findUserById"</span></span><br><span class="line">             column=<span class="string">"user_id"</span>&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="mapper-java"><a href="#mapper-java" class="headerlink" title="mapper.java"></a>mapper.java</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询订单关联查询用户，用户信息是延迟加载</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Orders&gt; <span class="title">findOrdersUserLazyLoading</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
+<h5 id="测试思路"><a href="#测试思路" class="headerlink" title="测试思路"></a>测试思路</h5><ol>
+<li>执行上边mapper方法(findOrdersUserLazyLoading)，内部去调用com.iot.mybatis.mapper.OrdersMapperCustom中的findOrdersUserLazyLoading只查询orders信息（单表）。</li>
+<li>在程序中去遍历上一步骤查询出的List，当我们调用Orders中的getUser方法时，开始进行延迟加载。</li>
+<li>延迟加载，去调用UserMapper.xml中findUserbyId这个方法获取用户信息。</li>
+</ol>
+<h5 id="延迟加载的配置"><a href="#延迟加载的配置" class="headerlink" title="延迟加载的配置"></a>延迟加载的配置</h5><p>mybatis默认没有开启延迟加载，需要在SqlMapConfig.xml中setting配置。<br>在mybatis核心配置文件中配置：lazyLoadingEnabled、aggressiveLazyLoading<br>在sqlmapconfig.xml中配置<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;settings&gt;</span><br><span class="line">    &lt;!-- 打开延迟加载 的开关 --&gt;</span><br><span class="line">    &lt;setting name=<span class="string">"lazyLoadingEnabled"</span> value=<span class="string">"true"</span>/&gt;</span><br><span class="line">    &lt;!-- 将积极加载改为消极加载即按需要加载 --&gt;</span><br><span class="line">    &lt;setting name=<span class="string">"aggressiveLazyLoading"</span> value=<span class="string">"false"</span>/&gt;</span><br><span class="line">    &lt;!-- 开启二级缓存 --&gt;</span><br><span class="line">   &lt;!-- &lt;setting name=<span class="string">"cacheEnabled"</span> value=<span class="string">"true"</span>/&gt;--&gt;</span><br><span class="line">&lt;/settings&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查询订单关联查询用户，用户信息使用延迟加载</span></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testFindOrdersUserLazyLoading</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">	SqlSession sqlSession = sqlSessionFactory.openSession();<span class="comment">// 创建代理对象</span></span><br><span class="line">	OrdersMapperCustom ordersMapperCustom = sqlSession</span><br><span class="line">			.getMapper(OrdersMapperCustom.class);</span><br><span class="line">	<span class="comment">// 查询订单信息（单表）</span></span><br><span class="line">	List&lt;Orders&gt; list = ordersMapperCustom.findOrdersUserLazyLoading();</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 遍历上边的订单列表</span></span><br><span class="line">	<span class="keyword">for</span> (Orders orders : list) &#123;</span><br><span class="line">		<span class="comment">// 执行getUser()去查询用户信息，这里实现按需加载</span></span><br><span class="line">		User user = orders.getUser();</span><br><span class="line">		System.out.println(user);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="延迟加载的思考"><a href="#延迟加载的思考" class="headerlink" title="延迟加载的思考"></a>延迟加载的思考</h5><p>不使用mybatis提供的association及collection中的延迟加载功能，如何实现延迟加载？？<br>实现方法如下：</p>
+<p>定义两个mapper方法：</p>
+<p>查询订单列表<br>根据用户id查询用户信息</p>
+<p>实现思路：<br>先去查询第一个mapper方法，获取订单信息列表；在程序中（service），按需去调用第二个mapper方法去查询用户信息。</p>
+<p>总之，使用延迟加载方法，先去查询简单的sql（最好单表，也可以关联查询），再去按需要加载关联查询的其它信息。</p>
 
           
         
@@ -1785,7 +1815,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1833,7 +1863,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

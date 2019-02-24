@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/20/Redis学习笔记——Redis哨兵模式/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/12/Mybatis学习笔记——一对多查询/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/20/Redis学习笔记——Redis哨兵模式/" itemprop="url">Redis学习笔记——Redis哨兵模式</a></h1>
+                <a class="post-title-link" href="/2018/10/12/Mybatis学习笔记——一对多查询/" itemprop="url">Mybatis学习笔记——一对多查询</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-20T08:54:21+08:00">
-                2018-09-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-12T10:33:51+08:00">
+                2018-10-12
               </time>
             
 
@@ -316,8 +316,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
                   </a>
                 </span>
 
@@ -355,21 +355,166 @@
       
         
           
-            <p><strong>本文转载自<a href="https://blog.csdn.net/weixin_42711549/article/details/83061052" target="_blank" rel="noopener">Redis Sentinel（哨兵）架构下的高可用</a></strong></p>
-<h4 id="哨兵模式的简介"><a href="#哨兵模式的简介" class="headerlink" title="哨兵模式的简介"></a>哨兵模式的简介</h4><p>Redis Sentinel是一个分布式架构，其中包含若干个Sentinel节点和Redis数据节点，每个Sentinel节点会对数据节点和其余Sentinel节点进行监控，当它发现节点不可达时，会对节点做下线标识。如果被标识的是主节点，它还会和其他Sentinel节点进行“协商”，当大多数Sentinel节点都认为主节点不可达时，它们会选举出一个Sentinel节点来完成自动故障转移的工作，同时会将这个变化通知给Redis应用方。整个过程完全是自动的，不需要人工来介入，所以这套方案很有效地解决了Redis的高可用问题。</p>
-<h4 id="哨兵模式的作用"><a href="#哨兵模式的作用" class="headerlink" title="哨兵模式的作用"></a>哨兵模式的作用</h4><p>Redis的主从复制下，一旦主节点由于故障不能提供服务，需要人工将从节点晋升为主节点，同时还要通知应用方更新主节点地址，对于很多应用场景这种故障处理的方法是无法接受的。但是Redis从2.8开始正式提供了Redis Sentinel（哨兵）架构来解决这个问题。</p>
-<h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>实现原理：</p>
-<p>三个定时监控任务</p>
-<p>1）每隔10秒，每个Sentinel节点会向主节点和从节点发送info命令获取最新的拓扑结构。</p>
-<p>2）每隔2秒，每个Sentinel节点会向Redis数据节点的<strong>sentinel</strong>:hello频道上发送该Sentinel节点对于主节点的判断以及当前Sentinel节点的信息，同时每个Sentinel节点也会订阅该频道，来了解其他Sentinel节点以及它们对主节点的判断。</p>
-<p>3）每隔一秒，每个Sentinel节点会向主节点、从节点、其余Sentinel节点发送一条ping命令做一次心跳检测，来确认这些节点当前是否可达。</p>
-<p>主观下线<br>因为每隔一秒，每个Sentinel节点会向主节点、从节点、其余Sentinel节点发送一条ping命令做一次心跳检测，当这些节点超过down-after-milliseconds没有进行有效回复，Sentinel节点就会对该节点做失败判定，这个行为叫做主观下线。</p>
-<p>客观下线<br>当Sentinel主观下线的节点是主节点时，该Sentinel节点会向其他Sentinel节点询问对主节点的判断，当超过<quorum>个数，那么意味着大部分的Sentinel节点都对这个主节点的下线做了同意的判定，于是该Sentinel节点认为主节点确实有问题，这时该Sentinel节点会做出客观下线的决定。</quorum></p>
-<p>领导者Sentinel节点选举<br>Raft算法：假设s1(sentinel-1)最先完成客观下线，它会向其余Sentinel节点发送命令，请求成为领导者；收到命令的Sentinel节点如果没有同意过其他Sentinel节点的请求，那么就会同意s1的请求，否则拒绝；如果s1发现自己的票数已经大于等于某个值，那么它将成为领导者。</p>
-<p>故障转移<br>1）领导者Sentinel节点在从节点列表中选出一个节点作为新的主节点;</p>
-<p>2）上一步的选取规则是与主节点复制相似度最高的从节点;</p>
-<p>3）领导者Sentinel节点让剩余的从节点成为新的主节点的从节点;</p>
-<p>4）Sentinel节点集合会将原来的主节点更新为从节点，并保持着对其关注，当其恢复后命令它去复制新的主节点;</p>
+            
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/12/Mybatis学习笔记——多对多查询/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/12/Mybatis学习笔记——多对多查询/" itemprop="url">Mybatis学习笔记——多对多查询</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-12T10:33:51+08:00">
+                2018-10-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><p>查询用户及用户购买商品信息<br>查询主表：用户表<br>关联表：由于用户和商品没有直接关联，所以关联表orders、orderdetail、items</p>
+<h4 id="sql"><a href="#sql" class="headerlink" title="sql"></a>sql</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">  orders.*,</span><br><span class="line">  user.username,</span><br><span class="line">  user.sex,</span><br><span class="line">  user.address,</span><br><span class="line">  orderdetail.id orderdetail_id,</span><br><span class="line">  orderdetail.items_id,</span><br><span class="line">  orderdetail.items_num,</span><br><span class="line">  orderdetail.orders_id,</span><br><span class="line">  items.name items_name,</span><br><span class="line">  items.detail items_detail,</span><br><span class="line">  items.price items_price</span><br><span class="line">FROM</span><br><span class="line">  orders,</span><br><span class="line">  user,</span><br><span class="line">  orderdetail,</span><br><span class="line">  items</span><br><span class="line">WHERE orders.user_id = user.id AND orderdetail.orders_id=orders.id AND orderdetail.items_id = items.id</span><br></pre></td></tr></table></figure>
+<h4 id="映射思路"><a href="#映射思路" class="headerlink" title="映射思路"></a>映射思路</h4><p>将用户信息映射到user中。<br>在user类中添加订单列表属性List<orders> orderslist，将用户创建的订单映射到orderslist<br>在Orders中添加订单明细列表属性List<orderdetail>orderdetials，将订单的明细映射到orderdetials<br>在OrderDetail中添加Items属性，将订单明细所对应的商品映射到Items</orderdetail></orders></p>
+<h4 id="mapper-xml"><a href="#mapper-xml" class="headerlink" title="mapper.xml"></a>mapper.xml</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">&lt;!-- 查询用户及购买的商品 --&gt;</span><br><span class="line">&lt;resultMap type=<span class="string">"com.iot.mybatis.po.User"</span> id=<span class="string">"UserAndItemsResultMap"</span>&gt;</span><br><span class="line">    &lt;!-- 用户信息 --&gt;</span><br><span class="line">    &lt;id column=<span class="string">"user_id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"username"</span> property=<span class="string">"username"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"sex"</span> property=<span class="string">"sex"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"address"</span> property=<span class="string">"address"</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 订单信息</span><br><span class="line">    一个用户对应多个订单，使用collection映射</span><br><span class="line">     --&gt;</span><br><span class="line">    &lt;collection property=<span class="string">"ordersList"</span> ofType=<span class="string">"com.iot.mybatis.po.Orders"</span>&gt;</span><br><span class="line">        &lt;id column=<span class="string">"id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"user_id"</span> property=<span class="string">"userId"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"number"</span> property=<span class="string">"number"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"createtime"</span> property=<span class="string">"createtime"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"note"</span> property=<span class="string">"note"</span>/&gt;</span><br><span class="line"></span><br><span class="line">        &lt;!-- 订单明细</span><br><span class="line">         一个订单包括 多个明细</span><br><span class="line">         --&gt;</span><br><span class="line">        &lt;collection property=<span class="string">"orderdetails"</span> ofType=<span class="string">"com.iot.mybatis.po.Orderdetail"</span>&gt;</span><br><span class="line">            &lt;id column=<span class="string">"orderdetail_id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">            &lt;result column=<span class="string">"items_id"</span> property=<span class="string">"itemsId"</span>/&gt;</span><br><span class="line">            &lt;result column=<span class="string">"items_num"</span> property=<span class="string">"itemsNum"</span>/&gt;</span><br><span class="line">            &lt;result column=<span class="string">"orders_id"</span> property=<span class="string">"ordersId"</span>/&gt;</span><br><span class="line"></span><br><span class="line">            &lt;!-- 商品信息</span><br><span class="line">             一个订单明细对应一个商品</span><br><span class="line">             --&gt;</span><br><span class="line">            &lt;association property=<span class="string">"items"</span> javaType=<span class="string">"com.iot.mybatis.po.Items"</span>&gt;</span><br><span class="line">                &lt;id column=<span class="string">"items_id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">                &lt;result column=<span class="string">"items_name"</span> property=<span class="string">"name"</span>/&gt;</span><br><span class="line">                &lt;result column=<span class="string">"items_detail"</span> property=<span class="string">"detail"</span>/&gt;</span><br><span class="line">                &lt;result column=<span class="string">"items_price"</span> property=<span class="string">"price"</span>/&gt;</span><br><span class="line">            &lt;/association&gt;</span><br><span class="line"></span><br><span class="line">        &lt;/collection&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/collection&gt;</span><br><span class="line">&lt;/resultMap&gt;</span><br><span class="line">&lt;!-- 查询用户及购买的商品信息，使用resultmap --&gt;</span><br><span class="line">&lt;select id=<span class="string">"findUserAndItemsResultMap"</span> resultMap=<span class="string">"UserAndItemsResultMap"</span>&gt;</span><br><span class="line">   SELECT</span><br><span class="line">      orders.*,</span><br><span class="line">      user.username,</span><br><span class="line">      user.sex,</span><br><span class="line">      user.address,</span><br><span class="line">      orderdetail.id orderdetail_id,</span><br><span class="line">      orderdetail.items_id,</span><br><span class="line">      orderdetail.items_num,</span><br><span class="line">      orderdetail.orders_id,</span><br><span class="line">      items.name items_name,</span><br><span class="line">      items.detail items_detail,</span><br><span class="line">      items.price items_price</span><br><span class="line">    FROM</span><br><span class="line">      orders,</span><br><span class="line">      user,</span><br><span class="line">      orderdetail,</span><br><span class="line">      items</span><br><span class="line">    WHERE orders.user_id = user.id AND orderdetail.orders_id=orders.id AND orderdetail.items_id = items.id</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="mapper-java"><a href="#mapper-java" class="headerlink" title="mapper.java"></a>mapper.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询用户购买商品信息</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;User&gt;  <span class="title">findUserAndItemsResultMap</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="多对多查询小结"><a href="#多对多查询小结" class="headerlink" title="多对多查询小结"></a>多对多查询小结</h4><p>将查询用户购买的商品信息明细清单，（用户名、用户地址、购买商品名称、购买商品时间、购买商品数量）<br>针对上边的需求就使用resultType将查询到的记录映射到一个扩展的pojo中，很简单实现明细清单的功能。<br>一对多是多对多的特例，如下需求：</p>
+<p>查询用户购买的商品信息，用户和商品的关系是多对多关系。</p>
+<p>需求1：<br>查询字段：用户账号、用户名称、用户性别、商品名称、商品价格(最常见)<br>企业开发中常见明细列表，用户购买商品明细列表，<br>使用resultType将上边查询列映射到pojo输出。</p>
+<p>需求2：<br>查询字段：用户账号、用户名称、购买商品数量、商品明细（鼠标移上显示明细）<br>使用resultMap将用户购买的商品明细列表映射到user对象中。</p>
+<p>总结：<br>使用resultMap是针对那些对查询结果映射有特殊要求的功能，比如特殊要求映射成list中包括多个list。</p>
+<h4 id="resultMap总结"><a href="#resultMap总结" class="headerlink" title="resultMap总结"></a>resultMap总结</h4><h5 id="resultType"><a href="#resultType" class="headerlink" title="resultType"></a>resultType</h5><p>作用：将查询结果按照sql列名pojo属性名一致性映射到pojo中。</p>
+<p>场合：常见一些明细记录的展示，比如用户购买商品明细，将关联查询信息全部展示在页面时，此时可直接使用resultType将每一条记录映射到pojo中，在前端页面遍历list（list中是pojo）即可。</p>
+<h5 id="resultMap"><a href="#resultMap" class="headerlink" title="resultMap"></a>resultMap</h5><p>使用association和collection完成一对一和一对多高级映射（对结果有特殊的映射要求）。</p>
+<p>association：<br>作用：将关联查询信息映射到一个pojo对象中。</p>
+<p>场合：为了方便查询关联信息可以使用association将关联订单信息映射为用户对象的pojo属性中，比如：查询订单及关联用户信息。</p>
+<p>使用resultType无法将查询结果映射到pojo对象的pojo属性中，根据对结果集查询遍历的需要选择使用resultType还是resultMap。</p>
+<p>collection：</p>
+<p>作用：将关联查询信息映射到一个list集合中。</p>
+<p>场合：为了方便查询遍历关联信息可以使用collection将关联信息映射到list集合中，比如：查询用户权限范围模块及模块下的菜单，可使用collection将模块映射到模块list中，将菜单列表映射到模块对象的菜单list属性中，这样的作的目的也是方便对查询结果集进行遍历查询。如果使用resultType无法将查询结果映射到list集合中。</p>
 
           
         
@@ -418,7 +563,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/Redis学习笔记——Redis分布式锁实现/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/11/Mybatis学习笔记——一对一查询/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -437,7 +582,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/18/Redis学习笔记——Redis分布式锁实现/" itemprop="url">Redis学习笔记——Redis分布式锁实现</a></h1>
+                <a class="post-title-link" href="/2018/10/11/Mybatis学习笔记——一对一查询/" itemprop="url">Mybatis学习笔记——一对一查询</a></h1>
         
 
         <div class="post-meta">
@@ -449,8 +594,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T12:10:07+08:00">
-                2018-09-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-11T13:24:01+08:00">
+                2018-10-11
               </time>
             
 
@@ -472,8 +617,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
                   </a>
                 </span>
 
@@ -511,18 +656,22 @@
       
         
           
-            <h4 id="为何会有分布式的锁"><a href="#为何会有分布式的锁" class="headerlink" title="为何会有分布式的锁"></a>为何会有分布式的锁</h4><p>我们知道，Reids和关系型数据库不同，他是单进程单线程的，他是不存在锁的说法的，那么我们为何又要提到锁呢？要知道我们这里讲的是分布式锁，也就是在分布式系统中，多个服务器(Tomcat)同时并发访问同一台Redis服务器(或者Mysql)上的相同的资源。由于Java中的syschornized和lock实现同步功能时候要求是在同一个jvm上，在分布式系统中，每个服务器上都有各自的jvm所以传统的锁很难发挥作用，但是不使用分布式锁就会出现问题。我们举个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> N=<span class="number">0L</span>;</span><br><span class="line"><span class="comment">//N从redis获取值</span></span><br><span class="line"><span class="keyword">if</span>(N&lt;<span class="number">5</span>)&#123;</span><br><span class="line">N++；</span><br><span class="line"><span class="comment">//N写回redis</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>上面的代码实现的功能是，对数值N进行边界检查，自加1，然后将结果写回到reids中，这种应用场景很常见，像秒杀，全局递增ID、IP访问限制等。以IP访问限制来说，恶意攻击者可能发起无限次访问，并发量比较大，分布式环境下对N的边界检查就不可靠，因为从redis读的N可能已经是脏数据。</p>
-<h4 id="使用redis的setnx命令实现分布式锁"><a href="#使用redis的setnx命令实现分布式锁" class="headerlink" title="使用redis的setnx命令实现分布式锁"></a>使用redis的setnx命令实现分布式锁</h4><h5 id="1-实现的原理"><a href="#1-实现的原理" class="headerlink" title="1.实现的原理"></a>1.实现的原理</h5><p>redis是单进程单线程模式，采用队列模式将并发访问变为串行访问，且客户端对redis的连接也不存在竞争关系，所以redis的setnx命令很容易实现分布式锁的功能。</p>
-<h5 id="2-基本命令解析"><a href="#2-基本命令解析" class="headerlink" title="2.基本命令解析"></a>2.基本命令解析</h5><p>(1)setnx（set if not exists）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setnx key1 v1 //将key1的值设置为v1,当v1不存在时，设置成功返回1.若key1已经存在则setnx不做任何动作返回0；</span><br></pre></td></tr></table></figure></p>
-<p>2.getset指令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getset key1 v2   //将指定的key1的值设置为v2，并返回key1的旧值。当key1的旧值不存在(key1不存在)返回nil</span><br></pre></td></tr></table></figure></p>
-<p>3.get指令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get key1   //当key不存在时，返回nil,否则返回key1的值若key1不是字符串类型则返回一个错误</span><br></pre></td></tr></table></figure></p>
-<h5 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h5><p>我们将锁的超时时间设置为key所对应的value,首先进行setnx操作，如果返回true(设置成功)，则成功获得这个锁，反之则锁已经存在则需要通过get操作获得锁的值(到期时间)和当前时间进行比较，如果超时则重新设置该值。</p>
-<h5 id="具体的代码"><a href="#具体的代码" class="headerlink" title="具体的代码"></a>具体的代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获得 lock.</span></span><br><span class="line"><span class="comment">     * 实现思路: 主要是使用了redis 的setnx命令,缓存了锁.</span></span><br><span class="line"><span class="comment">     * reids缓存的key是锁的key,所有的共享, value是锁的到期时间(注意:这里把过期时间放在value了,没有时间上设置其超时时间)</span></span><br><span class="line"><span class="comment">     * 执行过程:</span></span><br><span class="line"><span class="comment">     * 1.通过setnx尝试设置某个key的值,成功(当前没有这个锁)则返回,成功获得锁</span></span><br><span class="line"><span class="comment">     * 2.锁已经存在则获取锁的到期时间,和当前时间比较,超时的话,则设置新的值</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true if lock is acquired, false acquire timeouted</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException in case of thread interruption</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">lock</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> timeout = timeoutMsecs;</span><br><span class="line">        <span class="keyword">while</span> (timeout &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">long</span> expires = System.currentTimeMillis() + expireMsecs + <span class="number">1</span>;</span><br><span class="line">            String expiresStr = String.valueOf(expires); <span class="comment">//锁到期时间</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.setNX(lockKey, expiresStr)) &#123;</span><br><span class="line">                <span class="comment">// lock acquired</span></span><br><span class="line">                locked = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            String currentValueStr = <span class="keyword">this</span>.get(lockKey); <span class="comment">//redis里的时间</span></span><br><span class="line">            <span class="keyword">if</span> (currentValueStr != <span class="keyword">null</span> &amp;&amp; Long.parseLong(currentValueStr) &lt; System.currentTimeMillis()) &#123;</span><br><span class="line">                <span class="comment">//判断是否为空，不为空的情况下，如果被其他线程设置了值，则第二个条件判断是过不去的</span></span><br><span class="line">                <span class="comment">// lock is expired</span></span><br><span class="line"></span><br><span class="line">                String oldValueStr = <span class="keyword">this</span>.getSet(lockKey, expiresStr);</span><br><span class="line">                <span class="comment">//获取上一个锁到期时间，并设置现在的锁到期时间，</span></span><br><span class="line">                <span class="comment">//只有一个线程才能获取上一个线上的设置时间，因为jedis.getSet是同步的</span></span><br><span class="line">                <span class="keyword">if</span> (oldValueStr != <span class="keyword">null</span> &amp;&amp; oldValueStr.equals(currentValueStr)) &#123;</span><br><span class="line">                    <span class="comment">//防止误删（覆盖，因为key是相同的）了他人的锁——这里达不到效果，这里值会被覆盖，但是因为什么相差了很少的时间，所以可以接受</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment">//[分布式的情况下]:如过这个时候，多个线程恰好都到了这里，但是只有一个线程的设置值和当前值相同，他才有权利获取锁</span></span><br><span class="line">                    <span class="comment">// lock acquired</span></span><br><span class="line">                    locked = <span class="keyword">true</span>;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            timeout -= DEFAULT_ACQUIRY_RESOLUTION_MILLIS;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">                延迟100 毫秒,  这里使用随机时间可能会好一点,可以防止饥饿进程的出现,即,当同时到达多个进程,</span></span><br><span class="line"><span class="comment">                只会有一个进程获得锁,其他的都用同样的频率进行尝试,后面有来了一些进行,也以同样的频率申请锁,这将可能导致前面来的锁得不到满足.</span></span><br><span class="line"><span class="comment">                使用随机的等待时间可以一定程度上保证公平性</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            Thread.sleep(DEFAULT_ACQUIRY_RESOLUTION_MILLIS);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Acqurired lock release.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (locked) &#123;</span><br><span class="line">            redisTemplate.delete(lockKey);</span><br><span class="line">            locked = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="如何解决死锁"><a href="#如何解决死锁" class="headerlink" title="如何解决死锁"></a>如何解决死锁</h4><p>如果一个持有锁的客户端失败或崩溃了不能释放锁，是怎么解决的？<br>我们可以通过锁的键对应的时间戳来判断这种情况是否发生了，如果当前的时间已经大于锁的到期时间，说明该锁已失效，可以被重新使用。我们是通过指令getset方法进行处理的，如果c1超时了那么c2执行getset方法时，如果getset指令返回的是超时的值说明设置成功，成功的获取了锁，如果getset方法返回未超时时间则说明其他客户端比他快了一步，需要再次等待或者重试，留意一下，尽管C3没拿到锁，但它改写了C4设置的锁的超时值，不过这一点非常微小的误差带来的影响可以忽略不计。</p>
-<h4 id="为何不用expire指令设置超时时间？"><a href="#为何不用expire指令设置超时时间？" class="headerlink" title="为何不用expire指令设置超时时间？"></a>为何不用expire指令设置超时时间？</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock(key, expireSec)&#123;</span><br><span class="line">isSuccess = setnx key</span><br><span class="line">if (isSuccess)</span><br><span class="line">expire key expireSec</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>这种方式貌似没什么问题，但是假如在setnx后，redis崩溃了，expire就没有执行，结果就是死锁了。锁永远不会超时。</p>
-<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="https://www.cnblogs.com/0201zcr/p/5942748.html" target="_blank" rel="noopener">jedisLock—redis分布式锁实现</a><br><a href="https://blog.csdn.net/varyall/article/details/81205183" target="_blank" rel="noopener">10个常见的Redis面试”刁难”问题</a></p>
+            <h4 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h4><p>查询订单信息，关联查询创建订单的用户信息</p>
+<h4 id="resultType的实现"><a href="#resultType的实现" class="headerlink" title="resultType的实现"></a>resultType的实现</h4><h5 id="sql语句"><a href="#sql语句" class="headerlink" title="sql语句"></a>sql语句</h5><ol>
+<li>确定查询的主表：订单表</li>
+<li>确定查询的关联表：用户表</li>
+<li>关联查询使用内链接还是外连接？ 由于orders表中有一个外键（user_id），通过外键关联查询用户表只能查询出一条记录，可以使用内连接。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> orders.* ,user.username, user.sex,user.address <span class="keyword">from</span> <span class="keyword">user</span> <span class="keyword">where</span> orders.user_id=user.id</span><br></pre></td></tr></table></figure>
+<h5 id="创建pojo"><a href="#创建pojo" class="headerlink" title="创建pojo"></a>创建pojo</h5><p>将上边sql查询的结果映射到pojo中，pojo中必须包括所有查询的列名。原始的Orders.java类不能映射全部的字段，需要创建新的pojo。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">OrdersCustom</span> <span class="keyword">extends</span> <span class="title">Orders</span></span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">//添加用户属性</span></span><br><span class="line">	<span class="comment">/*USER.username,</span></span><br><span class="line"><span class="comment">	  USER.sex,</span></span><br><span class="line"><span class="comment">	  USER.address */</span></span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> String username;</span><br><span class="line">	<span class="keyword">private</span> String sex;</span><br><span class="line">	<span class="keyword">private</span> String address;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getUsername</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> username;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUsername</span><span class="params">(String username)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.username = username;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getSex</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> sex;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(String sex)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.sex = sex;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getAddress</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> address;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAddress</span><span class="params">(String address)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">this</span>.address = address;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="创建mapper-xml"><a href="#创建mapper-xml" class="headerlink" title="创建mapper.xml"></a>创建mapper.xml</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"findOrdersUser"</span>  resultType=<span class="string">"com.iot.mybatis.po.OrdersCustom"</span>&gt;</span><br><span class="line">  SELECT</span><br><span class="line">      orders.*,</span><br><span class="line">      user.username,</span><br><span class="line">      user.sex,</span><br><span class="line">      user.address</span><br><span class="line">    FROM</span><br><span class="line">      orders,</span><br><span class="line">      user</span><br><span class="line">    WHERE orders.user_id = user.id</span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="mapper-java"><a href="#mapper-java" class="headerlink" title="mapper.java"></a>mapper.java</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询订单关联查询用户信息</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;OrdersCustom&gt; <span class="title">findOrdersUser</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="resultMap的实现"><a href="#resultMap的实现" class="headerlink" title="resultMap的实现"></a>resultMap的实现</h4><h5 id="sql语句-1"><a href="#sql语句-1" class="headerlink" title="sql语句"></a>sql语句</h5><p>同resultType实现的sql</p>
+<h5 id="使用resultMap的思路"><a href="#使用resultMap的思路" class="headerlink" title="使用resultMap的思路"></a>使用resultMap的思路</h5><p>使用resultMap将查询结果中的订单信息映射到Orders对象中，在orders类中添加User属性，将关联查询出来的用户信息映射到orders对象中的user属性中。</p>
+<h5 id="mapper-xml"><a href="#mapper-xml" class="headerlink" title="mapper.xml"></a>mapper.xml</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 订单查询关联用户的resultMap</span><br><span class="line">将整个查询的结果映射到com.iot.mybatis.po.Orders中</span><br><span class="line"> --&gt;</span><br><span class="line">&lt;resultMap type=<span class="string">"com.iot.mybatis.po.Orders"</span> id=<span class="string">"OrdersUserResultMap"</span>&gt;</span><br><span class="line">    &lt;!-- 配置映射的订单信息 --&gt;</span><br><span class="line">    &lt;!-- id：指定查询列中的唯一标识，订单信息的中的唯 一标识，如果有多个列组成唯一标识，配置多个id</span><br><span class="line">        column：订单信息的唯一标识列</span><br><span class="line">        property：订单信息的唯一标识列所映射到Orders中哪个属性</span><br><span class="line">      --&gt;</span><br><span class="line">    &lt;id column=<span class="string">"id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"user_id"</span> property=<span class="string">"userId"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"number"</span> property=<span class="string">"number"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"createtime"</span> property=<span class="string">"createtime"</span>/&gt;</span><br><span class="line">    &lt;result column=<span class="string">"note"</span> property=<span class="string">"note"</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- 配置映射的关联的用户信息 --&gt;</span><br><span class="line">    &lt;!-- association：用于映射关联查询单个对象的信息</span><br><span class="line">    property：要将关联查询的用户信息映射到Orders中哪个属性</span><br><span class="line">     --&gt;</span><br><span class="line">    &lt;association property=<span class="string">"user"</span>  javaType=<span class="string">"com.iot.mybatis.po.User"</span>&gt;</span><br><span class="line">        &lt;!-- id：关联查询用户的唯 一标识</span><br><span class="line">        column：指定唯 一标识用户信息的列</span><br><span class="line">        javaType：映射到user的哪个属性</span><br><span class="line">         --&gt;</span><br><span class="line">        &lt;id column=<span class="string">"user_id"</span> property=<span class="string">"id"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"username"</span> property=<span class="string">"username"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"sex"</span> property=<span class="string">"sex"</span>/&gt;</span><br><span class="line">        &lt;result column=<span class="string">"address"</span> property=<span class="string">"address"</span>/&gt;</span><br><span class="line">    &lt;/association&gt;</span><br><span class="line">&lt;/resultMap&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="mapper-java-1"><a href="#mapper-java-1" class="headerlink" title="mapper.java"></a>mapper.java</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//查询订单关联查询用户使用resultMap</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> List&lt;Orders&gt; <span class="title">findOrdersUserResultMap</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="resultType和resultMap实现一对一查询总结"><a href="#resultType和resultMap实现一对一查询总结" class="headerlink" title="resultType和resultMap实现一对一查询总结"></a>resultType和resultMap实现一对一查询总结</h4><p>实现一对一查询：<br>resultType:使用resultType实现较为简单，如果pojo中没有包括查询出来的列名，需要增强列名对应的属性，即可完成映射。如果没有查询结果的特殊的要求建议使用resultType。<br>resultMap:需要单独定义resultMap，实现起来优点麻烦，如果对查询结果有特殊要求，使用resultMap可以完成将关联查询映射到pojo属性中。<br>resultMap可以实现延迟加载，resultType无法实现。</p>
 
           
         
@@ -571,7 +720,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/Redis学习笔记——Redis主从复制/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/10/Mybatis学习笔记——动态sql/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -590,7 +739,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/18/Redis学习笔记——Redis主从复制/" itemprop="url">Redis学习笔记——Redis主从复制</a></h1>
+                <a class="post-title-link" href="/2018/10/10/Mybatis学习笔记——动态sql/" itemprop="url">Mybatis学习笔记——动态sql</a></h1>
         
 
         <div class="post-meta">
@@ -602,8 +751,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T12:10:07+08:00">
-                2018-09-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-10T09:13:37+08:00">
+                2018-10-10
               </time>
             
 
@@ -625,8 +774,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
                   </a>
                 </span>
 
@@ -664,39 +813,11 @@
       
         
           
-            <p>这篇文章主要是摘录自Redis官方文档</p>
-<h4 id="Redis主从复制的要点"><a href="#Redis主从复制的要点" class="headerlink" title="Redis主从复制的要点"></a>Redis主从复制的要点</h4><ol>
-<li>Reids使用异步方式进行复制；</li>
-<li>一个主服务器可以有多个从服务器；</li>
-<li>一个从服务器也可以接受其他从服务器的连接(可以简单记为薪火相传)；</li>
-<li>Redis主从复制不会阻塞主服务器端，也就是若干个从服务器进行初始化同步时，主服务器仍然能够处理请求；</li>
-<li>主从复制也不阻塞从服务器端。当从服务器进行初始同步时，它使用旧版本的数据来应对查询请求，假设你在redis.conf配置文件是这么配置的。否则的话，你可以配置当复制流关闭时让从服务器给客户端返回一个错误。但是，当初始同步完成后，需要删除旧的数据集和加载新的数据集，在这个短暂的时间内，从服务器会阻塞连接进来的请求；</li>
-<li>主从复制可以用来增强扩展性，使用多个从服务器来处理只读的请求（比如，繁重的排序操作可以放到从服务器去做），也可以简单的用来做数据冗余；</li>
-<li>使用主从复制可以为主服务器免除把数据写入磁盘的消耗：在主服务器的redis.conf文件中配置“避免保存”（注释掉所有“保存“命令），然后连接一个配置为“进行保存”的从服务器即可。但是这个配置要确保主服务器不会自动重启（要获得更多信息请阅读下一段);<h4 id="当主服务器不进行持久化时复制的安全性"><a href="#当主服务器不进行持久化时复制的安全性" class="headerlink" title="当主服务器不进行持久化时复制的安全性"></a>当主服务器不进行持久化时复制的安全性</h4>在进行主从复制设置时，强烈建议在主服务器上开启持久化，当不能这么做时，比如考虑到延迟的问题，应该将实例配置为避免自动重启。<br>为什么不持久化的主服务器自动重启非常危险呢？</li>
-</ol>
-<p>为了更好的理解这个问题，看下面这个失败的例子，其中主服务器和从服务器中数据库都被删除了。</p>
-<ol>
-<li><p>我们设置节点A为主服务器，关闭持久化，节点B和C从节点A复制数据。</p>
-</li>
-<li><p>这时出现了一个崩溃，但Redis具有自动重启系统，重启了进程，因为关闭了持久化，节点重启后只有一个空的数据集。</p>
-</li>
-</ol>
-<ol start="3">
-<li>节点B和C从节点A进行复制，现在节点A是空的，所以节点B和C上的复制数据也会被删除。<br>当在高可用系统中使用Redis Sentinel，关闭了主服务器的持久化，并且允许自动重启，这种情况是很危险的。比如主服务器可能在很短的时间就完成了重启，以至于Sentinel都无法检测到这次失败，那么上面说的这种失败的情况就发生了。<br>如果数据比较重要，并且在使用主从复制时关闭了主服务器持久化功能的场景中，都应该禁止实例自动重启。</li>
-</ol>
-<p>综上所述：<strong>关闭持久化并允许自动重启的主服务器，在做主从同步时，可能导致所有服务器的数据都被清空</strong></p>
-<h4 id="Redis主从复制的原理"><a href="#Redis主从复制的原理" class="headerlink" title="Redis主从复制的原理"></a>Redis主从复制的原理</h4><p>如果你设置了一个从服务器，在连接时它发送了一个SYNC命令，不管它是第一次连接还是再次连接都没有关系。<br>然后主服务器开始后台存储，并且开始缓存新连接进来的修改数据的命令。当后台存储完成后，主服务器把数据文件发送到从服务器，从服务器将其保存在磁盘上，然后加载到内存中。然后主服务器把刚才缓存的命令发送到从服务器。这是作为命令流来完成的，并且和Redis协议本身格式相同。当主从服务器之间的连接由于某些原因断开时，从服务器可以自动进行重连接。当有多个从服务器同时请求同步时，主服务器只进行一个后台存储。<br>当连接断开又重新连上之后，一般都会进行一个完整的重新同步，但是从Redis2.8开始，只重新同步一部分也可以。</p>
-<h5 id="部分重新同步"><a href="#部分重新同步" class="headerlink" title="部分重新同步"></a>部分重新同步</h5><p>从Redis 2.8开始，如果遭遇连接断开，重新连接之后可以从中断处继续进行复制，而不必重新同步。<br>它的工作原理是这样，主服务器端为复制流维护一个内存缓冲区（in-memory backlog）。主从服务器都维护一个复制偏移量（replication offset）和master run id ，当连接断开时，从服务器会重新连接上主服务器，然后请求继续复制，假如主从服务器的两个master run id相同，并且指定的偏移量在内存缓冲区中还有效，复制就会从上次中断的点开始继续。如果其中一个条件不满足，就会进行完全重新同步（在2.8版本之前就是直接进行完全重新同步）。因为主运行id不保存在磁盘中，如果从服务器重启了的话就只能进行完全同步了。<br>部分重新同步这个新特性内部使用PSYNC命令，旧的实现中使用SYNC命令。Redis2.8版本可以检测出它所连接的服务器是否支持PSYNC命令，不支持的话使用SYNC命令。</p>
-<h5 id="全量同步"><a href="#全量同步" class="headerlink" title="全量同步"></a>全量同步</h5><p>Redis全量复制一般发生在Slave初始化阶段，这时Slave需要将Master上的所有数据都复制一份。具体步骤如下： </p>
-<ol>
-<li>从服务器连接主服务器，发送SYNC命令； </li>
-<li>主服务器接收到SYNC命名后，开始执行BGSAVE命令生成RDB文件并使用缓冲区记录此后执行的所有写命令； </li>
-<li>主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令； </li>
-<li>从服务器收到快照文件后丢弃所有旧数据，载入收到的快照； </li>
-<li>主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令； </li>
-<li>从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令； <h5 id="增量同步"><a href="#增量同步" class="headerlink" title="增量同步"></a>增量同步</h5>Redis增量复制是指Slave初始化后开始正常工作时主服务器发生的写操作同步到从服务器的过程。<br>增量复制的过程主要是主服务器每执行一个写命令就会向从服务器发送相同的写命令，从服务器接收并执行收到的写命令。<h4 id="只读从服务器"><a href="#只读从服务器" class="headerlink" title="只读从服务器"></a>只读从服务器</h4>从Redis 2.6开始，从服务器支持只读模式，并且是默认模式。这个行为是由Redis.conf文件中的slave-read-only 参数控制的，可以在运行中通过CONFIG SET来启用或者禁用。<br>只读的从服务器会拒绝所有写命令，所以对从服务器不会有误写操作。但这不表示可以把从服务器实例暴露在危险的网络环境下，因为像DEBUG或者CONFIG这样的管理命令还是可以运行的。不过你可以通过使用rename-command命令来为这些命令改名来增加安全性。<br>你可能想知道为什么只读限制还可以被还原，使得从服务器还可以进行写操作。虽然当主从服务器进行重新同步或者从服务器重启后，这些写操作都会失效，还是有一些使用场景会想从服务器中写入临时数据的，但将来这个特性可能会被去掉。</li>
-</ol>
-<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="http://ifeve.com/redis-replication/" target="_blank" rel="noopener">reids官方文档</a></p>
+            <h4 id="什么是动态sql"><a href="#什么是动态sql" class="headerlink" title="什么是动态sql"></a>什么是动态sql</h4><p>mybatis核心是对sql语句进行灵活的操作，动态sql就是通过表达式进行判断，对sql进行灵活的拼接、组装。</p>
+<h4 id="使用案例"><a href="#使用案例" class="headerlink" title="使用案例"></a>使用案例</h4><h5 id="需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql"><a href="#需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql" class="headerlink" title="需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql"></a>需求：用户的信息综合查询列表和用户信息查询列表总数这两个statement的定义使用动态sql</h5><p>对查询的条件进行判断，如果输入的参数不为空才进行查询条件的拼接。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"> &lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"cn.itcast.mybatis.po.UserQueryVo"</span> resultType=<span class="string">"int"</span>&gt;</span><br><span class="line">    <span class="function">select <span class="title">count</span><span class="params">(*)</span> from user</span></span><br><span class="line"><span class="function">&lt;!--where可以自动去掉条件中的第一个and--&gt;</span></span><br><span class="line"><span class="function">&lt;where&gt;</span></span><br><span class="line"><span class="function">    &lt;<span class="keyword">if</span> test</span>=<span class="string">"userCustom.sex!=null"</span> and userCustom.sex!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.sex = #&#123;userCustom.sex&#125;</span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> test=<span class="string">"userCustom.username!=null"</span> and userCustom.username!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.username like <span class="string">'%$&#123;userCustom.username&#125;'</span> </span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">&lt;/where&gt;</span><br><span class="line">   &lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。"><a href="#需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。" class="headerlink" title="需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。"></a>需求：将上边实现的动态sql判断代码抽取出来，组成一个sql片段。其他的statment中可以引用该sql片段，方便程序员进行开发。</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--定义sql片段</span><br><span class="line">      id:sql片段的唯一标识</span><br><span class="line">经验：基于单表来定义sql片段，这样的化这个sql片段可重用性才高，在sql片段中不要包括where--&gt;</span><br><span class="line">&lt;sql id=<span class="string">"query_user_where"</span>&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> test=<span class="string">"userCustom.sex!=null"</span> and userCustom.sex!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.sex = #&#123;userCustom.sex&#125;</span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">    &lt;<span class="keyword">if</span> test=<span class="string">"userCustom.username!=null"</span> and userCustom.username!=<span class="string">""</span>&gt;</span><br><span class="line">        and user.username like <span class="string">'%$&#123;userCustom.username&#125;'</span> </span><br><span class="line">    &lt;/if&gt;</span><br><span class="line">&lt;/sql&gt;</span><br></pre></td></tr></table></figure>
+<p>接下来引用sql片段<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"cn.itcast.mybatis.po.UserQueryVo"</span> resultType=<span class="string">"int"</span>&gt;</span><br><span class="line">    <span class="function">select <span class="title">count</span><span class="params">(*)</span> from user</span></span><br><span class="line"><span class="function">&lt;!--where可以自动去掉条件中的第一个and--&gt;</span></span><br><span class="line"><span class="function">&lt;where&gt;</span></span><br><span class="line"><span class="function">   &lt;!--引用sql片段的id,如果refid指定的id不在本mapper中，需要在前边加namespace--&gt;</span></span><br><span class="line">&lt;include refid = "query_user_where"&gt;&lt;/include&gt;</span><br><span class="line">   &lt;在这里还可能引用其他的sql片段，所以sql片段中不要加where&gt;</span><br><span class="line">&lt;/where&gt;</span><br><span class="line">   &lt;/select&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="foreach标签"><a href="#foreach标签" class="headerlink" title="foreach标签"></a>foreach标签</h5><p>向sql传递数组或者List，mybatis使用foreach解析<br>需求：在用户的查询列表和查询总数的statement中增加多个id输入查询。<br>sql语句如下：select * from user where age=3 and (id =1 or id =10 or id =16)<br>在输入的参数类型中要添加List<integer> dis 传入多个id。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">if</span> test=<span class="string">"ids!=null"</span>&gt;</span><br><span class="line">&lt;!--使用foreach遍历输入ids,collecton:指定输入对象中集合属性</span><br><span class="line">itme:每次遍历生成对象名</span><br><span class="line">open:开始遍历时的拼接的串</span><br><span class="line">close:结束遍历时拼接的串</span><br><span class="line">separator：遍历两个对象中需要拼接的串</span><br><span class="line">--&gt;</span><br><span class="line">&lt;!--实现如下拼接and (id =<span class="number">1</span> or id =<span class="number">10</span> or id =<span class="number">16</span>)--&gt;</span><br><span class="line">&lt;foreach collection=<span class="string">"ids"</span> item=<span class="string">"item_id"</span> open=<span class="string">" and ("</span> close=<span class="string">")"</span> separator=<span class="string">"or"</span>&gt;</span><br><span class="line">   &lt;!--每个遍历需要拼接的串--&gt;</span><br><span class="line">  id=#&#123;item_id&#125;</span><br><span class="line">&lt;/foreach&gt;</span><br></pre></td></tr></table></figure></integer></p>
 
           
         
@@ -745,7 +866,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/16/Redis学习笔记之Pipeline(管道)/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/09/Mybatis学习笔记——输入输出映射/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -764,7 +885,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/16/Redis学习笔记之Pipeline(管道)/" itemprop="url">Redis学习笔记——Pipeline(管道)</a></h1>
+                <a class="post-title-link" href="/2018/10/09/Mybatis学习笔记——输入输出映射/" itemprop="url">Mybatis学习笔记——输入输出映射</a></h1>
         
 
         <div class="post-meta">
@@ -776,8 +897,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-16T09:32:02+08:00">
-                2018-09-16
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-09T20:54:19+08:00">
+                2018-10-09
               </time>
             
 
@@ -799,8 +920,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
                   </a>
                 </span>
 
@@ -838,770 +959,194 @@
       
         
           
-            <h4 id="为什么会出现Pipeline"><a href="#为什么会出现Pipeline" class="headerlink" title="为什么会出现Pipeline"></a>为什么会出现Pipeline</h4><p>Redis的pipeline(管道)功能在命令行中没有，但是redis是支持这个功能的，之所以存在这个功能，是因为Redis的server的处理能力很强，但是由于收到的处理请求很少，导致吞吐量很小。这就导致大量的时间花费在客户端和服务器的通信上了。当client 使用pipelining 发送命令时，redis server必须将部分请求放到队列中（使用内存），执行完毕后一次性发送结果；如果发送的命令很多的话，建议对返回的结果加标签，当然这也会增加使用的内存；</p>
-<h4 id="Pipeline的原理"><a href="#Pipeline的原理" class="headerlink" title="Pipeline的原理"></a>Pipeline的原理</h4><p>而管道（pipeline）可以一次性发送多条命令并在执行完后一次性将结果返回，pipeline通过减少客户端与redis的通信次数来实现降低往返延时时间，而且Pipeline 实现的原理是队列，而队列的原理是时先进先出，这样就保证数据的顺序性。 Pipeline 的默认的同步的个数为53个，也就是说arges中累加到53条数据时会把数据提交。<br>需要注意到是用 pipeline方式打包命令发送，redis必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并不是打包的命令越多越好。具体多少合适需要根据具体情况测试。</p>
-<h4 id="Pipeline的使用场景"><a href="#Pipeline的使用场景" class="headerlink" title="Pipeline的使用场景"></a>Pipeline的使用场景</h4><p>Pipeline在某些场景下非常有用，比如有多个command需要被“及时的”提交，而且他们对相应结果没有互相依赖，对结果响应也无需立即获得，那么pipeline就可以充当这种“批处理”的工具；而且在一定程度上，可以较大的提升性能，性能提升的原因主要是TCP连接中减少了“交互往返”的时间。但是对那些对可靠性要求很高，每次操作都需要立马知道这次操作是否成功是否数据写入了redis,那么pipeline就不适合了。</p>
-<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="https://blog.csdn.net/varyall/article/details/81205183" target="_blank" rel="noopener">10个常见的Redis面试”刁难”问题</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/15/Redis学习笔记——Redis中的事务/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/15/Redis学习笔记——Redis中的事务/" itemprop="url">Redis学习笔记——Redis中的事务</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-15T17:16:32+08:00">
-                2018-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Redis事务简介"><a href="#Redis事务简介" class="headerlink" title="Redis事务简介"></a>Redis事务简介</h4><p>Redis事务可以一次执行多个命令，并且带有以下两个重要的保证：</p>
+            <h4 id="输入映射"><a href="#输入映射" class="headerlink" title="输入映射"></a>输入映射</h4><p>通过parameterType指定输入的参数的类型，类型可以是简单类型、hashmap、pojo自定义的包装类型。</p>
+<h5 id="输入参数为hashmap"><a href="#输入参数为hashmap" class="headerlink" title="输入参数为hashmap"></a>输入参数为hashmap</h5><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;select id=<span class="string">"selectTeacher"</span> parameterType=<span class="string">"hashmap"</span> resultType=<span class="string">"com.myapp.domain.Teacher"</span>&gt;  </span><br><span class="line">    select * from Teacher where c_id=#&#123;id&#125; and sex=#&#123;sex&#125;  </span><br><span class="line">&lt;/select&gt;</span><br></pre></td></tr></table></figure>
+<h6 id="输入参数为包装类型"><a href="#输入参数为包装类型" class="headerlink" title="输入参数为包装类型"></a>输入参数为包装类型</h6><p>完成用户信息的综合查询，需要传入的查询条件很复杂（可能包含用户的信息、其他信息，比如订单、商品）。针对上面这种需求，建议使用自定义的包装类型的pojo。在pojo中将复杂的查询条件包<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserQueryVo</span></span>&#123;</span><br><span class="line"><span class="comment">//在这里包装所需要的查询条件</span></span><br><span class="line"><span class="comment">//用户查询条件</span></span><br><span class="line"><span class="keyword">private</span> User user;</span><br><span class="line"><span class="comment">//可以包装其他的查询条件，订单、商品</span></span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="输出映射"><a href="#输出映射" class="headerlink" title="输出映射"></a>输出映射</h4><h5 id="resultType"><a href="#resultType" class="headerlink" title="resultType"></a>resultType</h5><p>使用result进行输出映射，<strong>只有查询出的列名和pojo中的属性名一致，该列可以成功映射</strong>，如果查询出的列名和属性名全部不一致，没有创建pojo对象。只要查询出来的列名和pojo中的属性名有一个一致，就会创建pojo对象。<br>输出简单类型：<br>用户的信息的综合查询列表总数，通过查询总数和用户综合查询列表才可以实现分页；<br>小结：只有查询出来的结果集只有一行和一列才可以使用简单类型，不管输出的pojo单个对象还是一个列表(list中包括pojo)，在mapper.xml中resultType指定的类型是一样的。在mapper接口中指定的方法返回值类型不一样：</p>
 <ol>
-<li>事务是一个单独隔离操作：事务中所有的命令都会序列化，按顺序地执行。事务在执行过程中，不会被其他客户端发送过来的命令所打断；</li>
-<li>事务是一个原子性，要么全部执行成功，要么全部都没有被处理；<br>一个事务从开始到执行会经历以下三个阶段：</li>
-<li>开始事务；</li>
-<li>命令入队；</li>
-<li>执行事务；<br>redis中事务与关系数据库中的事务的联系：与关系型数据库中的事务不同，redis中的事务是不支持回滚的(语法错误除外)，redis中的事务机制保证事务中的指令一次执行不会被其他指令插入影响；</li>
-</ol>
-<h4 id="redis中的事务命令"><a href="#redis中的事务命令" class="headerlink" title="redis中的事务命令"></a>redis中的事务命令</h4><p>Discard：取消事务，放弃执行事务块内的所有指令；<br>Exec:执行所有事务块内的命令；<br>Multi:标记一个事务块的开始；<br>Unwatch:取消watch命令对所有key的监视；<br>Watch key[key…]：监视一个key，如果在事务执行之前这个(或者这些key)被其他命令所改动，那么事务将被打断；</p>
-<h4 id="redis事务中的错误"><a href="#redis事务中的错误" class="headerlink" title="redis事务中的错误"></a>redis事务中的错误</h4><p>在redis事务中，可能发生两种错误：</p>
-<ol>
-<li><p>命令可能排队失败，如命令的语法错误(如参数的数量错误…)，或者一些重要的环境问题，如内存不足，从 Redis 2.6.5 开始, 在命令排队期间发生错误，Redis会拒绝执行EXEC，并返回一个错误，然后自动放弃这个事务。这可以理解为Java中的编译时期的错误告诉开发者必须自己先进行处理。 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line">&quot;22&quot;</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set k1 89</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k99 99</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k900</span><br><span class="line">(error) ERR wrong number of arguments for &apos;set&apos; command</span><br><span class="line">127.0.0.1:6379&gt; get k99</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">(error) EXECABORT Transaction discarded because of previous errors. //事务执行失败</span><br><span class="line">127.0.0.1:6379&gt; get k1   //里面的操作都没有被执行</span><br><span class="line">&quot;22&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>当exec后发现一些指令可能执行失败了，如在一个字符串上进行了加的操作。此时其他的正确的操作仍然执行成功；这可以理解为java中的运行时错误。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line">&quot;22&quot;</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set k1 90</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k2 string</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; incr k2</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; get k2</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">1) OK</span><br><span class="line">2) OK</span><br><span class="line">3) (error) ERR value is not an integer or out of range</span><br><span class="line">4) &quot;90&quot;</span><br><span class="line">5) &quot;string&quot;</span><br></pre></td></tr></table></figure>
+<li>输出单个pojo对象，方法返回值为单个对象类型；</li>
+<li>输出pojo对象的list，方法的返回值为list<pojo>;                     <h5 id="resultMap"><a href="#resultMap" class="headerlink" title="resultMap"></a>resultMap</h5>mybatis中使用resultMap完成高级输出结果映射。<br>如果查询出来的列明和pojo属性名不一致，通过定义一个resultMap对列明和pojo属性名之间作一个映射关系。</pojo></li>
+<li>定义resultMap；</li>
+<li>使用resultMap作为statement的输出映射类型；<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"dao.mapper.UserMapper"</span>&gt;</span><br><span class="line">    &lt;!--定义resultMap</span><br><span class="line">    select id id_ ,age age_ from user where id = #&#123;value&#125;和user类中的属性做一个映射关系</span><br><span class="line">    type:resultMap最终映射的java对象类型，可以使用别名</span><br><span class="line">    id:对resultMap的唯一标识--&gt;</span><br><span class="line">    &lt;resultMap id=<span class="string">"useResultMap"</span> type=<span class="string">"user"</span>&gt;</span><br><span class="line">        &lt;!--id表示查询结果集中的唯一标识，column：查询出来的列名</span><br><span class="line">        property:type指定的pojo类型中的属性名</span><br><span class="line">        最终resultMap对column和property作一个映射关系(对应关系)--&gt;</span><br><span class="line">        &lt;id column="id_" property="id"&gt;&lt;/id&gt;</span><br><span class="line">        &lt;!--result:对普通列的映射的定义，column：查询出来的列名</span><br><span class="line">        property:type指定的pojo类型中的属性名</span><br><span class="line">        最终resultMap对column和property作一个映射关系(对应的关系)--&gt;</span><br><span class="line">        &lt;result column="age_" property="age"&gt;&lt;/result&gt;</span><br><span class="line">    &lt;/resultMap&gt;</span><br><span class="line">    &lt;!--使用resultMap进行输出映射</span><br><span class="line">    resultMap：指定定义的resultMap的id，如果这个resultMap在其他的mapper文件中，前面需要加namespace--&gt;</span><br><span class="line">    &lt;select id=<span class="string">"findUserById2"</span> parameterType=<span class="string">"int"</span> resultMap=<span class="string">"useResultMap"</span>&gt;</span><br><span class="line">        select id id_,age age_ from user where id = #&#123;value&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<h4 id="Redis中为何不支持事务回滚"><a href="#Redis中为何不支持事务回滚" class="headerlink" title="Redis中为何不支持事务回滚"></a>Redis中为何不支持事务回滚</h4><p>Redis命令在事务中可能会执行失败，但是redis事务中不会回滚，而是继续会执行余下的命令。这样做的主要原因是：</p>
+<p>测试代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById2</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//创建sqlsession对象</span></span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//获得mapper代理对象</span></span><br><span class="line">        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);</span><br><span class="line">        User user = userMapper.findUserById2(<span class="number">1</span>);</span><br><span class="line">        sqlSession.close();</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/08/Mybatis学习笔记——SqlMapConfig.xml讲解/" itemprop="url">Mybatis学习笔记——SqlMapConfig.xml讲解</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-08T20:54:19+08:00">
+                2018-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>SqlMapConfig.xml是mybatis的全局配置文件，他是满足dtd约束的，其中配置的内容和顺序如下：</p>
 <ol>
-<li>只有当发生语法错误，redis命令才会执行失败，这意味着这些错误都是程序性的错误，这类错误在开发过程中就能够解决，几乎不会出现在生产环境中；</li>
-<li>由于不要进行回滚，redis内部更加简单，运行速度更快；</li>
-</ol>
-<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>WATCH 命令为事务提供一个check-and-set (CAS) 行为。这个命令使得Exec的执行必须要满足一个条件：如果watch的keys 没有一个被更改(但它们可以在事务中被修改)，则执行事务；不然，就不会执行这个事务。(注意，如果你 WATCH了一个有生命周期的key，并且这个key过期了， EXEC 依然会执行)</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/14/Redis学习笔记——Redis持久化/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/14/Redis学习笔记——Redis持久化/" itemprop="url">Redis学习笔记——Redis持久化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-14T18:13:51+08:00">
-                2018-09-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="Redis持久化的定义"><a href="#Redis持久化的定义" class="headerlink" title="Redis持久化的定义"></a>Redis持久化的定义</h4><p>Redis的数据操作都在内存中进行，如果发生服务器宕机，内存中的数据就会丢失。持久化就是将数据保存在磁盘上，redis中常用的持久化方法为：RDB和AOF;</p>
-<h4 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h4><p>RDB方式就是将redis中的数据生成一个完整的快照，然后以二进制文件的形式保存在磁盘上，当需要进行恢复时，在从磁盘加载到内存中。</p>
-<h5 id="三种触发方式"><a href="#三种触发方式" class="headerlink" title="三种触发方式"></a>三种触发方式</h5><p>1.save命令触发：这种触发方式是一种同步触发方式，该方式会造成Redis的阻塞。所有的数据操作命令都要排队等他完成。<br>文件策略：他会生成一个临时文件，save执行完后就会替换老的文件；<br>2.bgsave命令触发方式：这种方式是一种异步方式，客户端对服务器下达bgsave命令时，redis会fork出一个子进程进行RDB文件的生成，当RDB生成完毕后子进程会反馈给主进程。fork子进程时也会阻塞，不过正常情况下fork的过程非常快。<br>文件策略：和save的相同；<br>save触发方式和bgsave触发方式的比较：<br>1.save触发方式是同步的，会阻塞客户端的操作，而bgsave触发方式是异步的基本上不会阻塞客户端的操作(除了fork子进程的时候会阻塞，但是这个过程很快)；<br>2.save触发方式实在主进程中进行RDB文件的生成，而bgsave是在子进程中进行RDB文件的生成；<br>3.save方式不会消耗内存，但是bgsave fork一个子进程中会消耗内存；<br>3.规则自动触发方式<br>当满足一定的规则时，会自动生成文件，这些规则需要在配置文件中进行配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">900 1    900秒内改变1条数据会自动生成RDB文件</span><br><span class="line">300 10   300秒内改变10条数据，会自动生成RDB文件</span><br><span class="line">60  10000  60秒内改变1万条数据，会自动生成RDB文件</span><br></pre></td></tr></table></figure></p>
-<p>4.其它的一些触发方式<br>1.全量复制：主从复制时，master会自动生成RDB文件；<br>2.debug reload:提供debug级别的重启，不清空内存的一种重启方式，但是会自动生成RDB文件；<br>3.shutdown:当执行shutdown指令时，会自动生成RDB文件；</p>
-<h5 id="RDB持久化的优缺点"><a href="#RDB持久化的优缺点" class="headerlink" title="RDB持久化的优缺点"></a>RDB持久化的优缺点</h5><p>RDB方式进行持久化时，速度快，生成的文件比较小，但是在生成快照时候，会造成最后一个分片时间内操作的数据的丢失；</p>
-<h4 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h4><p>AOF持久化就是将所有的写操作都写到日志文件中，当服务器发生宕机时，只需要重新从头到尾执行一下这个文件就可以了；<br>AOF的三种策略：<br>always:每一步写操作立即同步到日志文件中；优点是即使宕机也不会存在数据的丢失，缺点是频繁的进行IO操作， 对系统的性能影响较大；<br>everysec:每秒中同步一次；缺点是会丢失最后一秒钟的数据<br>no:刷新策略交给操作系统；</p>
-<h4 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h4><p>使用AOF持久化的时候，有一个重要的问题就是随着操作的增多，日志文件会越来越大，那么有什么方法解决这个问题呢？redis采用重写的方式有效的解决了这个问题。AOF重写就是把过期的、没用的、重复的以及可优化的命令，进行化简。只取最终有价值的结果。虽然写入操作很频繁，但系统定义的key的量是相对有限的。AOF重写并不是针对原来的日志文件，而是对内存中的数据进行一次回溯，回溯成aof文件。</p>
-<h5 id="AOF重写的触发方式"><a href="#AOF重写的触发方式" class="headerlink" title="AOF重写的触发方式"></a>AOF重写的触发方式</h5><p>1.bgrewriteaof命令触发AOF重写：redis客户端向Redis发bgrewriteaof命令，redis服务端fork一个子进程去完成AOF重写。<br>2.AOF自动重写的触发时机，同时满足以下两点）：<br>aof_current_size &gt; auto-aof-rewrite-min-size<br>aof_current_size - aof_base_size/aof_base_size &gt; auto-aof-rewrite-percentage</p>
-<h4 id="两种持久化方式的比较"><a href="#两种持久化方式的比较" class="headerlink" title="两种持久化方式的比较"></a>两种持久化方式的比较</h4><p>1.RDB持久化方式数据恢复的速度快，但是会丢失生成最后一次快照后的数据，适合规模较大的数据但是对数据的完整性不是很敏感；AOF持久化可以保证数据的完整性，但是恢复的速度比较慢；<br>2.RDB文件的体积小，AOF日志文件的体积大；</p>
-<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>RDB持久化方式和AOF持久化方式可以同时存在，当两者同时存在时，进行数据恢复时会选择AOF进行数据恢复，因为它保存的数据更加完整。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/12/Redis学习笔记——五大常用的数据类型之ZSet(SortedSet)/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/12/Redis学习笔记——五大常用的数据类型之ZSet(SortedSet)/" itemprop="url">Redis学习笔记——五大常用的数据类型之ZSet(SortedSet)</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-12T14:45:27+08:00">
-                2018-09-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>zset中的数据就是在set的基础上，加一个score值，之前set是k1 v1 v2 v3 现在是k1 score1 v1 socer2 v2;<br>1.zadd/zrange<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zadd zset1 60 v1 70 v2 80 v3</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1 withscores //输出的元素带score</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;60&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;80&quot;</span><br><span class="line">5) &quot;v4&quot;</span><br><span class="line">6) &quot;90&quot;</span><br><span class="line">7) &quot;v5&quot;</span><br><span class="line">8) &quot;100&quot;</span><br></pre></td></tr></table></figure></p>
-<p>2.zrangebyscore key 开始score结束score:查询在某一个范围之间的元素<br>“(“:表示不包含，limit:作用是限制返回元素的个数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v4&quot;</span><br><span class="line">5) &quot;v5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 70 90 //70-90之间的元素，包含70也包含90</span><br><span class="line">1) &quot;v2&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br><span class="line">3) &quot;v4&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 70 (90</span><br><span class="line">1) &quot;v2&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 (70 (90  //70-90之间的元素，不包含70也不包含90</span><br><span class="line">1) &quot;v3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 60 90</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v4&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 60 90 limit 2 2 //从第二个元素开始取两个</span><br><span class="line">1) &quot;v3&quot;</span><br><span class="line">2) &quot;v4&quot;</span><br></pre></td></tr></table></figure></p>
-<p>3.zrem key 某score下对应的value值，作用是删除元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v4&quot;</span><br><span class="line">5) &quot;v5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrem zset1 v2</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br><span class="line">3) &quot;v4&quot;</span><br><span class="line">4) &quot;v5&quot;</span><br></pre></td></tr></table></figure></p>
-<p>4.zcard/zcount key score区间/zrank key values值，作用是获得下标值/zsocre key 对应的值，获得分数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1 withscores</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;60&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;80&quot;</span><br><span class="line">5) &quot;v4&quot;</span><br><span class="line">6) &quot;90&quot;</span><br><span class="line">7) &quot;v5&quot;</span><br><span class="line">8) &quot;100&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zcard zset1 //分数和后面的值是一体的，所以为4</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379[6]&gt; zcount zset1 60 80 //统计分数在60到80分之间的数量</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379[6]&gt; zrank zset1 v4  //获得v4的排名从0开始</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379[6]&gt; zscore zset1 v4 //获得v4的score</span><br><span class="line">&quot;90&quot;</span><br></pre></td></tr></table></figure></p>
-<p>5.zrevrank key values值，作用是逆序获得下标值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrevrank zset1 v4 //倒过来的顺序，也是从0开始计数</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure></p>
-<p>6.zrevrange/zrevrangebyscore key score1 score2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrevrange zset1 0 -1 //逆序遍历元素</span><br><span class="line">1) &quot;v5&quot;</span><br><span class="line">2) &quot;v4&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v1&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrevrangebyscore zset1 90 70 //注意范围也要倒着写</span><br><span class="line">1) &quot;v4&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/10/Redis学习笔记——五大常用的数据类型之Hash/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/10/Redis学习笔记——五大常用的数据类型之Hash/" itemprop="url">Redis学习笔记——五大常用的数据类型之Hash</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-10T16:22:21+08:00">
-                2018-09-10
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Hash数据类型仍然是KV模式，但是v是一个键值对<br>1.hset/hget/hmset/hmget/hgetall/hdel<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hset hash2 id 5</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hset hash2 age 77</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hset hash2 name liu</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hget hash2 id</span><br><span class="line">&quot;5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hmset hash2 food xiangjiao drink coffer</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; hmget hash2 id name age</span><br><span class="line">1) &quot;5&quot;</span><br><span class="line">2) &quot;liu&quot;</span><br><span class="line">3) &quot;77&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hgetall hash2</span><br><span class="line"> 1) &quot;id&quot;</span><br><span class="line"> 2) &quot;5&quot;</span><br><span class="line"> 3) &quot;age&quot;</span><br><span class="line"> 4) &quot;77&quot;</span><br><span class="line"> 5) &quot;name&quot;</span><br><span class="line"> 6) &quot;liu&quot;</span><br><span class="line"> 7) &quot;food&quot;</span><br><span class="line"> 8) &quot;xiangjiao&quot;</span><br><span class="line"> 9) &quot;drink&quot;</span><br><span class="line">10) &quot;coffer&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hdel hash2 id</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hgetall hash2</span><br><span class="line">1) &quot;age&quot;</span><br><span class="line">2) &quot;77&quot;</span><br><span class="line">3) &quot;name&quot;</span><br><span class="line">4) &quot;liu&quot;</span><br><span class="line">5) &quot;food&quot;</span><br><span class="line">6) &quot;xiangjiao&quot;</span><br><span class="line">7) &quot;drink&quot;</span><br><span class="line">8) &quot;coffer&quot;</span><br></pre></td></tr></table></figure></p>
-<p>2.hlen:判断hash中元素的个数；hexists key 在key里面某个值的key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hlen hash2</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379[6]&gt; hexists hash2 id</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379[6]&gt; hexists hash2 age</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure></p>
-<p>3.hkeys/hvals<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hkeys hash2</span><br><span class="line">1) &quot;age&quot;</span><br><span class="line">2) &quot;name&quot;</span><br><span class="line">3) &quot;food&quot;</span><br><span class="line">4) &quot;drink&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hvals hash2</span><br><span class="line">1) &quot;77&quot;</span><br><span class="line">2) &quot;liu&quot;</span><br><span class="line">3) &quot;xiangjiao&quot;</span><br><span class="line">4) &quot;coffer&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt;</span><br></pre></td></tr></table></figure></p>
-<p>4.hincrby/hincrbyfloat //加上一个整数或者小数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hget hash2 age</span><br><span class="line">&quot;77&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hincrby hash2 age 3</span><br><span class="line">(integer) 80</span><br><span class="line">127.0.0.1:6379[6]&gt; hincrbyfloat hash2 age 0.5</span><br><span class="line">&quot;80.5&quot;</span><br></pre></td></tr></table></figure></p>
-<p>5.hsetnx //不存在则添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hgetall hash2</span><br><span class="line"> 1) &quot;age&quot;</span><br><span class="line"> 2) &quot;80.5&quot;</span><br><span class="line"> 3) &quot;name&quot;</span><br><span class="line"> 4) &quot;liu&quot;</span><br><span class="line"> 5) &quot;food&quot;</span><br><span class="line"> 6) &quot;xiangjiao&quot;</span><br><span class="line"> 7) &quot;drink&quot;</span><br><span class="line"> 8) &quot;coffer&quot;</span><br><span class="line"> 9) &quot;id&quot;</span><br><span class="line">10) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hsetnx hash2 id 2</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379[6]&gt; hsetnx hash2 num 2</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/Redis学习笔记——五大常用的数据类型之Set/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/09/08/Redis学习笔记——五大常用的数据类型之Set/" itemprop="url">Redis学习笔记——五大常用的数据类型之Set</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-08T20:31:41+08:00">
-                2018-09-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>1.sadd/smembers/sismember:添加元素、查询元素、判断要给set中是否存在某个元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"> 127.0.0.1:6379[6]&gt; sadd set2 4 5 6</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;4&quot;</span><br><span class="line">2) &quot;5&quot;</span><br><span class="line">3) &quot;6&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; sismember set2 4  //存在返回1</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; sismember set2 9  //不存在返回0</span><br><span class="line">(integer) 0</span><br></pre></td></tr></table></figure></p>
-<p>2.scard：获取集合中的元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; scard set2</span><br><span class="line">(integer) 3</span><br></pre></td></tr></table></figure></p>
-<p>3.srem key value:删除集合中的某个元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; srem set2 5</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;4&quot;</span><br><span class="line">2) &quot;6&quot;</span><br></pre></td></tr></table></figure></p>
-<p>4.srandmember key:某个整数(随机出几个数)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) &quot;4&quot;</span><br><span class="line">5) &quot;5&quot;</span><br><span class="line">6) &quot;6&quot;</span><br><span class="line">7) &quot;7&quot;</span><br><span class="line">8) &quot;8&quot;</span><br><span class="line">9) &quot;9&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; srandmember set2 3</span><br><span class="line">1) &quot;4&quot;</span><br><span class="line">2) &quot;1&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; srandmember set2 3</span><br><span class="line">1) &quot;6&quot;</span><br><span class="line">2) &quot;5&quot;</span><br><span class="line">3) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; srandmember set2 3</span><br><span class="line">1) &quot;4&quot;</span><br><span class="line">2) &quot;1&quot;</span><br><span class="line">3) &quot;5&quot;</span><br></pre></td></tr></table></figure></p>
-<p>5.spop key 随机出栈<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br><span class="line">3) &quot;5&quot;</span><br><span class="line">4) &quot;7&quot;</span><br><span class="line">5) &quot;8&quot;</span><br><span class="line">6) &quot;9&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; spop set2</span><br><span class="line">&quot;9&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; spop set2</span><br><span class="line">&quot;2&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; spop set2</span><br><span class="line">&quot;5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;7&quot;</span><br><span class="line">3) &quot;8&quot;</span><br></pre></td></tr></table></figure></p>
-<ol start="6">
-<li>smove key1 key2 在key1中的某个值：作用是将key1中的某个值赋值给key2<br>3.srem key value:删除集合中的某个元素<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; smembers set3</span><br><span class="line">1) &quot;2&quot;</span><br><span class="line">2) &quot;3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;7&quot;</span><br><span class="line">3) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; smove set2 set3 1</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;7&quot;</span><br><span class="line">2) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; smembers set3</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br><span class="line">3) &quot;3&quot;</span><br></pre></td></tr></table></figure>
+<li>properities（属性）</li>
+<li>settings (全局配置参数)</li>
+<li>typeAliases (类型别名)</li>
+<li>typeHandlers （类型处理器）</li>
+<li>objectFactory （对象工厂）</li>
+<li>plugins (插件)</li>
+<li>environments (环境集合属性对象)<br>   environment（环境子属性对象）<pre><code>transactionManager (事务管理)
+    dataSource (数据源)
+</code></pre></li>
+<li>mappers (映射器)<h4 id="properities-属性"><a href="#properities-属性" class="headerlink" title="properities(属性)"></a>properities(属性)</h4>需求：将数据库连接参数单独配置在jdbc.properties中，只需要在SqlMapConfig.xml中加载jdbc.properties的属性值。在SqlMapConfig.xml中就不需要对数据库连接参数进行硬编码。将数据库连接参数只配置在jdbc.properties中，原因：方便对参数进行统一管理，其他xml可以引用该jdbc.properties。<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties resource="jdbc.properties"&gt;&lt;/properties&gt;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>7.数学集合类：交集(sinter)、差集(sdiff)、并集(sunion)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; smembers set2</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;7&quot;</span><br><span class="line">3) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; smembers set3</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; sdiff set2 set3 //在set2中不在set3中</span><br><span class="line">1) &quot;7&quot;</span><br><span class="line">2) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; sunion set2 set3 //并集</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) &quot;7&quot;</span><br><span class="line">5) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; sinter set2 set3 //交集</span><br><span class="line">1) &quot;1&quot;</span><br></pre></td></tr></table></figure></p>
+<p>配置文件中的内容：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">driver=com.mysql.cj.jdbc.Driver</span><br><span class="line">url=jdbc:mysql:<span class="comment">//127.0.0.1:3306/User?useUnicode=true&amp;characterEncoding=utf8&amp;serverTimezone=GMT</span></span><br><span class="line">username=root</span><br><span class="line">password=<span class="number">123456</span></span><br></pre></td></tr></table></figure></p>
+<p>应用属性的方式如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;dataSource type=<span class="string">"POOLED"</span>&gt;</span><br><span class="line">                 &lt;property name=<span class="string">"driver"</span> value=<span class="string">"$&#123;driver&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"url"</span> value=<span class="string">"$&#123;url&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"username"</span> value=<span class="string">"$&#123;username&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"password"</span> value=<span class="string">"$&#123;password&#125;"</span>/&gt;</span><br><span class="line">            &lt;/dataSource&gt;</span><br></pre></td></tr></table></figure></p>
+<p><strong>注意：Mybatis中将按照如下顺序加载属性</strong></p>
+<ol>
+<li><p>在properties元素体内定义的属性首先被读取；</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;properties resource=<span class="string">"jdbc.properties"</span>&gt;</span><br><span class="line">        &lt;property name="name" value="hello"&gt;&lt;/property&gt;</span><br><span class="line">    &lt;/properties&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>然后会读取properities元素中resource或url加载的属性，他会覆盖已经读取的同名属性；</p>
+</li>
+<li><p>最后读取parameterType传递的属性，他会覆盖已经读取的同名属性；<br>因此，通过parameterType传递的属性具有最高的优先级，resource或者url加载的属性次之，最低优先级的是properties元素体内定义的属性；</p>
+</li>
+</ol>
+<p><strong>建议</strong>：不要在properties元素体内添加任何属性值，只将属性值定义在properties文件中，在properties文件中定义的属性名要有一定的特殊性，如XXXX.XXXX.XXXX;</p>
+<h4 id="settings全局参数配置"><a href="#settings全局参数配置" class="headerlink" title="settings全局参数配置"></a>settings全局参数配置</h4><p>mybatis框架在运行时可以调整一些运行参数。<br>比如：开启二级缓存、开启延迟加载…</p>
+<h4 id="typeAliases-别名-重点"><a href="#typeAliases-别名-重点" class="headerlink" title="typeAliases(别名)重点"></a>typeAliases(别名)重点</h4><p>在mapper.xml中定义了很多statement，statement需要parameterType指定输入的参数的类型，需要resultType指定输出结果的映射类型。如果在指定类型时输入类型全路径，不方便进行开发，可以针对parameterType或者resultType指定的类型定义一些别名，在mapper.xml中通过别名定义，方便开发。<br>单个别名的定义方式如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;typeAliases&gt;</span><br><span class="line">        &lt;!--单个别名的定义--&gt;</span><br><span class="line">        &lt;typeAlias type="po.User" alias="user"&gt;&lt;/typeAlias&gt;</span><br><span class="line">    &lt;/typeAliases&gt;</span><br><span class="line"><span class="comment">//type：表示类的路径，alias:表示类的别名。</span></span><br></pre></td></tr></table></figure></p>
+<p>批量定义别名的定义方法如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;typeAliases&gt;</span><br><span class="line">        &lt;package name="po" &gt;&lt;/package&gt;</span><br><span class="line">    &lt;/typeAliases&gt;</span><br><span class="line"><span class="comment">//mybatis自动扫描包中的pojo类，自动定义别名，别名就是类名(首字母大写或者小写都可以)</span></span><br></pre></td></tr></table></figure></p>
+<p>很显然批量别名的定义比较常用。</p>
+<h4 id="typeHandlers-类型处理器"><a href="#typeHandlers-类型处理器" class="headerlink" title="typeHandlers(类型处理器)"></a>typeHandlers(类型处理器)</h4><p>mybatis中通过typeHandlers完成jdbc类型和Java类型的转换。通常情况下，mybatis提供的类型处理器满足日常需要，不要我们自定义。</p>
+<h4 id="mappers-映射配置"><a href="#mappers-映射配置" class="headerlink" title="mappers(映射配置)"></a>mappers(映射配置)</h4><p>1.通过resource加载单个映射文件<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;mappers&gt;</span><br><span class="line">        &lt;!-- 加载映射文件--&gt;</span><br><span class="line">        &lt;mapper resource=<span class="string">"User.xml"</span>/&gt;</span><br><span class="line">    &lt;/mappers&gt;</span><br></pre></td></tr></table></figure></p>
+<p>2.通过mapper接口加载单个映射文件<br>需要遵循一些规范：需要将mapper接口类名和mapper.xml映射文件名保持一致，且在同一个目录中，上边的规范的前提是：使用的是mapper代理的方法。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;mapper class="dao.mapper.UserMapper" &gt;&lt;/mapper&gt;</span><br></pre></td></tr></table></figure></p>
+<p>3.批量加载mapper(推荐使用)<br>指定mapper的接口的包名，mybatis自动扫描包下的所有mapper接口进行加载，遵循一些规范：需要将mapper接口和mapper.xml映射文件名称保持一致，且在一个目录中，上边规范的前提是：使用的是mapper代理方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;<span class="keyword">package</span> name=<span class="string">"dao.mapper"</span>/&gt;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -1650,7 +1195,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/08/Redis学习笔记——五大常用的数据类型之list/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/06/Mybatis学习笔记——mapper代理方法/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -1669,7 +1214,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/08/Redis学习笔记——五大常用的数据类型之list/" itemprop="url">Redis学习笔记——五大常用的数据类型之List</a></h1>
+                <a class="post-title-link" href="/2018/10/06/Mybatis学习笔记——mapper代理方法/" itemprop="url">Mybatis学习笔记——mapper代理方法</a></h1>
         
 
         <div class="post-meta">
@@ -1681,8 +1226,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-08T09:06:27+08:00">
-                2018-09-08
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-06T08:31:43+08:00">
+                2018-10-06
               </time>
             
 
@@ -1704,8 +1249,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
-                    <span itemprop="name">Redis学习笔记</span>
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
                   </a>
                 </span>
 
@@ -1743,15 +1288,467 @@
       
         
           
-            <p>list是一个字符串链表，left、right都可以添加；如果键不存在，创建新的链表；如果键已经存在，新增内容；如果值全移除，对应的键也就消失了；<br>1.lpush/rpush/lrange<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">//redis中的list底层实现是双向队列，所以从左边push，左边出时相当于栈，先进后出</span><br><span class="line">//右边进左边出相当于队列，先进先出</span><br><span class="line">127.0.0.1:6379[6]&gt; lpush list2 1 2 3 4 5</span><br><span class="line">(integer) 5</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;5&quot;</span><br><span class="line">2) &quot;4&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) &quot;2&quot;</span><br><span class="line">5) &quot;1&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; rpush list3 1 2 3 4 5</span><br><span class="line">(integer) 5</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list3 0 -1</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;2&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) &quot;4&quot;</span><br><span class="line">5) &quot;5&quot;</span><br></pre></td></tr></table></figure></p>
-<p>2.lpop/rpop<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//每次取出一个元素，lpop和lrange的元素顺序相同，rpop和lrange相反</span><br><span class="line">127.0.0.1:6379[6]&gt; lpop list2</span><br><span class="line">&quot;5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; rpop list2</span><br><span class="line">&quot;1&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lpop list3</span><br><span class="line">&quot;1&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; rpop list3</span><br><span class="line">&quot;5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;4&quot;</span><br><span class="line">2) &quot;3&quot;</span><br><span class="line">3) &quot;2&quot;</span><br></pre></td></tr></table></figure></p>
-<p>3.lindex:按照索引下标获得元素(从上到下)<br>llen:获得list的元素的个数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; lindex list2 2</span><br><span class="line">&quot;2&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; llen list2</span><br><span class="line">(integer) 3</span><br></pre></td></tr></table></figure></p>
-<p>4.lrem key 删除N个value<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;4&quot;</span><br><span class="line">2) &quot;3&quot;</span><br><span class="line">3) &quot;2&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lpush list2 1 1 1</span><br><span class="line">(integer) 6</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;1&quot;</span><br><span class="line">3) &quot;1&quot;</span><br><span class="line">4) &quot;4&quot;</span><br><span class="line">5) &quot;3&quot;</span><br><span class="line">6) &quot;2&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lrem list2 2 1</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;4&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) &quot;2&quot;</span><br></pre></td></tr></table></figure></p>
-<p>5.ltrim key startindex endindex 截取指定范围的值后再赋值给key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;4&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">4) &quot;2&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; ltrim list2 0 2</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;4&quot;</span><br><span class="line">3) &quot;3&quot;</span><br></pre></td></tr></table></figure></p>
-<p>6.rpoplpush 源列表  目的列表<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;4&quot;</span><br><span class="line">3) &quot;3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lpush list 6 1</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379[6]&gt; rpoplpush list2 list //取出的数据为3</span><br><span class="line">&quot;3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list2 0 -1</span><br><span class="line">1) &quot;1&quot;</span><br><span class="line">2) &quot;4&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list 0 -1</span><br><span class="line">1) &quot;3&quot;</span><br><span class="line">2) &quot;1&quot;</span><br><span class="line">3) &quot;6&quot;</span><br></pre></td></tr></table></figure></p>
-<p>7.lset key value:设置指定位置的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; lrange list 0 -1</span><br><span class="line">1) &quot;3&quot;</span><br><span class="line">2) &quot;1&quot;</span><br><span class="line">3) &quot;6&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; lset list 1 9</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list 0 -1</span><br><span class="line">1) &quot;3&quot;</span><br><span class="line">2) &quot;9&quot;</span><br><span class="line">3) &quot;6&quot;</span><br></pre></td></tr></table></figure></p>
-<p>8.linsert key before/after 值1 值2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; lrange list 0 -1</span><br><span class="line">1) &quot;3&quot;</span><br><span class="line">2) &quot;9&quot;</span><br><span class="line">3) &quot;6&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; linsert list before 3 java</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379[6]&gt; lrange list 0 -1</span><br><span class="line">1) &quot;java&quot;</span><br><span class="line">2) &quot;3&quot;</span><br><span class="line">3) &quot;9&quot;</span><br><span class="line">4) &quot;6&quot;</span><br></pre></td></tr></table></figure></p>
+            <p>思路：程序员只用编写mapper接口(相当于dao接口)和mapper.xml映射文件。mybatis可以自动生成mapper接口实现类代理对象，但是要遵守如下开发规范：</p>
+<ol>
+<li>在mapper.xml中namespace等于mapper接口地址；</li>
+<li>mapper接口中方法名和mapper.xml中statement的id保持一致；</li>
+<li>mapper接口中的方法的输入参数类型和mapper.xml中statement的paramemterType指定的类型一致；</li>
+<li>mapper接口的方法的返回类型和mapper.xml中statement的resultType指定的类型一致；<h4 id="具体代码"><a href="#具体代码" class="headerlink" title="具体代码"></a>具体代码</h4><h5 id="创建mapper-xml文件"><a href="#创建mapper-xml文件" class="headerlink" title="创建mapper.xml文件"></a>创建mapper.xml文件</h5></li>
+</ol>
+<p><strong><strong>主要需要注意的是mapper.xml文件中的namespace要和mapper接口的地址一致</strong></strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;!--namespace命名空间，作用就是对sql进行分类管理，可以简单的理解为sql隔离</span><br><span class="line">注意：使用mapper代理的方法进行开发，namespace有特殊的作用--&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"dao.mapper.UserMapper"</span>&gt;</span><br><span class="line">    &lt;!--在映射文件中配置很多sql语句，通过select执行数据库查询；id:标识映射文件中的sql,称为statement的id</span><br><span class="line">    将sql语句封装到mappedStatement对象中,所以将它称为Statement的id--&gt;</span><br><span class="line">    &lt;!--parameterType:指定输入的参数的类型，在这里指定<span class="keyword">int</span>型</span><br><span class="line">        resultType：指定sql输出的结果所映射的Java对象类型，select指定resultType表示将单条记录映射成Java对象；</span><br><span class="line">    #&#123;&#125;表示一个占位符号</span><br><span class="line">    #&#123;id&#125;:其中的id表示接收输入的参数，参数的名称为id,如果输入的参数是基本数据类型，#&#123;&#125;中的参数名可以任意，--&gt;</span><br><span class="line">    &lt;select id=<span class="string">"findUserById"</span> parameterType=<span class="string">"int"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">select * from user  where id=#&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--根据用户名称模糊查询用户信息,可能返回多条记录</span><br><span class="line">    resultType:指定单条记录所映射的Java对象类型--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"java.lang.String"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        select * from user where name like #&#123;value&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--添加用户</span><br><span class="line">    paraterType:指定输入的参数类型是pojo(包括用户信息)</span><br><span class="line">    #&#123;&#125;中指定pojo的属性名，接收到pojo对象的属性值，mybatis通过OGNL获取对象的属性值</span><br><span class="line">    --&gt;</span><br><span class="line">    &lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>:得到刚insert进去的记录的主键值只适用于自增主键值</span></span><br><span class="line"><span class="function">            keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span></span><br><span class="line"><span class="function">            order:select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">            resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"AFTER"</span> resultType=<span class="string">"java.lang.Integer"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age,id)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;,#&#123;id&#125;)</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br><span class="line"><span class="function">&lt;/mapper&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="创建mapper接口"><a href="#创建mapper接口" class="headerlink" title="创建mapper接口"></a>创建mapper接口</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao.mapper;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserMapper</span> </span>&#123;</span><br><span class="line">    <span class="comment">//需要满足几个规范1.mapper接口名和mapper.xml配置文件中的namespace保持一致、</span></span><br><span class="line">    <span class="comment">// 方法的名称和statementid一致、输入输出参数和mapper.xml配置文件中的一致</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(<span class="keyword">int</span> id)</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">findUserByName</span><span class="params">(String name)</span></span>;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h5 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImplTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"><span class="meta">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//mybatis配置文件</span></span><br><span class="line">    String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">    <span class="comment">//得到配置文件流</span></span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">    <span class="comment">//创建sqlsessionfactory</span></span><br><span class="line">    sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">&#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//创建UserDao的对象</span></span><br><span class="line">        UserDao userDao = <span class="keyword">new</span> UserDaoImpl(sqlSessionFactory);</span><br><span class="line">        User user=userDao.findUserById(<span class="number">3</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="几个常见的问题"><a href="#几个常见的问题" class="headerlink" title="几个常见的问题"></a>几个常见的问题</h4><ol>
+<li>mapper接口方法参数只能有一个是否影响系统的开发？<br>这个问题相当于：mapper接口中的方法参数只能有一个，系统是否不利于扩展维护。要知道系统开发中，dao层的代码是被业务层公用的，即使mapper接口只有一个参数，可以使用包装类型的pojo满足不同的业务需求。注意：持久层方法的参数可以使用包装类型，service方法中建议不要使用包装类型(不利于业务层的扩展)；</li>
+<li>代理对象内部调用 selectOne或selectList<br>如果mapper方法返回单个pojo对象(非集合对象)，代理内部通过selectOne查询数据库；<br>如果mapper方法返回集合对象，代理内部通过selectList查询数据库；</li>
+</ol>
 
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/05/Mybatis学习笔记——原始dao开发方法/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/05/Mybatis学习笔记——原始dao开发方法/" itemprop="url">Mybatis学习笔记——原始dao开发方法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-05T09:41:53+08:00">
+                2018-10-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="相关类介绍"><a href="#相关类介绍" class="headerlink" title="相关类介绍"></a>相关类介绍</h4><h5 id="SqlSessionFactoryBuilder"><a href="#SqlSessionFactoryBuilder" class="headerlink" title="SqlSessionFactoryBuilder"></a>SqlSessionFactoryBuilder</h5><p>通过SqlSessionFactoryBuilder创建会话工厂SqlSessionFactory,将SqlSessionFactoryBuilder当成一个工具类使用即可，不需要使用单例管理SqlSessionFactoryBuilder。在需要创建SqlSessionFactory时候，只需要new一次SqlSessionFactoryBuilder即可。</p>
+<h5 id="SqlSessionFactory"><a href="#SqlSessionFactory" class="headerlink" title="SqlSessionFactory"></a>SqlSessionFactory</h5><p>通过SqlSessionFactory创建SqlSession，使用单例模式管理SqlSessionFactory(工厂一旦创建，使用一个实例)。将mybatis和spring整合后，使用单例模式管理SqlSessionFactory。</p>
+<h5 id="SqlSession"><a href="#SqlSession" class="headerlink" title="SqlSession"></a>SqlSession</h5><p>SqlSession是一个面向用户(程序员)的接口，SqlSession中提供了很多操作数据库的方法如select(返回单个对象)、select(返回单个或者多个对象)。SqlSession是线程不安全的，在SqlSession实现类中除了有接口中的方法(操作数据库的方法)还有数据域属性。所以它的最佳应用场合在方法体中，定义成局部变量。</p>
+<h4 id="原始dao开发方法（程序员需要写dao接口和dao实现类）"><a href="#原始dao开发方法（程序员需要写dao接口和dao实现类）" class="headerlink" title="原始dao开发方法（程序员需要写dao接口和dao实现类）"></a>原始dao开发方法（程序员需要写dao接口和dao实现类）</h4><p>思路：程序员需要写dao接口和dao实现类。需要向dao实现类中注入sqlSessionFactory,在方法体内通过sqlsessionfactory创建sqlsession。</p>
+<h5 id="创建dao接口"><a href="#创建dao接口" class="headerlink" title="创建dao接口"></a>创建dao接口</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserDao</span> </span>&#123;</span><br><span class="line">    <span class="comment">//根据id查询用户的id</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception </span>;</span><br><span class="line">    <span class="comment">//添加用户的信息</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span>  <span class="keyword">void</span> <span class="title">insertUser</span><span class="params">(User user)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">    <span class="comment">//删除用户信息</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="创建dao实现类"><a href="#创建dao实现类" class="headerlink" title="创建dao实现类"></a>创建dao实现类</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImpl</span> <span class="keyword">implements</span> <span class="title">UserDao</span></span>&#123;</span><br><span class="line">    <span class="comment">//需要向dao实现类中注入SqlSessionFactory,在spring中可以直接通过IOC注入；</span></span><br><span class="line">    <span class="comment">//这里通过构造方法注入</span></span><br><span class="line">    <span class="keyword">private</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UserDaoImpl</span><span class="params">(SqlSessionFactory sqlSessionFactory)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sqlSessionFactory=sqlSessionFactory;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findUserById</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        User user = sqlSession.selectOne(<span class="string">"test.findUserbyId"</span>);</span><br><span class="line">        <span class="keyword">return</span> user;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertUser</span><span class="params">(User user)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//执行插入</span></span><br><span class="line">        sqlSession.insert(<span class="string">"test.insertUser"</span>,user);</span><br><span class="line">        <span class="comment">//提交事务</span></span><br><span class="line">        sqlSession.commit();</span><br><span class="line">        <span class="comment">//释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteUser</span><span class="params">(<span class="keyword">int</span> id)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="测试方法"><a href="#测试方法" class="headerlink" title="测试方法"></a>测试方法</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> dao;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line"><span class="keyword">import</span> org.junit.Before;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="keyword">static</span> org.junit.Assert.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDaoImplTest</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SqlSessionFactory sqlSessionFactory;</span><br><span class="line"><span class="meta">@Before</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUp</span><span class="params">()</span><span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">    <span class="comment">//mybatis配置文件</span></span><br><span class="line">    String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">    <span class="comment">//得到配置文件流</span></span><br><span class="line">    InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">    <span class="comment">//创建sqlsessionfactory</span></span><br><span class="line">    sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">&#125;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserById</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//创建UserDao的对象</span></span><br><span class="line">        UserDao userDao = <span class="keyword">new</span> UserDaoImpl(sqlSessionFactory);</span><br><span class="line">        User user=userDao.findUserById(<span class="number">1</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="原始dao开发的问题"><a href="#原始dao开发的问题" class="headerlink" title="原始dao开发的问题"></a>原始dao开发的问题</h4><ol>
+<li>dao接口实现类的方法中存在大量的模板方法，设想能否将这些代码提取出来大大减少程序员的工作量；</li>
+<li>调用sqlsession方法时将statement的id硬编码了；</li>
+<li>调用sqlsession方法时传入的变量，由于sqlsession使用泛型，即使变量类型传入错误，在编译阶段也不报错，不利于程序员开发；</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/04/Mybatis学习笔记——入门程序总结/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/04/Mybatis学习笔记——入门程序总结/" itemprop="url">Mybatis学习笔记——入门程序总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-04T22:05:46+08:00">
+                2018-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="parameterType和resultType"><a href="#parameterType和resultType" class="headerlink" title="parameterType和resultType"></a>parameterType和resultType</h4><ol>
+<li>parameterType:在映射文件中指定输入参数类型；</li>
+<li>resultType:在映射文件中指定输出参数类型；<h4 id="和"><a href="#和" class="headerlink" title="/#{}和/${}"></a>/#{}和/${}</h4>/#{}和/${}的区别：前者表示一个占位符，会在传入的参数上加双引号，会被解析为“？”,能够有效抵御注入攻击，类型可以为简单类型，pojo、hashmap如果接收简单类型可以为任何值而后者只能为value；而后者表示一个字符串拼接符，会引入注入攻击，存在安全隐患，不建议使用；<h4 id="selsectOne和selectList"><a href="#selsectOne和selectList" class="headerlink" title="selsectOne和selectList"></a>selsectOne和selectList</h4>selectOne表示查询出一条记录进行映射，如果使用selectOne可以实现，使用selectList也可以实现(List中只有一个对象)；<br>selectList表示查询出一个列表(多条记录)进行映射，如果selectList可以查询多条记录，不能使用selectOne；<h4 id="自增主键返回"><a href="#自增主键返回" class="headerlink" title="自增主键返回"></a>自增主键返回</h4>mysql自增主键，执行insert提交之前自动生成一个自增主键，通过mysql函数获取到刚刚插入记录的自增主键：last_insert_id();<br>在insert之后调用此函数；<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">   &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">       <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>:得到刚insert进去的记录的主键值只适用于自增主键值</span></span><br><span class="line"><span class="function">       keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span></span><br><span class="line"><span class="function">       order:select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">       resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"AFTER"</span> resultType=<span class="string">"java.lang.Integer"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">last_insert_id</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;)</span> <span class="comment">//可以不用传入主键值id，主键值自动生成</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">//通过调用输入参数user的getId()就可以得到自增主键的返回值</span></span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="非自增主键的返回"><a href="#非自增主键的返回" class="headerlink" title="非自增主键的返回"></a>非自增主键的返回</h4><p>通过函数select UUID()生成主键，需要修改表中id字段类型为String,长度设置为35位。<br>执行思路：先通过UUID()查询到主键，将主键输入到sql语句中；<br>执行相对于insert之前；<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id=<span class="string">"insertUser"</span> parameterType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">   &lt;!--将插入的数据的主键返回，返回到user对象中</span><br><span class="line">       使用uuid生成主键，将主键设置到user对象的id属性中</span><br><span class="line">       其次在insert执行时，从user对象中取出id属性值</span><br><span class="line">       keyProperty:将查询主键值设置到parameterType指定的那个对象的属性中</span><br><span class="line">       order:<span class="function">select <span class="title">last_insert_id</span><span class="params">()</span>执行顺序，相对于insert语句而言的执行顺序</span></span><br><span class="line"><span class="function">       resultType:指定select <span class="title">last_insert_id</span><span class="params">()</span>结果的返回类型--&gt;</span></span><br><span class="line"><span class="function">        &lt;selectKey keyProperty</span>=<span class="string">"id"</span> order=<span class="string">"before"</span> resultType=<span class="string">"java.lang.String"</span>&gt;</span><br><span class="line">            <span class="function">select <span class="title">UUID</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        &lt;/selectKey&gt;</span></span><br><span class="line"><span class="function">        insert into <span class="title">user</span><span class="params">(name,age,id)</span> <span class="title">values</span> <span class="params">(#&#123;name&#125;,#&#123;age&#125;,#&#123;id&#125;)</span> <span class="comment">//必须传入主键值</span></span></span><br><span class="line"><span class="function">    &lt;/insert&gt;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景"><a href="#Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景" class="headerlink" title="Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景"></a>Mybatis学习笔记——Mybatis和Hibernate本质区别和应用场景</h4><p>Hibernate:是一个标准的ORM框架(对象关系映射)，入门的门槛较高，不需要程序员写sql,sql语句自动生成。对sql语句进行优化，修改比较困难；<br>应用场景：适用于需求变化不多的中小型项目，比如后台管理系统；</p>
+<p>mysql:专注是sql本身，需要程序员自己写sql语句，sql修改、优化比较方便；mybatis是一个不完全的ORM框架，虽然程序员自己写sql，mybatis也可以实现映射（输入映射、输出映射）。<br>应用场景：适用与需求变化较多的项目，比如：互联网项目。<br>企业进行技术选型，以低成本、高回报作为技术选型的原则，根据项目组的技术力量进行选型</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/04/Mybatis学习笔记——入门程序/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/04/Mybatis学习笔记——入门程序/" itemprop="url">Mybatis学习笔记——入门程序</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-04T11:19:21+08:00">
+                2018-10-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="配置pom-xml文件"><a href="#配置pom-xml文件" class="headerlink" title="配置pom.xml文件"></a>配置pom.xml文件</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;project xmlns=<span class="string">"http://maven.apache.org/POM/4.0.0"</span></span><br><span class="line">         xmlns:xsi=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">         xsi:schemaLocation=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"</span>&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line"></span><br><span class="line">    &lt;groupId&gt;mybatisTest&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;mybatistest&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.0-SNAPSHOT&lt;/version&gt;</span><br><span class="line">&lt;dependencies&gt;</span><br><span class="line">   &lt;!--导入mabatis依赖的jar包--&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.mybatis&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;mybatis&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;3.4.0&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">  &lt;!--导入jdbc依赖的jar包--&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;8.0.11&lt;/version&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;4.12&lt;/version&gt;</span><br><span class="line">        &lt;scope&gt;compile&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br><span class="line">``` </span><br><span class="line">#### 配置全局配置文件</span><br><span class="line">```java</span><br><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span>?&gt;</span><br><span class="line">&lt;!DOCTYPE configuration PUBLIC <span class="string">"-//mybatis.org//DTD Config 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-config.dtd"</span>&gt;</span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;!--引用jdbc.properties配置文件--&gt;</span><br><span class="line">    &lt;properties resource="jdbc.properties"&gt;&lt;/properties&gt;</span><br><span class="line">    &lt;environments <span class="keyword">default</span>=<span class="string">"development"</span>&gt;</span><br><span class="line">        &lt;environment id=<span class="string">"development"</span>&gt;</span><br><span class="line">            &lt;!--使用jdbc事务管理--&gt;</span><br><span class="line">            &lt;transactionManager type=<span class="string">"JDBC"</span>/&gt;</span><br><span class="line">            &lt;!-- 配置数据库连接信息,事务的控制由mybatis --&gt;</span><br><span class="line">            &lt;!--数据库连接池--&gt;</span><br><span class="line">            &lt;dataSource type=<span class="string">"POOLED"</span>&gt;</span><br><span class="line">                 &lt;property name=<span class="string">"driver"</span> value=<span class="string">"$&#123;driver&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"url"</span> value=<span class="string">"$&#123;url&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"username"</span> value=<span class="string">"$&#123;username&#125;"</span>/&gt;</span><br><span class="line">                &lt;property name=<span class="string">"password"</span> value=<span class="string">"$&#123;password&#125;"</span>/&gt;</span><br><span class="line">            &lt;/dataSource&gt;</span><br><span class="line">        &lt;/environment&gt;</span><br><span class="line">    &lt;/environments&gt;</span><br><span class="line"></span><br><span class="line">    &lt;mappers&gt;</span><br><span class="line">        &lt;!-- 加载映射文件--&gt;</span><br><span class="line">        &lt;mapper resource=<span class="string">"User.xml"</span>/&gt;</span><br><span class="line"></span><br><span class="line">    &lt;/mappers&gt;</span><br><span class="line"></span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="建立Pojo类用来存储查询结果"><a href="#建立Pojo类用来存储查询结果" class="headerlink" title="建立Pojo类用来存储查询结果"></a>建立Pojo类用来存储查询结果</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> po;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"><span class="comment">//属性与数据库表的字段对应</span></span><br><span class="line">    String name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">int</span> id;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"User&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">", id="</span> + id +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="新建映射文件"><a href="#新建映射文件" class="headerlink" title="新建映射文件"></a>新建映射文件</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"UTF-8"</span> ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper PUBLIC <span class="string">"-//mybatis.org//DTD Mapper 3.0//EN"</span> <span class="string">"http://mybatis.org/dtd/mybatis-3-mapper.dtd"</span>&gt;</span><br><span class="line">&lt;!--namespace命名空间，作用就是对sql进行分类管理，可以简单的理解为sql隔离</span><br><span class="line">注意：使用mapper代理的方法进行开发，namespace有特殊的作用--&gt;</span><br><span class="line">&lt;mapper namespace=<span class="string">"test"</span>&gt;</span><br><span class="line">    &lt;!--在映射文件中配置很多sql语句，通过select执行数据库查询；id:标识映射文件中的sql,称为statement的id</span><br><span class="line">    将sql语句封装到mappedStatement对象中,所以将它称为Statement的id--&gt;</span><br><span class="line">    &lt;!--parameterType:指定输入的参数的类型，在这里指定<span class="keyword">int</span>型</span><br><span class="line">        resultType：指定sql输出的结果所映射的Java对象类型，select指定resultType表示将单条记录映射成Java对象；</span><br><span class="line">    #&#123;&#125;表示一个占位符号</span><br><span class="line">    #&#123;id&#125;:其中的id表示接收输入的参数，参数的名称为id,如果输入的参数是基本数据类型，#&#123;&#125;中的参数名可以任意，--&gt;</span><br><span class="line">    &lt;select id=<span class="string">"findUserById"</span> parameterType=<span class="string">"int"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">select * from user  where id=#&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">    &lt;!--根据用户名称模糊查询用户信息,可能返回多条记录</span><br><span class="line">    resultType:指定单条记录所映射的Java对象类型--&gt;</span><br><span class="line"></span><br><span class="line">    &lt;select id=<span class="string">"findUserByName"</span> parameterType=<span class="string">"java.lang.String"</span> resultType=<span class="string">"po.User"</span>&gt;</span><br><span class="line">        select * from user where name like #&#123;value&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.ibatis.io.Resources;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSession;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactory;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.session.SqlSessionFactoryBuilder;</span><br><span class="line"><span class="keyword">import</span> org.junit.Test;</span><br><span class="line"><span class="keyword">import</span> po.User;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MybatisFirst</span> </span>&#123;</span><br><span class="line">    <span class="comment">//根据id查询用户信息，得到一条信息</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserByIdTest</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//mybatis配置文件的信息</span></span><br><span class="line">        String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">        <span class="comment">//得到配置文件流</span></span><br><span class="line">        InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="comment">//创建会话工厂,传入mybatis配置文件的信息</span></span><br><span class="line">        SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        <span class="comment">//通过工厂得到SqlSession(面向用户的接口)</span></span><br><span class="line">        SqlSession sqlSession =sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//通过SqlSession操作数据库</span></span><br><span class="line">        <span class="comment">//第一个参数：映射文件中statement的id,等于“namesapce”+"."+statement的id</span></span><br><span class="line">        <span class="comment">//第二个参数：指定和映射文件中和parameterType类型匹配的参数</span></span><br><span class="line">        <span class="comment">//sqlSession.selectOne的结果是与映射文件中resultType类型相匹配的对象</span></span><br><span class="line">        <span class="comment">//selectonef方法用来查询单条记录</span></span><br><span class="line">        User user = sqlSession.selectOne(<span class="string">"findUserById"</span>,<span class="number">1</span>);</span><br><span class="line">         System.out.println(user);</span><br><span class="line">         <span class="comment">//释放资源</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//根据用户的名称模糊查询用户列表</span></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findUserByNameTest</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//mybatis的配置文件</span></span><br><span class="line">        String resource = <span class="string">"SqlMapConfig.xml"</span>;</span><br><span class="line">        <span class="comment">//得到配置文件流</span></span><br><span class="line">        InputStream inputStream = Resources.getResourceAsStream(resource);</span><br><span class="line">        <span class="comment">//创建sqlSessionfactory</span></span><br><span class="line">        SqlSessionFactory sqlSessionFactory = <span class="keyword">new</span> SqlSessionFactoryBuilder().build(inputStream);</span><br><span class="line">        <span class="comment">//通过sqlsessionfactory创建sqlsession</span></span><br><span class="line">        SqlSession sqlSession = sqlSessionFactory.openSession();</span><br><span class="line">        <span class="comment">//list中的user和映射文件中的resulttype所指定的类型一致</span></span><br><span class="line">        List&lt;User&gt; list = sqlSession.selectList(<span class="string">"test.findUserByName"</span>,<span class="string">"%小明"</span>);</span><br><span class="line">        System.out.println(list);</span><br><span class="line">        <span class="comment">//最后关闭</span></span><br><span class="line">        sqlSession.close();</span><br><span class="line">    &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
           
         
       
@@ -1790,7 +1787,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1838,7 +1835,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>

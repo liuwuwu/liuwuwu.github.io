@@ -262,7 +262,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/07/Redis学习笔记——五大常用的数据类型之String/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Mybatis学习笔记——Mybatis框架简介/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -281,7 +281,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/07/Redis学习笔记——五大常用的数据类型之String/" itemprop="url">Redis学习笔记——五大常用的数据类型之String</a></h1>
+                <a class="post-title-link" href="/2018/10/02/Mybatis学习笔记——Mybatis框架简介/" itemprop="url">Mybatis学习笔记——Mybatis框架简介</a></h1>
         
 
         <div class="post-meta">
@@ -293,8 +293,307 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-07T10:33:27+08:00">
-                2018-09-07
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-02T15:33:27+08:00">
+                2018-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="Mybatis是什么"><a href="#Mybatis是什么" class="headerlink" title="Mybatis是什么"></a>Mybatis是什么</h4><p>Mybatis是apache下的顶级项目，让程序员将主要精力放在sql上，通过提供mybatis提供的映射方式，自动灵活的生成(半自动化，大部分需要程序员自己编写sql)满足需要的sql语句。可以将向perpareStatement中输入的参数自动进行输入映射，将查询的结果集灵活的映射成java对象(输出映射)。</p>
+<h4 id="Mybatis框架的基础知识"><a href="#Mybatis框架的基础知识" class="headerlink" title="Mybatis框架的基础知识"></a>Mybatis框架的基础知识</h4><p>sqlMapConfig.xml:mybatis全局配置文件，配置数据源、事务等运行环境，配置映射文件mapper.xml(配置了sql语句)；<br>SqlSessionFactory:会话工厂，创建SqlSession；<br>SqlSession：会话，操作数据库(发出sql增、删、改、查)内部通过Executor操作数据库，mappedstatement(底层封装对象)，对数据库存储封装，包括sql语句，输入参数、输出结果类型；<br>mybatis中支持的输入参数类型(输出结果类型)：Java简单类型、hashmap、pojo自定义类型</p>
+<h4 id="和-的区别与联系"><a href="#和-的区别与联系" class="headerlink" title="#{}和\${}的区别与联系"></a>#{}和\${}的区别与联系</h4><p>$#{} 表示占位符，接收输入参数，类型可以是简单类型、pojo、hashmap；如果为简单类型，#{}中可以写成value或其他名称，通过ONGL读取对象中的属性值；<br>$${}表示一个拼接符号，会引起sql注入所以不建议使用\${}，接收输入参数，类型可以为简单类型、pojo、hashmap；如果为简单类型${}只能写为value;</p>
+<h4 id="OGNL简介"><a href="#OGNL简介" class="headerlink" title="OGNL简介"></a>OGNL简介</h4><p>OGNL的全称是Object Graph Navigation Language(对象图导航语言)，它是一种强大的表达式语言，让你通过简单一致的表达式语法来读取和设置Java对象的属性值，调用对象的方法，遍历整个对象的结构图，实现字段类型转换等功能。<br>相对于其它的表达式语言，OGNL的功能更为强大，它提供了很多高级而必需的特性，例如强大的类型转换功能、静态或实例方法的执行、跨集合投影，以及动态lambda表达式定义等。<br>OGNL基础：OGNL表达式的计算都是围绕OGNL上下文来进行的，OGNL上下文实际上就是一个Map对象，由ognl.OgnlContext类(实现了java.util.Map接口)来表示。OGNL上下文可以包含一个或多个JavaBean对象，在这些对象中有一个是特殊的，这个对象就是上下文的根(root)对象。如果在写表达式的时候，没有指定使用上下文中的哪一个对象，那么根对象将被假定为表达式所依据的对象。在OGNL上下文中，只能有一个根对象，如果你访问根对象，那么在写表达式的时候，直接写对象的属性就可以了；否则，你需要使用“#key”前缀，例如表达式#namager.name。<br>OGNL表达式:OGNL表达式的基础单元就是导航链，通常简称为链(chain)。最简单的链由下列部分组成：<br>１、属性名：如name和manager.name；</p>
+<p>２、方法调用：如manager.hashCode()，返回manager对象的散列码；</p>
+<p>３、数组索引：如emals[0]，返回当前对象的邮件列表中的第一个邮件地址。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/02/Mybatis学习笔记——原生态JDBC的介绍/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/10/02/Mybatis学习笔记——原生态JDBC的介绍/" itemprop="url">Mybatis学习笔记——原生态JDBC的介绍</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-02T08:43:27+08:00">
+                2018-10-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mybatis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Mybatis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h4 id="JDBC编程步骤"><a href="#JDBC编程步骤" class="headerlink" title="JDBC编程步骤"></a>JDBC编程步骤</h4><p>1.加载数据库驱动；</p>
+<p>2.获得数据库连接；</p>
+<p>3.创建Statment对象，执行sql语句；</p>
+<p>4.设置sql语句；</p>
+<p>5.执行sql语句，得到结果集；</p>
+<p>6.对结果集进行分析处理；</p>
+<p>7.释放资源；</p>
+<h4 id="原生态JDBC存在如下问题："><a href="#原生态JDBC存在如下问题：" class="headerlink" title="原生态JDBC存在如下问题："></a>原生态JDBC存在如下问题：</h4><p>1.每一个连接的在使用时候创建，不用的时候需要释放，如果使用频繁的话，频繁的建立和释放连接会浪费系统的资源，影响数据库的性能；<strong>使用数据库连接池解决</strong></p>
+<p>2.将sql语句硬编码到Java代码中，修改sql语句需要重新编译，不利于系统的维护；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
+<p>3.向PrepareStatment中设置参数，会对占位符位置和参数值硬编码，不利于系统的维护；；<strong>将sql语句配置在xml配置文件中，即使sql文件变化也不需要重新编译</strong></p>
+<p>4.从result中遍历结果集数据时存在硬编码，主要体现在将获取字段进行硬编码不利于系统维护。<strong>将查询结果集自动映射为Java对象</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/20/Redis学习笔记——Redis哨兵模式/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/20/Redis学习笔记——Redis哨兵模式/" itemprop="url">Redis学习笔记——Redis哨兵模式</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-20T08:54:21+08:00">
+                2018-09-20
               </time>
             
 
@@ -355,27 +654,21 @@
       
         
           
-            <p>这篇文章，我们将重点介绍redis的键(key)和常用的五大数据类型之中的String。以此开启我们redis学习的大门。</p>
-<h4 id="redis中的key的常用指令"><a href="#redis中的key的常用指令" class="headerlink" title="redis中的key的常用指令"></a>redis中的key的常用指令</h4><ol>
-<li><p>添加元素：set key的名字 值  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">set key1 v1</span><br><span class="line">set key2 v2</span><br><span class="line">set key3 v3</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>查询数据库中所有的key: keys *</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">keys *</span><br><span class="line">//-----------结果为---------------</span><br><span class="line">&quot;k1&quot;</span><br><span class="line">&quot;k2&quot;</span><br><span class="line">&quot;k3&quot;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>判断某一个key是否存在：exists key的名字 返回值为1表示存在，返回值为0表示不存在</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">exists k1</span><br><span class="line">(Integer) 1</span><br><span class="line">exists k4</span><br><span class="line">(Integer) 0</span><br></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>4.将一个key移除到另外一个数据库中(实现剪切操作)：move key的名字 db的编号<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">move k2 3 //将k2移到编号为3的数据库中</span><br></pre></td></tr></table></figure></p>
-<p>5.为给定的key设置过期时间：expire key 秒钟<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">expire key1 10</span><br></pre></td></tr></table></figure></p>
-<p>6.查看还有多少秒过期：ttl key -1表示永不过期，-2表示已经过期(过期的key就不会存在);<br>查看key是什么类型：type key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ttl k1</span><br><span class="line">type k1</span><br></pre></td></tr></table></figure></p>
-<h4 id="redis中的String类型"><a href="#redis中的String类型" class="headerlink" title="redis中的String类型"></a>redis中的String类型</h4><p>1.增删改查：set/get/del/append/strlen<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; select 6</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; set k1 hello</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; set k2 month</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; set k3 hi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; get k1</span><br><span class="line">&quot;hello&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; del k2</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; keys *</span><br><span class="line">1) &quot;k3&quot;</span><br><span class="line">2) &quot;k1&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; append k1 12345</span><br><span class="line">(integer) 10</span><br><span class="line">127.0.0.1:6379[6]&gt; get k1</span><br><span class="line">&quot;hello12345&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; strlen k1</span><br><span class="line">(integer) 10</span><br><span class="line">127.0.0.1:6379[6]&gt;</span><br></pre></td></tr></table></figure></p>
-<p>2.数字进行加减:incr/decr/incrby/decrby<br>前提条件是key中的元素一定要为数字，否则会报错；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; set k5 55</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; incr k5</span><br><span class="line">(integer) 56</span><br><span class="line">127.0.0.1:6379[6]&gt; get k5</span><br><span class="line">&quot;56&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; decr k5</span><br><span class="line">(integer) 55</span><br><span class="line">127.0.0.1:6379[6]&gt; get k5</span><br><span class="line">&quot;55&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; incr k1</span><br><span class="line">(error) ERR value is not an integer or out of range</span><br><span class="line">127.0.0.1:6379[6]&gt; incrby k5 8</span><br><span class="line">(integer) 63</span><br><span class="line">127.0.0.1:6379[6]&gt; decrby k5 8</span><br><span class="line">(integer) 55</span><br><span class="line">127.0.0.1:6379[6]&gt;</span><br></pre></td></tr></table></figure></p>
-<p>3.getrange/setrange:获得/设置指定范围内的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; get k5</span><br><span class="line">&quot;55liu&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; getrange k5 0 2</span><br><span class="line">&quot;55l&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; getrange k5 0 -1</span><br><span class="line">&quot;55liu&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; setrange k5 0 MMM</span><br><span class="line">(integer) 5</span><br><span class="line">127.0.0.1:6379[6]&gt; get k5</span><br><span class="line">&quot;MMMiu&quot;</span><br></pre></td></tr></table></figure></p>
-<p>4.setex(set with expire) 键 秒 值/setnx(set if not exist)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; setex k6 20 helll //设置k6的值为helll，过期时间为20秒</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; ttl k6</span><br><span class="line">(integer) 9</span><br><span class="line">127.0.0.1:6379[6]&gt; get k6</span><br><span class="line">(nil)</span><br><span class="line">127.0.0.1:6379[6]&gt; setnx k6 woshi  //如果不存在则添加成功</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; get k6</span><br><span class="line">&quot;woshi&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; get k5</span><br><span class="line">&quot;MMMiu&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; setnx k5 heeee //如果存在则添加失败</span><br><span class="line">(integer) 0</span><br></pre></td></tr></table></figure></p>
-<p>5.mset/mget/msetnx：进行多个元素的设置和取值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; mset k8 liu k9 wu k10 wu</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; mget k8 k9 k10</span><br><span class="line">1) &quot;liu&quot;</span><br><span class="line">2) &quot;wu&quot;</span><br><span class="line">3) &quot;wu&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; msetnx k22 hell k8 fsa //只要一个失败就会整体都失败</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379[6]&gt; msetnx k22 hell k18 fsa //都成功才成功</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure></p>
-<p>6 getset:先get再set<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; getset k22 333</span><br><span class="line">&quot;hell&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; get k22</span><br><span class="line">&quot;333&quot;</span><br></pre></td></tr></table></figure></p>
+            <p><strong>本文转载自<a href="https://blog.csdn.net/weixin_42711549/article/details/83061052" target="_blank" rel="noopener">Redis Sentinel（哨兵）架构下的高可用</a></strong></p>
+<h4 id="哨兵模式的简介"><a href="#哨兵模式的简介" class="headerlink" title="哨兵模式的简介"></a>哨兵模式的简介</h4><p>Redis Sentinel是一个分布式架构，其中包含若干个Sentinel节点和Redis数据节点，每个Sentinel节点会对数据节点和其余Sentinel节点进行监控，当它发现节点不可达时，会对节点做下线标识。如果被标识的是主节点，它还会和其他Sentinel节点进行“协商”，当大多数Sentinel节点都认为主节点不可达时，它们会选举出一个Sentinel节点来完成自动故障转移的工作，同时会将这个变化通知给Redis应用方。整个过程完全是自动的，不需要人工来介入，所以这套方案很有效地解决了Redis的高可用问题。</p>
+<h4 id="哨兵模式的作用"><a href="#哨兵模式的作用" class="headerlink" title="哨兵模式的作用"></a>哨兵模式的作用</h4><p>Redis的主从复制下，一旦主节点由于故障不能提供服务，需要人工将从节点晋升为主节点，同时还要通知应用方更新主节点地址，对于很多应用场景这种故障处理的方法是无法接受的。但是Redis从2.8开始正式提供了Redis Sentinel（哨兵）架构来解决这个问题。</p>
+<h4 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h4><p>实现原理：</p>
+<p>三个定时监控任务</p>
+<p>1）每隔10秒，每个Sentinel节点会向主节点和从节点发送info命令获取最新的拓扑结构。</p>
+<p>2）每隔2秒，每个Sentinel节点会向Redis数据节点的<strong>sentinel</strong>:hello频道上发送该Sentinel节点对于主节点的判断以及当前Sentinel节点的信息，同时每个Sentinel节点也会订阅该频道，来了解其他Sentinel节点以及它们对主节点的判断。</p>
+<p>3）每隔一秒，每个Sentinel节点会向主节点、从节点、其余Sentinel节点发送一条ping命令做一次心跳检测，来确认这些节点当前是否可达。</p>
+<p>主观下线<br>因为每隔一秒，每个Sentinel节点会向主节点、从节点、其余Sentinel节点发送一条ping命令做一次心跳检测，当这些节点超过down-after-milliseconds没有进行有效回复，Sentinel节点就会对该节点做失败判定，这个行为叫做主观下线。</p>
+<p>客观下线<br>当Sentinel主观下线的节点是主节点时，该Sentinel节点会向其他Sentinel节点询问对主节点的判断，当超过<quorum>个数，那么意味着大部分的Sentinel节点都对这个主节点的下线做了同意的判定，于是该Sentinel节点认为主节点确实有问题，这时该Sentinel节点会做出客观下线的决定。</quorum></p>
+<p>领导者Sentinel节点选举<br>Raft算法：假设s1(sentinel-1)最先完成客观下线，它会向其余Sentinel节点发送命令，请求成为领导者；收到命令的Sentinel节点如果没有同意过其他Sentinel节点的请求，那么就会同意s1的请求，否则拒绝；如果s1发现自己的票数已经大于等于某个值，那么它将成为领导者。</p>
+<p>故障转移<br>1）领导者Sentinel节点在从节点列表中选出一个节点作为新的主节点;</p>
+<p>2）上一步的选取规则是与主节点复制相似度最高的从节点;</p>
+<p>3）领导者Sentinel节点让剩余的从节点成为新的主节点的从节点;</p>
+<p>4）Sentinel节点集合会将原来的主节点更新为从节点，并保持着对其关注，当其恢复后命令它去复制新的主节点;</p>
 
           
         
@@ -424,7 +717,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/06/Redis学习笔记——NoSQL的概述/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/Redis学习笔记——Redis分布式锁实现/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -443,7 +736,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/09/06/Redis学习笔记——NoSQL的概述/" itemprop="url">Redis学习笔记——NoSQL的概述</a></h1>
+                <a class="post-title-link" href="/2018/09/18/Redis学习笔记——Redis分布式锁实现/" itemprop="url">Redis学习笔记——Redis分布式锁实现</a></h1>
         
 
         <div class="post-meta">
@@ -455,8 +748,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-06T22:11:27+08:00">
-                2018-09-06
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T12:10:07+08:00">
+                2018-09-18
               </time>
             
 
@@ -517,26 +810,192 @@
       
         
           
-            <h4 id="什么是NoSQL"><a href="#什么是NoSQL" class="headerlink" title="什么是NoSQL"></a>什么是NoSQL</h4><p>NoSQL(not only sql),泛指非关系数据库，随着互联网web2.0网站的兴起，传统的关系数据库在应付web2.0网站，特别是超大规模和高并发的社交网络服务(SNS)类型的web2.0纯动态网站已经显得力不从心，暴露出了很多问题，而非关系型数据库由于其自身的特点得到了非常迅速的发展。NoSQL数据库的产生就是为了解决大规模数据集合多重数据种类带来的挑战，尤其是大数据应用难题，包括超大规模数据的存储。</p>
-<h4 id="NoSQL的优缺点"><a href="#NoSQL的优缺点" class="headerlink" title="NoSQL的优缺点"></a>NoSQL的优缺点</h4><h5 id="优点："><a href="#优点：" class="headerlink" title="优点："></a>优点：</h5><ol>
-<li>扩展简单 ； </li>
-<li>读写速度快，可以实现每秒钟80000次的写，和110000次的读；</li>
-<li>低廉的成本，因为是开源的，没有昂贵的license成本；<h5 id="缺点："><a href="#缺点：" class="headerlink" title="缺点："></a>缺点：</h5></li>
-<li>没有提供对sql的支持；</li>
-<li>没有提供对事务的支持；</li>
-<li>现有的产品还是不够成熟；</li>
+            <h4 id="为何会有分布式的锁"><a href="#为何会有分布式的锁" class="headerlink" title="为何会有分布式的锁"></a>为何会有分布式的锁</h4><p>我们知道，Reids和关系型数据库不同，他是单进程单线程的，他是不存在锁的说法的，那么我们为何又要提到锁呢？要知道我们这里讲的是分布式锁，也就是在分布式系统中，多个服务器(Tomcat)同时并发访问同一台Redis服务器(或者Mysql)上的相同的资源。由于Java中的syschornized和lock实现同步功能时候要求是在同一个jvm上，在分布式系统中，每个服务器上都有各自的jvm所以传统的锁很难发挥作用，但是不使用分布式锁就会出现问题。我们举个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">long</span> N=<span class="number">0L</span>;</span><br><span class="line"><span class="comment">//N从redis获取值</span></span><br><span class="line"><span class="keyword">if</span>(N&lt;<span class="number">5</span>)&#123;</span><br><span class="line">N++；</span><br><span class="line"><span class="comment">//N写回redis</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码实现的功能是，对数值N进行边界检查，自加1，然后将结果写回到reids中，这种应用场景很常见，像秒杀，全局递增ID、IP访问限制等。以IP访问限制来说，恶意攻击者可能发起无限次访问，并发量比较大，分布式环境下对N的边界检查就不可靠，因为从redis读的N可能已经是脏数据。</p>
+<h4 id="使用redis的setnx命令实现分布式锁"><a href="#使用redis的setnx命令实现分布式锁" class="headerlink" title="使用redis的setnx命令实现分布式锁"></a>使用redis的setnx命令实现分布式锁</h4><h5 id="1-实现的原理"><a href="#1-实现的原理" class="headerlink" title="1.实现的原理"></a>1.实现的原理</h5><p>redis是单进程单线程模式，采用队列模式将并发访问变为串行访问，且客户端对redis的连接也不存在竞争关系，所以redis的setnx命令很容易实现分布式锁的功能。</p>
+<h5 id="2-基本命令解析"><a href="#2-基本命令解析" class="headerlink" title="2.基本命令解析"></a>2.基本命令解析</h5><p>(1)setnx（set if not exists）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setnx key1 v1 //将key1的值设置为v1,当v1不存在时，设置成功返回1.若key1已经存在则setnx不做任何动作返回0；</span><br></pre></td></tr></table></figure></p>
+<p>2.getset指令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getset key1 v2   //将指定的key1的值设置为v2，并返回key1的旧值。当key1的旧值不存在(key1不存在)返回nil</span><br></pre></td></tr></table></figure></p>
+<p>3.get指令<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">get key1   //当key不存在时，返回nil,否则返回key1的值若key1不是字符串类型则返回一个错误</span><br></pre></td></tr></table></figure></p>
+<h5 id="设计思路"><a href="#设计思路" class="headerlink" title="设计思路"></a>设计思路</h5><p>我们将锁的超时时间设置为key所对应的value,首先进行setnx操作，如果返回true(设置成功)，则成功获得这个锁，反之则锁已经存在则需要通过get操作获得锁的值(到期时间)和当前时间进行比较，如果超时则重新设置该值。</p>
+<h5 id="具体的代码"><a href="#具体的代码" class="headerlink" title="具体的代码"></a>具体的代码</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 获得 lock.</span></span><br><span class="line"><span class="comment">     * 实现思路: 主要是使用了redis 的setnx命令,缓存了锁.</span></span><br><span class="line"><span class="comment">     * reids缓存的key是锁的key,所有的共享, value是锁的到期时间(注意:这里把过期时间放在value了,没有时间上设置其超时时间)</span></span><br><span class="line"><span class="comment">     * 执行过程:</span></span><br><span class="line"><span class="comment">     * 1.通过setnx尝试设置某个key的值,成功(当前没有这个锁)则返回,成功获得锁</span></span><br><span class="line"><span class="comment">     * 2.锁已经存在则获取锁的到期时间,和当前时间比较,超时的话,则设置新的值</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span> true if lock is acquired, false acquire timeouted</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@throws</span> InterruptedException in case of thread interruption</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">boolean</span> <span class="title">lock</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> timeout = timeoutMsecs;</span><br><span class="line">        <span class="keyword">while</span> (timeout &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">long</span> expires = System.currentTimeMillis() + expireMsecs + <span class="number">1</span>;</span><br><span class="line">            String expiresStr = String.valueOf(expires); <span class="comment">//锁到期时间</span></span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">this</span>.setNX(lockKey, expiresStr)) &#123;</span><br><span class="line">                <span class="comment">// lock acquired</span></span><br><span class="line">                locked = <span class="keyword">true</span>;</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            String currentValueStr = <span class="keyword">this</span>.get(lockKey); <span class="comment">//redis里的时间</span></span><br><span class="line">            <span class="keyword">if</span> (currentValueStr != <span class="keyword">null</span> &amp;&amp; Long.parseLong(currentValueStr) &lt; System.currentTimeMillis()) &#123;</span><br><span class="line">                <span class="comment">//判断是否为空，不为空的情况下，如果被其他线程设置了值，则第二个条件判断是过不去的</span></span><br><span class="line">                <span class="comment">// lock is expired</span></span><br><span class="line"></span><br><span class="line">                String oldValueStr = <span class="keyword">this</span>.getSet(lockKey, expiresStr);</span><br><span class="line">                <span class="comment">//获取上一个锁到期时间，并设置现在的锁到期时间，</span></span><br><span class="line">                <span class="comment">//只有一个线程才能获取上一个线上的设置时间，因为jedis.getSet是同步的</span></span><br><span class="line">                <span class="keyword">if</span> (oldValueStr != <span class="keyword">null</span> &amp;&amp; oldValueStr.equals(currentValueStr)) &#123;</span><br><span class="line">                    <span class="comment">//防止误删（覆盖，因为key是相同的）了他人的锁——这里达不到效果，这里值会被覆盖，但是因为什么相差了很少的时间，所以可以接受</span></span><br><span class="line"></span><br><span class="line">                    <span class="comment">//[分布式的情况下]:如过这个时候，多个线程恰好都到了这里，但是只有一个线程的设置值和当前值相同，他才有权利获取锁</span></span><br><span class="line">                    <span class="comment">// lock acquired</span></span><br><span class="line">                    locked = <span class="keyword">true</span>;</span><br><span class="line">                    <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            timeout -= DEFAULT_ACQUIRY_RESOLUTION_MILLIS;</span><br><span class="line"></span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">                延迟100 毫秒,  这里使用随机时间可能会好一点,可以防止饥饿进程的出现,即,当同时到达多个进程,</span></span><br><span class="line"><span class="comment">                只会有一个进程获得锁,其他的都用同样的频率进行尝试,后面有来了一些进行,也以同样的频率申请锁,这将可能导致前面来的锁得不到满足.</span></span><br><span class="line"><span class="comment">                使用随机的等待时间可以一定程度上保证公平性</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            Thread.sleep(DEFAULT_ACQUIRY_RESOLUTION_MILLIS);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Acqurired lock release.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (locked) &#123;</span><br><span class="line">            redisTemplate.delete(lockKey);</span><br><span class="line">            locked = <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="如何解决死锁"><a href="#如何解决死锁" class="headerlink" title="如何解决死锁"></a>如何解决死锁</h4><p>如果一个持有锁的客户端失败或崩溃了不能释放锁，是怎么解决的？<br>我们可以通过锁的键对应的时间戳来判断这种情况是否发生了，如果当前的时间已经大于锁的到期时间，说明该锁已失效，可以被重新使用。我们是通过指令getset方法进行处理的，如果c1超时了那么c2执行getset方法时，如果getset指令返回的是超时的值说明设置成功，成功的获取了锁，如果getset方法返回未超时时间则说明其他客户端比他快了一步，需要再次等待或者重试，留意一下，尽管C3没拿到锁，但它改写了C4设置的锁的超时值，不过这一点非常微小的误差带来的影响可以忽略不计。</p>
+<h4 id="为何不用expire指令设置超时时间？"><a href="#为何不用expire指令设置超时时间？" class="headerlink" title="为何不用expire指令设置超时时间？"></a>为何不用expire指令设置超时时间？</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock(key, expireSec)&#123;</span><br><span class="line">isSuccess = setnx key</span><br><span class="line">if (isSuccess)</span><br><span class="line">expire key expireSec</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这种方式貌似没什么问题，但是假如在setnx后，redis崩溃了，expire就没有执行，结果就是死锁了。锁永远不会超时。</p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="https://www.cnblogs.com/0201zcr/p/5942748.html" target="_blank" rel="noopener">jedisLock—redis分布式锁实现</a><br><a href="https://blog.csdn.net/varyall/article/details/81205183" target="_blank" rel="noopener">10个常见的Redis面试”刁难”问题</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/18/Redis学习笔记——Redis主从复制/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="LiuWuWu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/liuwuwu.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Coder Paradise">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/09/18/Redis学习笔记——Redis主从复制/" itemprop="url">Redis学习笔记——Redis主从复制</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-18T12:10:07+08:00">
+                2018-09-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis学习笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇文章主要是摘录自Redis官方文档</p>
+<h4 id="Redis主从复制的要点"><a href="#Redis主从复制的要点" class="headerlink" title="Redis主从复制的要点"></a>Redis主从复制的要点</h4><ol>
+<li>Reids使用异步方式进行复制；</li>
+<li>一个主服务器可以有多个从服务器；</li>
+<li>一个从服务器也可以接受其他从服务器的连接(可以简单记为薪火相传)；</li>
+<li>Redis主从复制不会阻塞主服务器端，也就是若干个从服务器进行初始化同步时，主服务器仍然能够处理请求；</li>
+<li>主从复制也不阻塞从服务器端。当从服务器进行初始同步时，它使用旧版本的数据来应对查询请求，假设你在redis.conf配置文件是这么配置的。否则的话，你可以配置当复制流关闭时让从服务器给客户端返回一个错误。但是，当初始同步完成后，需要删除旧的数据集和加载新的数据集，在这个短暂的时间内，从服务器会阻塞连接进来的请求；</li>
+<li>主从复制可以用来增强扩展性，使用多个从服务器来处理只读的请求（比如，繁重的排序操作可以放到从服务器去做），也可以简单的用来做数据冗余；</li>
+<li>使用主从复制可以为主服务器免除把数据写入磁盘的消耗：在主服务器的redis.conf文件中配置“避免保存”（注释掉所有“保存“命令），然后连接一个配置为“进行保存”的从服务器即可。但是这个配置要确保主服务器不会自动重启（要获得更多信息请阅读下一段);<h4 id="当主服务器不进行持久化时复制的安全性"><a href="#当主服务器不进行持久化时复制的安全性" class="headerlink" title="当主服务器不进行持久化时复制的安全性"></a>当主服务器不进行持久化时复制的安全性</h4>在进行主从复制设置时，强烈建议在主服务器上开启持久化，当不能这么做时，比如考虑到延迟的问题，应该将实例配置为避免自动重启。<br>为什么不持久化的主服务器自动重启非常危险呢？</li>
 </ol>
-<h4 id="关系型数据库与NoSQL的区别"><a href="#关系型数据库与NoSQL的区别" class="headerlink" title="关系型数据库与NoSQL的区别"></a>关系型数据库与NoSQL的区别</h4><ol>
-<li>关系型数据库中的数据都是高度结构化组织化的数据，同时还需要预定义模式；而非关系型数据库中存储的是非结构化和不可预知的数据，不需要进行预定义模式；</li>
-<li>关系型数据库中都是通过结构化查询语句进行数据的处理，而非关系型数据库中没有声明性查询语言；</li>
-<li>关系型数据库中的数据具有强一致性，而非关系性数据库中的数据强调的是最终一致性；</li>
-<li>关系型数据库支持事务，而非关系型数据库并不支持事务；</li>
-<li>关系型数据库遵循ACID规则而非关系型数据库支持CAP定理；<h4 id="哪些场景下用NoSQL"><a href="#哪些场景下用NoSQL" class="headerlink" title="哪些场景下用NoSQL"></a>哪些场景下用NoSQL</h4></li>
-<li>数据库表schema经常变化 比如在线商城，维护产品的属性经常要增加字段，这就意味着ORMapping层的代码和配置要改，如果该表的数据量过百万，新增字段会带来额外开销（重建索引等）。NoSQL应用在这种场景，可以极大提升DB的可伸缩性，开发人员可以将更多的精力放在业务层。</li>
-<li>数据库表字段是复杂数据类型,对于复杂数据类型，比如SQLSever提供了可扩展性的支持，像xml类型的字段。很多用过的同学应该知道，该字段不管是查询还是更改，效率非常一般。主要原因是是DB层对xml字段很难建高效索引，应用层又要做从字符流到dom的解析转换。NoSQL以json方式存储，提供了原生态的支持，在效率方便远远高于传统关系型数据库。</li>
-<li>高并发数据库请求,此类应用常见于web2.0的网站，很多应用对于数据一致性要求很低，而关系型数据库的事务以及大表join反而成了”性能杀手”。</li>
-<li>海量数据的分布式存储,海量数据的存储如果选用大型商用数据，如Oracle，那么整个解决方案的成本是非常高的，要花很多钱在软硬件上。NoSQL分布式存储，可以部署在廉价的硬件上，是一个性价比非常高的解决方案</li>
+<p>为了更好的理解这个问题，看下面这个失败的例子，其中主服务器和从服务器中数据库都被删除了。</p>
+<ol>
+<li><p>我们设置节点A为主服务器，关闭持久化，节点B和C从节点A复制数据。</p>
+</li>
+<li><p>这时出现了一个崩溃，但Redis具有自动重启系统，重启了进程，因为关闭了持久化，节点重启后只有一个空的数据集。</p>
+</li>
 </ol>
+<ol start="3">
+<li>节点B和C从节点A进行复制，现在节点A是空的，所以节点B和C上的复制数据也会被删除。<br>当在高可用系统中使用Redis Sentinel，关闭了主服务器的持久化，并且允许自动重启，这种情况是很危险的。比如主服务器可能在很短的时间就完成了重启，以至于Sentinel都无法检测到这次失败，那么上面说的这种失败的情况就发生了。<br>如果数据比较重要，并且在使用主从复制时关闭了主服务器持久化功能的场景中，都应该禁止实例自动重启。</li>
+</ol>
+<p>综上所述：<strong>关闭持久化并允许自动重启的主服务器，在做主从同步时，可能导致所有服务器的数据都被清空</strong></p>
+<h4 id="Redis主从复制的原理"><a href="#Redis主从复制的原理" class="headerlink" title="Redis主从复制的原理"></a>Redis主从复制的原理</h4><p>如果你设置了一个从服务器，在连接时它发送了一个SYNC命令，不管它是第一次连接还是再次连接都没有关系。<br>然后主服务器开始后台存储，并且开始缓存新连接进来的修改数据的命令。当后台存储完成后，主服务器把数据文件发送到从服务器，从服务器将其保存在磁盘上，然后加载到内存中。然后主服务器把刚才缓存的命令发送到从服务器。这是作为命令流来完成的，并且和Redis协议本身格式相同。当主从服务器之间的连接由于某些原因断开时，从服务器可以自动进行重连接。当有多个从服务器同时请求同步时，主服务器只进行一个后台存储。<br>当连接断开又重新连上之后，一般都会进行一个完整的重新同步，但是从Redis2.8开始，只重新同步一部分也可以。</p>
+<h5 id="部分重新同步"><a href="#部分重新同步" class="headerlink" title="部分重新同步"></a>部分重新同步</h5><p>从Redis 2.8开始，如果遭遇连接断开，重新连接之后可以从中断处继续进行复制，而不必重新同步。<br>它的工作原理是这样，主服务器端为复制流维护一个内存缓冲区（in-memory backlog）。主从服务器都维护一个复制偏移量（replication offset）和master run id ，当连接断开时，从服务器会重新连接上主服务器，然后请求继续复制，假如主从服务器的两个master run id相同，并且指定的偏移量在内存缓冲区中还有效，复制就会从上次中断的点开始继续。如果其中一个条件不满足，就会进行完全重新同步（在2.8版本之前就是直接进行完全重新同步）。因为主运行id不保存在磁盘中，如果从服务器重启了的话就只能进行完全同步了。<br>部分重新同步这个新特性内部使用PSYNC命令，旧的实现中使用SYNC命令。Redis2.8版本可以检测出它所连接的服务器是否支持PSYNC命令，不支持的话使用SYNC命令。</p>
+<h5 id="全量同步"><a href="#全量同步" class="headerlink" title="全量同步"></a>全量同步</h5><p>Redis全量复制一般发生在Slave初始化阶段，这时Slave需要将Master上的所有数据都复制一份。具体步骤如下： </p>
+<ol>
+<li>从服务器连接主服务器，发送SYNC命令； </li>
+<li>主服务器接收到SYNC命名后，开始执行BGSAVE命令生成RDB文件并使用缓冲区记录此后执行的所有写命令； </li>
+<li>主服务器BGSAVE执行完后，向所有从服务器发送快照文件，并在发送期间继续记录被执行的写命令； </li>
+<li>从服务器收到快照文件后丢弃所有旧数据，载入收到的快照； </li>
+<li>主服务器快照发送完毕后开始向从服务器发送缓冲区中的写命令； </li>
+<li>从服务器完成对快照的载入，开始接收命令请求，并执行来自主服务器缓冲区的写命令； <h5 id="增量同步"><a href="#增量同步" class="headerlink" title="增量同步"></a>增量同步</h5>Redis增量复制是指Slave初始化后开始正常工作时主服务器发生的写操作同步到从服务器的过程。<br>增量复制的过程主要是主服务器每执行一个写命令就会向从服务器发送相同的写命令，从服务器接收并执行收到的写命令。<h4 id="只读从服务器"><a href="#只读从服务器" class="headerlink" title="只读从服务器"></a>只读从服务器</h4>从Redis 2.6开始，从服务器支持只读模式，并且是默认模式。这个行为是由Redis.conf文件中的slave-read-only 参数控制的，可以在运行中通过CONFIG SET来启用或者禁用。<br>只读的从服务器会拒绝所有写命令，所以对从服务器不会有误写操作。但这不表示可以把从服务器实例暴露在危险的网络环境下，因为像DEBUG或者CONFIG这样的管理命令还是可以运行的。不过你可以通过使用rename-command命令来为这些命令改名来增加安全性。<br>你可能想知道为什么只读限制还可以被还原，使得从服务器还可以进行写操作。虽然当主从服务器进行重新同步或者从服务器重启后，这些写操作都会失效，还是有一些使用场景会想从服务器中写入临时数据的，但将来这个特性可能会被去掉。</li>
+</ol>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="http://ifeve.com/redis-replication/" target="_blank" rel="noopener">reids官方文档</a></p>
 
           
         
@@ -585,7 +1044,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/24/HashMap源码详解（下）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/16/Redis学习笔记之Pipeline(管道)/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -604,7 +1063,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/24/HashMap源码详解（下）/" itemprop="url">HashMap源码详解（下）</a></h1>
+                <a class="post-title-link" href="/2018/09/16/Redis学习笔记之Pipeline(管道)/" itemprop="url">Redis学习笔记——Pipeline(管道)</a></h1>
         
 
         <div class="post-meta">
@@ -616,8 +1075,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-24T08:27:08+08:00">
-                2018-08-24
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-16T09:32:02+08:00">
+                2018-09-16
               </time>
             
 
@@ -639,8 +1098,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis学习笔记</span>
                   </a>
                 </span>
 
@@ -678,10 +1137,10 @@
       
         
           
-            <p>在上一篇文章中我们聊了一下HashMap的存储结构和put、get方法，接下来我们将重点介绍一下它的扩容机制。不知道大家有没有过这样的疑问为何HashMap中进行扩容的时候要扩大2倍不是3倍或者1.5倍。如果大家弄清楚了本文的内容，这个问题也就迎刃而解了。话不多说让我们直奔主题吧！</p>
-<h4 id="HashMap的扩容机制"><a href="#HashMap的扩容机制" class="headerlink" title="HashMap的扩容机制"></a>HashMap的扩容机制</h4><p>为了提高空间的利用率，HashMap采用了自动扩容的机制，但是由于其底层数据结构仍然采用了数组的数据结构，所以在自动扩容时需要将旧的数组中的元素复制到新的数组中。这就好比是用一个水桶装水，开始水不是很多，我们就用一个小桶，后来水多了我们就要换一个大桶同时还要将小桶中的水倒入到大桶中。扩容的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">final</span> Node&lt;K,V&gt;[] resize() &#123;</span><br><span class="line">        Node&lt;K,V&gt;[] oldTab = table;</span><br><span class="line">        <span class="keyword">int</span> oldCap = (oldTab == <span class="keyword">null</span>) ? <span class="number">0</span> : oldTab.length;</span><br><span class="line">        <span class="keyword">int</span> oldThr = threshold;</span><br><span class="line">        <span class="keyword">int</span> newCap, newThr = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (oldCap &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (oldCap &gt;= MAXIMUM_CAPACITY) &#123;</span><br><span class="line">                threshold = Integer.MAX_VALUE;</span><br><span class="line">                <span class="keyword">return</span> oldTab;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> ((newCap = oldCap &lt;&lt; <span class="number">1</span>) &lt; MAXIMUM_CAPACITY &amp;&amp;</span><br><span class="line">                     oldCap &gt;= DEFAULT_INITIAL_CAPACITY)</span><br><span class="line">                newThr = oldThr &lt;&lt; <span class="number">1</span>; <span class="comment">// double threshold</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (oldThr &gt; <span class="number">0</span>) <span class="comment">// initial capacity was placed in threshold</span></span><br><span class="line">            newCap = oldThr;</span><br><span class="line">        <span class="keyword">else</span> &#123;               <span class="comment">// zero initial threshold signifies using defaults</span></span><br><span class="line">            newCap = DEFAULT_INITIAL_CAPACITY;</span><br><span class="line">            newThr = (<span class="keyword">int</span>)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (newThr == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">float</span> ft = (<span class="keyword">float</span>)newCap * loadFactor;</span><br><span class="line">            newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (<span class="keyword">float</span>)MAXIMUM_CAPACITY ?</span><br><span class="line">                      (<span class="keyword">int</span>)ft : Integer.MAX_VALUE);</span><br><span class="line">        &#125;</span><br><span class="line">        threshold = newThr;</span><br><span class="line">        <span class="meta">@SuppressWarnings</span>(&#123;<span class="string">"rawtypes"</span>,<span class="string">"unchecked"</span>&#125;)</span><br><span class="line">            Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])<span class="keyword">new</span> Node[newCap];</span><br><span class="line">        table = newTab;</span><br><span class="line">        <span class="keyword">if</span> (oldTab != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; oldCap; ++j) &#123;</span><br><span class="line">                Node&lt;K,V&gt; e;</span><br><span class="line">                <span class="keyword">if</span> ((e = oldTab[j]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">                    oldTab[j] = <span class="keyword">null</span>;</span><br><span class="line">                    <span class="keyword">if</span> (e.next == <span class="keyword">null</span>)</span><br><span class="line">                        newTab[e.hash &amp; (newCap - <span class="number">1</span>)] = e;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (e <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                        ((TreeNode&lt;K,V&gt;)e).split(<span class="keyword">this</span>, newTab, j, oldCap);</span><br><span class="line">                    <span class="keyword">else</span> &#123; <span class="comment">// preserve order</span></span><br><span class="line">                        Node&lt;K,V&gt; loHead = <span class="keyword">null</span>, loTail = <span class="keyword">null</span>;</span><br><span class="line">                        Node&lt;K,V&gt; hiHead = <span class="keyword">null</span>, hiTail = <span class="keyword">null</span>;</span><br><span class="line">                        Node&lt;K,V&gt; next;</span><br><span class="line">                        <span class="keyword">do</span> &#123;</span><br><span class="line">                            next = e.next;</span><br><span class="line">                            <span class="keyword">if</span> ((e.hash &amp; oldCap) == <span class="number">0</span>) &#123;</span><br><span class="line">                                <span class="keyword">if</span> (loTail == <span class="keyword">null</span>)</span><br><span class="line">                                    loHead = e;</span><br><span class="line">                                <span class="keyword">else</span></span><br><span class="line">                                    loTail.next = e;</span><br><span class="line">                                loTail = e;</span><br><span class="line">                            &#125;</span><br><span class="line">                            <span class="keyword">else</span> &#123;</span><br><span class="line">                                <span class="keyword">if</span> (hiTail == <span class="keyword">null</span>)</span><br><span class="line">                                    hiHead = e;</span><br><span class="line">                                <span class="keyword">else</span></span><br><span class="line">                                    hiTail.next = e;</span><br><span class="line">                                hiTail = e;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; <span class="keyword">while</span> ((e = next) != <span class="keyword">null</span>);</span><br><span class="line">                        <span class="keyword">if</span> (loTail != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            loTail.next = <span class="keyword">null</span>;</span><br><span class="line">                            newTab[j] = loHead;</span><br><span class="line">                        &#125;</span><br><span class="line">                        <span class="keyword">if</span> (hiTail != <span class="keyword">null</span>) &#123;</span><br><span class="line">                            hiTail.next = <span class="keyword">null</span>;</span><br><span class="line">                            newTab[j + oldCap] = hiHead;</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> newTab;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
-<p>直接讲解源码可能比较难以理解，我们用一个比较经典的例子讲解一下这个过程。假设了我们的hash算法就是简单的用key mod 一下表的大小（也就是数组的长度）。其中的哈希桶数组table的size=2， 所以key = 3、7、5，put顺序依次为 5、7、3。在mod 2以后都冲突在table[1]这里了。这里假设负载因子 loadFactor=1，即当键值对的实际大小size 大于 table的实际大小时进行扩容。接下来的三个步骤是哈希桶数组 resize成4，然后所有的Node重新rehash的过程。<br>如果每次扩容都需要在进行rehash这样太过麻烦，有没有什么比较好的办法呢？sun的工程师在jdk1.8中进行了优化，提出了一个很巧妙的方法，那就是每次扩容的时候容量都是乘以2，这就保证了扩容后的索引要么保持不变要么是在原值的基础上加上了原始数组的容量。在jdk1.8中这个新的索引不需要重新计算，只需要根据hash值新增的那一位判断，如果新增的那一位为0,则保持不变，为1则新索引=旧索引+旧容量；这个设计确实非常的巧妙，既省去了重新计算hash值的时间，而且同时，由于新增的1bit是0还是1可以认为是随机的，因此resize的过程，均匀的把之前的冲突的节点分散到新的bucket了。</p>
-<h4 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h4><p>在jdk1.7中如果进行扩容的话，同一个链表中元素的顺序会倒置主要是因为采用了头部插入，jdk1.8中因为采用的是尾部插入，通过hiHead和loHead两个变量作为首节点保存元素，这就确保了元素顺序的不变。</p>
+            <h4 id="为什么会出现Pipeline"><a href="#为什么会出现Pipeline" class="headerlink" title="为什么会出现Pipeline"></a>为什么会出现Pipeline</h4><p>Redis的pipeline(管道)功能在命令行中没有，但是redis是支持这个功能的，之所以存在这个功能，是因为Redis的server的处理能力很强，但是由于收到的处理请求很少，导致吞吐量很小。这就导致大量的时间花费在客户端和服务器的通信上了。当client 使用pipelining 发送命令时，redis server必须将部分请求放到队列中（使用内存），执行完毕后一次性发送结果；如果发送的命令很多的话，建议对返回的结果加标签，当然这也会增加使用的内存；</p>
+<h4 id="Pipeline的原理"><a href="#Pipeline的原理" class="headerlink" title="Pipeline的原理"></a>Pipeline的原理</h4><p>而管道（pipeline）可以一次性发送多条命令并在执行完后一次性将结果返回，pipeline通过减少客户端与redis的通信次数来实现降低往返延时时间，而且Pipeline 实现的原理是队列，而队列的原理是时先进先出，这样就保证数据的顺序性。 Pipeline 的默认的同步的个数为53个，也就是说arges中累加到53条数据时会把数据提交。<br>需要注意到是用 pipeline方式打包命令发送，redis必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并不是打包的命令越多越好。具体多少合适需要根据具体情况测试。</p>
+<h4 id="Pipeline的使用场景"><a href="#Pipeline的使用场景" class="headerlink" title="Pipeline的使用场景"></a>Pipeline的使用场景</h4><p>Pipeline在某些场景下非常有用，比如有多个command需要被“及时的”提交，而且他们对相应结果没有互相依赖，对结果响应也无需立即获得，那么pipeline就可以充当这种“批处理”的工具；而且在一定程度上，可以较大的提升性能，性能提升的原因主要是TCP连接中减少了“交互往返”的时间。但是对那些对可靠性要求很高，每次操作都需要立马知道这次操作是否成功是否数据写入了redis,那么pipeline就不适合了。</p>
+<h4 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h4><p><a href="https://blog.csdn.net/varyall/article/details/81205183" target="_blank" rel="noopener">10个常见的Redis面试”刁难”问题</a></p>
 
           
         
@@ -730,7 +1189,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/23/HashMap源码详解（上）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/15/Redis学习笔记——Redis中的事务/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -749,7 +1208,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/08/23/HashMap源码详解（上）/" itemprop="url">HashMap源码详解（上）</a></h1>
+                <a class="post-title-link" href="/2018/09/15/Redis学习笔记——Redis中的事务/" itemprop="url">Redis学习笔记——Redis中的事务</a></h1>
         
 
         <div class="post-meta">
@@ -761,8 +1220,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-08-23T09:32:48+08:00">
-                2018-08-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-15T17:16:32+08:00">
+                2018-09-15
               </time>
             
 
@@ -784,8 +1243,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis学习笔记</span>
                   </a>
                 </span>
 
@@ -823,21 +1282,30 @@
       
         
           
-            <p>有些东西，除了要知其然还要知其所以然，这样才能学到其精髓，做到融汇贯通。HashMap在Java中用处非常广泛，相信很多人都用过，不知道大家有没有存在过疑问：“这个家伙究竟是怎么样实现的，他的底层原理是什么？” 接下来我们就好好探讨一下hashmap的奥秘。</p>
-<h4 id="存储结构"><a href="#存储结构" class="headerlink" title="存储结构"></a>存储结构</h4><p>在jdk1.8之前HashMap是通过桶（数组）+单向链表实现的，在进行查询操作时，首先根据元素的key值的散列码计算得到hash值，确定其存储在哪一个桶上，当有多个元素hash值相同的时候，就通过链表将他们串联起来（链表的主要作用就是解决hash冲突）。jdk1.8中引入了数组+单向链表+红黑树的实现方式，为何加上红黑树呢？答案就是加快查询的速度（优化查询效率），当单向链表的长度过长时候，遍历查询是相当费时的，采用红黑树的数据结构可以明显加快查询的速度。<br><img src="https://liuwuwu.github.io/picture/原来的实现方式.png" alt="原来的实现方式"><br><img src="https://liuwuwu.github.io/picture/jdk1.8中的实现方式.jpg" alt="JDK1.8中的实现方式"></p>
-<h4 id="HashMap中的字段"><a href="#HashMap中的字段" class="headerlink" title="HashMap中的字段"></a>HashMap中的字段</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">transient</span> Node&lt;K,V&gt;[] table;</span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> size;</span><br><span class="line"><span class="keyword">transient</span> <span class="keyword">int</span> modCount;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> DEFAULT_INITIAL_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">4</span>; <span class="comment">// aka 16</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MAXIMUM_CAPACITY = <span class="number">1</span> &lt;&lt; <span class="number">30</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">float</span> DEFAULT_LOAD_FACTOR = <span class="number">0.75f</span>;</span><br><span class="line"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> TREEIFY_THRESHOLD = <span class="number">8</span>;</span><br></pre></td></tr></table></figure>
-<p>table:也叫桶，是一个存放链表的数组，HashMap的基础设施，所有的节点都放在这里；<br>size:HashMap中存放的键值对的数目，很显然他的值大于等于table的数目（一个table中可能存在多个元素，因为链表和红黑树的存在）；<br>modCount:它的值代表了hashmap被修改的次数，hashmap的迭代循环时主要是通过它实现的fail-fast机制；<br>DEFAULT_INITIAL_CAPACITY，表示默认HashMap数组初始大小为16，并且为了后续的rehash的方便，hash数组进行扩容时乘以2保证数组的大小始终为2的整数次幂；<br>MAXIMUM_CAPACITY，表示Hashmap数组的最大容量，初始值为2^30；<br>DEFAULT_LOAD_FACTOR，表示负载因子，当Hashmap的实际容量超过了(设定容量x负载因子)，就触发rehash操作，默认值为0.75；<br>TREEIFY_THRESHOLD，jkd1.8新增的，如果Hashmap数组元素的链表长度超过这个值，就使用红黑树结构代替链表提高查询效率，默认值为8。</p>
-<h4 id="如何确定Hash桶数组索引"><a href="#如何确定Hash桶数组索引" class="headerlink" title="如何确定Hash桶数组索引"></a>如何确定Hash桶数组索引</h4><p>无论是插入、删除还是查找，我们都要先确定元素的桶数组的索引，这一步是至关重要的。我们希望元素的分布尽可能的均匀最好是一个桶上只有一个元素，这样在进行查询的时候无须遍历，直接可以得到结果。我们来看看hashmap的底层源码是如何为了这个目标而吧努力的(方法1+方法2)：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//方法1：</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;   <span class="comment">//jdk1.8 &amp; jdk1.7</span></span><br><span class="line">     <span class="keyword">int</span> h;</span><br><span class="line">     <span class="comment">// h = key.hashCode() 为第一步 取hashCode值</span></span><br><span class="line">     <span class="comment">// h ^ (h &gt;&gt;&gt; 16)  为第二步 高位参与运算</span></span><br><span class="line">     <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//方法2：</span></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">indexFor</span><span class="params">(<span class="keyword">int</span> h, <span class="keyword">int</span> length)</span> </span>&#123;  <span class="comment">//jdk1.7的源码，jdk1.8没有这个方法，但是实现原理一样的</span></span><br><span class="line">     <span class="keyword">return</span> h &amp; (length-<span class="number">1</span>);  <span class="comment">//第三步 取模运算</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>详细的过程是：首先得到key的hashcode值，然后将他的高16位和l低16位进行异或运算得到一个hash值，这样做的原因是即使桶数组长度比较小的时候，hashcode的高位依然能够参与到桶数组的索引的确定中，这样可以使得元素的分布更加分散，降低hash冲突，同时不会有太大的开销；最后将上一步得到的hash值与桶数组的长度-1进行&amp;运算，这是hashmap中在速度上进行的优化，当桶数组的长度为2的整数次幂时，hash &amp;(桶的长度-1)与hash%(桶的长度)得到的结果是一样的，但是位运算的速度要比算术运算的速度快。<br><img src="https://liuwuwu.github.io/picture/计算下标的例子.png" alt="计算下标的例子"></p>
-<h4 id="put方法"><a href="#put方法" class="headerlink" title="put方法"></a>put方法</h4><p><img src="https://liuwuwu.github.io/picture/hashmap的put流程.png" alt="hashmap的put流程"><br>put方法的源码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">  <span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</span><br><span class="line">  <span class="comment">// 对key的hashCode()做hash</span></span><br><span class="line">    <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></span><br><span class="line"><span class="function"><span class="params">               <span class="keyword">boolean</span> evict)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</span><br><span class="line">    <span class="comment">// 步骤①：tab为空则创建</span></span><br><span class="line">   <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</span><br><span class="line">       n = (tab = resize()).length;</span><br><span class="line">   <span class="comment">// 步骤②：计算index，并对null做处理 </span></span><br><span class="line">   <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>) </span><br><span class="line">      tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</span><br><span class="line">   <span class="keyword">else</span> &#123;</span><br><span class="line">       Node&lt;K,V&gt; e; K k;</span><br><span class="line">       <span class="comment">// 步骤③：节点key存在，直接覆盖value</span></span><br><span class="line">      <span class="keyword">if</span> (p.hash == hash &amp;&amp;</span><br><span class="line">           ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">           e = p;</span><br><span class="line">       <span class="comment">// 步骤④：判断该链为红黑树</span></span><br><span class="line">       <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">          e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</span><br><span class="line">      <span class="comment">// 步骤⑤：该链为链表</span></span><br><span class="line">       <span class="keyword">else</span> &#123;</span><br><span class="line">           <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</span><br><span class="line">               <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;</span><br><span class="line">                  p.next = newNode(hash, key,value,<span class="keyword">null</span>);</span><br><span class="line">                      <span class="comment">//链表长度大于8转换为红黑树进行处理</span></span><br><span class="line">                  <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st  </span></span><br><span class="line">                       treeifyBin(tab, hash);</span><br><span class="line">                   <span class="keyword">break</span>;</span><br><span class="line">               &#125;</span><br><span class="line">                  <span class="comment">// key已经存在直接覆盖value</span></span><br><span class="line">              <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">           ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))      <span class="keyword">break</span>;</span><br><span class="line">               p = e;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">      </span><br><span class="line">       <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></span><br><span class="line">           V oldValue = e.value;</span><br><span class="line">           <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</span><br><span class="line">               e.value = value;</span><br><span class="line">           afterNodeAccess(e);</span><br><span class="line">           <span class="keyword">return</span> oldValue;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   ++modCount;</span><br><span class="line">   <span class="comment">// 步骤⑥：超过最大容量 就扩容</span></span><br><span class="line">   <span class="keyword">if</span> (++size &gt; threshold)</span><br><span class="line">       resize();</span><br><span class="line">   afterNodeInsertion(evict);</span><br><span class="line">   <span class="keyword">return</span> <span class="keyword">null</span> &#125;</span><br></pre></td></tr></table></figure></p>
-<p>1.首先判断桶数组是否为空，如果为空或者长度为0则新建一个桶数组（初始话长度为16）；<br>2.判断插入元素所对应的桶数组的索引处是否为空，如果为空则说明暂时没有元素与该元素产生hash冲突，直接将元素插入到该位置，在判断hashmap是否需要扩容（比较size和最大容量threashold的大小）；<br>3.如果插入元素所对应的位置不为空，则比较该元素的key和桶所对应的首元素的key是否相等（通过hashcode和equals方法进行判断），如果相等则直接替换他们的；<br>4.如果key和桶中首元素的key不相等，则再判断桶中是否是红黑树，如果是的则直接在红黑树中插入键值对；<br>5.如果不是红黑树则需要遍历桶，如果在遍历过程总找到key相等的就直接替换，否则看桶中的元素是否大于8,大于8则转换为红黑树进行存储，然后在红黑树中进行插入。不大于8则进行链表的插入操作；<br>6.插入成功后判断是否需要扩容；</p>
-<h4 id="get方法"><a href="#get方法" class="headerlink" title="get方法"></a>get方法</h4><p>get方法的源码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">getNode</span><span class="params">(<span class="keyword">int</span> hash, Object key)</span> </span>&#123;</span><br><span class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; <span class="keyword">int</span> n; K k;</span><br><span class="line">    <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">        (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (first.hash == hash &amp;&amp; <span class="comment">// always check first node</span></span><br><span class="line">            ((k = first.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">            <span class="keyword">return</span> first;</span><br><span class="line">        <span class="keyword">if</span> ((e = first.next) != <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</span><br><span class="line">                <span class="keyword">return</span> ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</span><br><span class="line">            <span class="keyword">do</span> &#123;</span><br><span class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</span><br><span class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</span><br><span class="line">                    <span class="keyword">return</span> e;</span><br><span class="line">            &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>get方法的原理相对来说比较简单，首先计算key的hashcode值，然后进一步计算得到桶数组的索引，相等则返回value不相等则通过遍历来查找（如果为红黑树储存则在红黑树中进行查找，如果为链表则在链表总进行查找）。若找不到则返回null;</p>
-<h4 id="答疑"><a href="#答疑" class="headerlink" title="答疑"></a>答疑</h4><p>不知道大家注意没有jdk1.8之前采用的是头部插入而jdk1.8中采用的是尾部插入，为何会这样呢？本人查看了许多资料发现众说纷纭，有的人说头部插入是为了避免尾部遍历，但是我认为这样的解释有点牵强，我觉得只要还是为了提高效率，可能sun公司的工程师认为后插入的元素使用的概率比较大，放在头部可以提高操作的性能。后来改为尾部插入的原因是因为尾部插入可以保证元素的顺序和插入的顺序相同同时使得hashmap的性能更加稳定。同时插入操作也十分简单方便，只需要将原来链表首元素赋值给待插入元素的next属性即可。</p>
-<h4 id="HashMap的线程安全性分析"><a href="#HashMap的线程安全性分析" class="headerlink" title="HashMap的线程安全性分析"></a>HashMap的线程安全性分析</h4><p>hashmap发生死锁的原因主要是在并发环境中，当有多个线程进行扩容时候形成了一个闭合链条，导致死循环。具体讲解可以参考博客</p>
-<p><a href="https://zhuanlan.zhihu.com/p/21673805" target="_blank" rel="noopener">Java 8系列之重新认识HashMap</a></p>
-<p><a href="https://blog.csdn.net/luxia_24/article/details/52344367" target="_blank" rel="noopener">关于上上文hashmap的深入-hashmap产生死锁的详解</a></p>
+            <h4 id="Redis事务简介"><a href="#Redis事务简介" class="headerlink" title="Redis事务简介"></a>Redis事务简介</h4><p>Redis事务可以一次执行多个命令，并且带有以下两个重要的保证：</p>
+<ol>
+<li>事务是一个单独隔离操作：事务中所有的命令都会序列化，按顺序地执行。事务在执行过程中，不会被其他客户端发送过来的命令所打断；</li>
+<li>事务是一个原子性，要么全部执行成功，要么全部都没有被处理；<br>一个事务从开始到执行会经历以下三个阶段：</li>
+<li>开始事务；</li>
+<li>命令入队；</li>
+<li>执行事务；<br>redis中事务与关系数据库中的事务的联系：与关系型数据库中的事务不同，redis中的事务是不支持回滚的(语法错误除外)，redis中的事务机制保证事务中的指令一次执行不会被其他指令插入影响；</li>
+</ol>
+<h4 id="redis中的事务命令"><a href="#redis中的事务命令" class="headerlink" title="redis中的事务命令"></a>redis中的事务命令</h4><p>Discard：取消事务，放弃执行事务块内的所有指令；<br>Exec:执行所有事务块内的命令；<br>Multi:标记一个事务块的开始；<br>Unwatch:取消watch命令对所有key的监视；<br>Watch key[key…]：监视一个key，如果在事务执行之前这个(或者这些key)被其他命令所改动，那么事务将被打断；</p>
+<h4 id="redis事务中的错误"><a href="#redis事务中的错误" class="headerlink" title="redis事务中的错误"></a>redis事务中的错误</h4><p>在redis事务中，可能发生两种错误：</p>
+<ol>
+<li><p>命令可能排队失败，如命令的语法错误(如参数的数量错误…)，或者一些重要的环境问题，如内存不足，从 Redis 2.6.5 开始, 在命令排队期间发生错误，Redis会拒绝执行EXEC，并返回一个错误，然后自动放弃这个事务。这可以理解为Java中的编译时期的错误告诉开发者必须自己先进行处理。 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line">&quot;22&quot;</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set k1 89</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k99 99</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k900</span><br><span class="line">(error) ERR wrong number of arguments for &apos;set&apos; command</span><br><span class="line">127.0.0.1:6379&gt; get k99</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">(error) EXECABORT Transaction discarded because of previous errors. //事务执行失败</span><br><span class="line">127.0.0.1:6379&gt; get k1   //里面的操作都没有被执行</span><br><span class="line">&quot;22&quot;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当exec后发现一些指令可能执行失败了，如在一个字符串上进行了加的操作。此时其他的正确的操作仍然执行成功；这可以理解为java中的运行时错误。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line">&quot;22&quot;</span><br><span class="line">127.0.0.1:6379&gt; multi</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379&gt; set k1 90</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; set k2 string</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; incr k2</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; get k1</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; get k2</span><br><span class="line">QUEUED</span><br><span class="line">127.0.0.1:6379&gt; exec</span><br><span class="line">1) OK</span><br><span class="line">2) OK</span><br><span class="line">3) (error) ERR value is not an integer or out of range</span><br><span class="line">4) &quot;90&quot;</span><br><span class="line">5) &quot;string&quot;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="Redis中为何不支持事务回滚"><a href="#Redis中为何不支持事务回滚" class="headerlink" title="Redis中为何不支持事务回滚"></a>Redis中为何不支持事务回滚</h4><p>Redis命令在事务中可能会执行失败，但是redis事务中不会回滚，而是继续会执行余下的命令。这样做的主要原因是：</p>
+<ol>
+<li>只有当发生语法错误，redis命令才会执行失败，这意味着这些错误都是程序性的错误，这类错误在开发过程中就能够解决，几乎不会出现在生产环境中；</li>
+<li>由于不要进行回滚，redis内部更加简单，运行速度更快；</li>
+</ol>
+<h4 id="乐观锁"><a href="#乐观锁" class="headerlink" title="乐观锁"></a>乐观锁</h4><p>WATCH 命令为事务提供一个check-and-set (CAS) 行为。这个命令使得Exec的执行必须要满足一个条件：如果watch的keys 没有一个被更改(但它们可以在事务中被修改)，则执行事务；不然，就不会执行这个事务。(注意，如果你 WATCH了一个有生命周期的key，并且这个key过期了， EXEC 依然会执行)</p>
 
           
         
@@ -886,7 +1354,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/11/ConcurrentHashMap/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/14/Redis学习笔记——Redis持久化/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -905,7 +1373,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/11/ConcurrentHashMap/" itemprop="url">ConcurrentHashMap</a></h1>
+                <a class="post-title-link" href="/2018/09/14/Redis学习笔记——Redis持久化/" itemprop="url">Redis学习笔记——Redis持久化</a></h1>
         
 
         <div class="post-meta">
@@ -917,8 +1385,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-11T19:59:42+08:00">
-                2018-07-11
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-14T18:13:51+08:00">
+                2018-09-14
               </time>
             
 
@@ -940,8 +1408,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
+                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis学习笔记</span>
                   </a>
                 </span>
 
@@ -979,13 +1447,16 @@
       
         
           
-            <h4 id="ConcurrentHashMap如何定位"><a href="#ConcurrentHashMap如何定位" class="headerlink" title="ConcurrentHashMap如何定位"></a>ConcurrentHashMap如何定位</h4><p>我们都知道ConcurrentHashMap中用到了分段锁的技术实现了线程安全性，与HashTable相比，实现了了锁的分离，ConcurrentHashMap在进行元素定位时候首先判断元素位于哪一个Segment上，然后在判断元素具体位于哪一个桶上面。默认的并发级别为16(Segment的个数)，在确定Segment时候，首先将hash值无符号的右移28位，这样仅仅通过高4位就可以确定segment的位置。确定桶的方式和HashMap中的方式很相似，就是通过&amp;运算符。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hash &gt;&gt;&gt; segmentShift &amp; segmentMask　　 <span class="comment">// 定位Segment所使用的hash算法</span></span><br><span class="line"><span class="keyword">int</span> index = hash &amp; (tab.length - <span class="number">1</span>);　　 <span class="comment">// 定位HashEntry所使用的hash算法</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="ConcurrentHashMap如何size"><a href="#ConcurrentHashMap如何size" class="headerlink" title="ConcurrentHashMap如何size"></a>ConcurrentHashMap如何size</h4><p>要统计整个ConcurrentHashMap里元素的数量,就必须统计所有Segment里元素的数量后计总.<br>Segment里的全局变量count是一个volatile,在并发场景下,是不是直接把所有Segment的count相加就可以得到整个ConcurrentHashMap大小了呢?不是的<br>虽然相加时可以获取每个Segment的count的最新值,但是可能累加前使用的count发生了变化,那么统计结果就不准了.<br>所以,最安全的做法是在统计size的时候把所有Segment的put、remove和clean方法全部锁住,但是这种做法显然非常低效.<br>因为在累加count操作过程中,之前累加过的count发生变化的几率非常小,所以<br>ConcurrentHashMap的做法是先尝试2次通过不锁Segment的方式来统计各个Segment大小,如果统计的过程中,count发生了变化,则再采用加锁的方式来统计所有Segment的大小.<br>那么ConcurrentHashMap又是如何判断在统计的时候容器是否发生了变化呢?<br>使用modCount变量,在put、remove和clean方法里操作元素前都会将变量modCount进行加1,那么在统计size前后比较modCount是否发生变化,从而得知容器的大小是否发生变化.</p>
-<h4 id="put-、remove-）、get（）方法"><a href="#put-、remove-）、get（）方法" class="headerlink" title="put()、remove(）、get（）方法"></a>put()、remove(）、get（）方法</h4><p>关于源码的讲解可以参考这几篇文章</p>
-<p><a href="https://www.cnblogs.com/dolphin0520/p/3932905.html" target="_blank" rel="noopener">并发容器之ConcurrentHashMap</a></p>
-<p><a href="https://blog.csdn.net/varyall/article/details/80317467" target="_blank" rel="noopener">ConcurrentHashMap put</a></p>
-<h4 id="对ConcurrentHashMap的迭代遍历"><a href="#对ConcurrentHashMap的迭代遍历" class="headerlink" title="对ConcurrentHashMap的迭代遍历"></a>对ConcurrentHashMap的迭代遍历</h4><p>在对hashmap进行迭代遍历时，一旦迭代器创建了就不能调用hashmap的put和rempve方法进行更改，不然的话就会导致ConcurrentModificationException异常，只能通过调用迭代器的remove方法进行删除，这是因为直接调用map的put或者remove方法将导致modcount和exceptmodcount不一致，而在调用迭代器的remove方法时会对这两者进行同步操作。对concurrenthashmap进行迭代时候，可以对map直接进行修改，并且这些修改在迭代器进行遍历时候也会有体现。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ConcurrentHashMapTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        <span class="comment">//一个线程对ConcurrentHashMap中的数据进行修改，一个线程对其中的数据进行遍历</span></span><br><span class="line">        ConcurrentHashMap&lt;Integer,String&gt; concurrentHashMap=<span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line">        concurrentHashMap.put(<span class="number">1</span>,<span class="string">"张三"</span>);</span><br><span class="line">        concurrentHashMap.put(<span class="number">2</span>,<span class="string">"李四"</span>);</span><br><span class="line">        concurrentHashMap.put(<span class="number">3</span>,<span class="string">"王五"</span>);</span><br><span class="line">        concurrentHashMap.put(<span class="number">4</span>,<span class="string">"赵六"</span>);</span><br><span class="line">        System.out.println(<span class="string">"修改前concurrenthashmap中的数据为"</span>+concurrentHashMap);</span><br><span class="line">        <span class="comment">//新建一个线程对map中的数据进行更改</span></span><br><span class="line">        Thread A= <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">4000</span>);</span><br><span class="line">                    concurrentHashMap.put(<span class="number">5</span>,<span class="string">"顺治皇帝"</span>);</span><br><span class="line">                    concurrentHashMap.put(<span class="number">4</span>,<span class="string">"刘武武"</span>);</span><br><span class="line">                    System.out.println(<span class="string">"---------------------数据修改成功了可以进行测试"</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        A.start();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//新建一个遍历线程</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    Thread.sleep(<span class="number">2000</span>);</span><br><span class="line">                    System.out.println(<span class="string">"迭代器中进行遍历的结果为："</span>);</span><br><span class="line">                    Iterator&lt;Map.Entry&lt;Integer,String&gt;&gt; it=concurrentHashMap.entrySet().iterator();</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">for</span>(Map.Entry entry:concurrentHashMap.entrySet())&#123;</span><br><span class="line">                        System.out.print(entry.getKey());</span><br><span class="line">                        System.out.println(entry.getValue());</span><br><span class="line">                       <span class="comment">// Thread.sleep(500);</span></span><br><span class="line">                        A.join();</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><a href="https://www.cnblogs.com/zhuawang/p/4779649.html" target="_blank" rel="noopener">ConcurrentHashMap使用要点</a></p>
+            <h4 id="Redis持久化的定义"><a href="#Redis持久化的定义" class="headerlink" title="Redis持久化的定义"></a>Redis持久化的定义</h4><p>Redis的数据操作都在内存中进行，如果发生服务器宕机，内存中的数据就会丢失。持久化就是将数据保存在磁盘上，redis中常用的持久化方法为：RDB和AOF;</p>
+<h4 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h4><p>RDB方式就是将redis中的数据生成一个完整的快照，然后以二进制文件的形式保存在磁盘上，当需要进行恢复时，在从磁盘加载到内存中。</p>
+<h5 id="三种触发方式"><a href="#三种触发方式" class="headerlink" title="三种触发方式"></a>三种触发方式</h5><p>1.save命令触发：这种触发方式是一种同步触发方式，该方式会造成Redis的阻塞。所有的数据操作命令都要排队等他完成。<br>文件策略：他会生成一个临时文件，save执行完后就会替换老的文件；<br>2.bgsave命令触发方式：这种方式是一种异步方式，客户端对服务器下达bgsave命令时，redis会fork出一个子进程进行RDB文件的生成，当RDB生成完毕后子进程会反馈给主进程。fork子进程时也会阻塞，不过正常情况下fork的过程非常快。<br>文件策略：和save的相同；<br>save触发方式和bgsave触发方式的比较：<br>1.save触发方式是同步的，会阻塞客户端的操作，而bgsave触发方式是异步的基本上不会阻塞客户端的操作(除了fork子进程的时候会阻塞，但是这个过程很快)；<br>2.save触发方式实在主进程中进行RDB文件的生成，而bgsave是在子进程中进行RDB文件的生成；<br>3.save方式不会消耗内存，但是bgsave fork一个子进程中会消耗内存；<br>3.规则自动触发方式<br>当满足一定的规则时，会自动生成文件，这些规则需要在配置文件中进行配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">900 1    900秒内改变1条数据会自动生成RDB文件</span><br><span class="line">300 10   300秒内改变10条数据，会自动生成RDB文件</span><br><span class="line">60  10000  60秒内改变1万条数据，会自动生成RDB文件</span><br></pre></td></tr></table></figure></p>
+<p>4.其它的一些触发方式<br>1.全量复制：主从复制时，master会自动生成RDB文件；<br>2.debug reload:提供debug级别的重启，不清空内存的一种重启方式，但是会自动生成RDB文件；<br>3.shutdown:当执行shutdown指令时，会自动生成RDB文件；</p>
+<h5 id="RDB持久化的优缺点"><a href="#RDB持久化的优缺点" class="headerlink" title="RDB持久化的优缺点"></a>RDB持久化的优缺点</h5><p>RDB方式进行持久化时，速度快，生成的文件比较小，但是在生成快照时候，会造成最后一个分片时间内操作的数据的丢失；</p>
+<h4 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h4><p>AOF持久化就是将所有的写操作都写到日志文件中，当服务器发生宕机时，只需要重新从头到尾执行一下这个文件就可以了；<br>AOF的三种策略：<br>always:每一步写操作立即同步到日志文件中；优点是即使宕机也不会存在数据的丢失，缺点是频繁的进行IO操作， 对系统的性能影响较大；<br>everysec:每秒中同步一次；缺点是会丢失最后一秒钟的数据<br>no:刷新策略交给操作系统；</p>
+<h4 id="AOF重写"><a href="#AOF重写" class="headerlink" title="AOF重写"></a>AOF重写</h4><p>使用AOF持久化的时候，有一个重要的问题就是随着操作的增多，日志文件会越来越大，那么有什么方法解决这个问题呢？redis采用重写的方式有效的解决了这个问题。AOF重写就是把过期的、没用的、重复的以及可优化的命令，进行化简。只取最终有价值的结果。虽然写入操作很频繁，但系统定义的key的量是相对有限的。AOF重写并不是针对原来的日志文件，而是对内存中的数据进行一次回溯，回溯成aof文件。</p>
+<h5 id="AOF重写的触发方式"><a href="#AOF重写的触发方式" class="headerlink" title="AOF重写的触发方式"></a>AOF重写的触发方式</h5><p>1.bgrewriteaof命令触发AOF重写：redis客户端向Redis发bgrewriteaof命令，redis服务端fork一个子进程去完成AOF重写。<br>2.AOF自动重写的触发时机，同时满足以下两点）：<br>aof_current_size &gt; auto-aof-rewrite-min-size<br>aof_current_size - aof_base_size/aof_base_size &gt; auto-aof-rewrite-percentage</p>
+<h4 id="两种持久化方式的比较"><a href="#两种持久化方式的比较" class="headerlink" title="两种持久化方式的比较"></a>两种持久化方式的比较</h4><p>1.RDB持久化方式数据恢复的速度快，但是会丢失生成最后一次快照后的数据，适合规模较大的数据但是对数据的完整性不是很敏感；AOF持久化可以保证数据的完整性，但是恢复的速度比较慢；<br>2.RDB文件的体积小，AOF日志文件的体积大；</p>
+<h4 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h4><p>RDB持久化方式和AOF持久化方式可以同时存在，当两者同时存在时，进行数据恢复时会选择AOF进行数据恢复，因为它保存的数据更加完整。</p>
 
           
         
@@ -1034,7 +1505,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/03/同步工具类之信号量/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/12/Redis学习笔记——五大常用的数据类型之ZSet(SortedSet)/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -1053,7 +1524,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/03/同步工具类之信号量/" itemprop="url">同步工具类之信号量</a></h1>
+                <a class="post-title-link" href="/2018/09/12/Redis学习笔记——五大常用的数据类型之ZSet(SortedSet)/" itemprop="url">Redis学习笔记——五大常用的数据类型之ZSet(SortedSet)</a></h1>
         
 
         <div class="post-meta">
@@ -1065,8 +1536,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-03T19:08:32+08:00">
-                2018-07-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-12T14:45:27+08:00">
+                2018-09-12
               </time>
             
 
@@ -1088,8 +1559,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
+                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis学习笔记</span>
                   </a>
                 </span>
 
@@ -1127,7 +1598,12 @@
       
         
           
-            <h4 id="信号量-Semaphore-简介"><a href="#信号量-Semaphore-简介" class="headerlink" title="信号量(Semaphore)简介"></a>信号量(Semaphore)简介</h4><p>Java中的信号量是用来控制多个线程对同一个资源的访问的，每个线程通过acquire()方法获得访问的许可，通过release()方法释放这个许可，当这个许可用完的时候后面的线程将无法访问该资源，被阻塞直到有许可被释放。我们可以这样理解，一个厕所的坑位是有限的，先到先得，后面到的需要等到前面的人处理完了之后才能上。如果前面的人没有上完，没办法你只能在外面等着。那我们就直接以上厕所的例子来讲解这个同步工具类：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SemaphoreTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        ExecutorService executorService= Executors.newFixedThreadPool(<span class="number">9</span>);</span><br><span class="line">        Semaphore  s=<span class="keyword">new</span> Semaphore(<span class="number">5</span>,<span class="keyword">true</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">9</span>;i++)&#123;</span><br><span class="line">            executorService.execute(<span class="keyword">new</span> Thread(<span class="keyword">new</span> task(s,i)));</span><br><span class="line">        &#125;</span><br><span class="line">        executorService.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">task</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    Semaphore semaphore;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">task</span><span class="params">(Semaphore semaphore,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">      <span class="keyword">this</span>.count=count;</span><br><span class="line">      <span class="keyword">this</span>.semaphore=semaphore;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            semaphore.acquire();</span><br><span class="line">            System.out.println(<span class="string">"我是第"</span>+count+<span class="string">"获得许可的"</span>);</span><br><span class="line">            Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">            System.out.println(count+<span class="string">"上完厕所了，感觉很舒服。。。。。"</span>);</span><br><span class="line">            semaphore.release();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+            <p>zset中的数据就是在set的基础上，加一个score值，之前set是k1 v1 v2 v3 现在是k1 score1 v1 socer2 v2;<br>1.zadd/zrange<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zadd zset1 60 v1 70 v2 80 v3</span><br><span class="line">(integer) 3</span><br><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1 withscores //输出的元素带score</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;60&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;80&quot;</span><br><span class="line">5) &quot;v4&quot;</span><br><span class="line">6) &quot;90&quot;</span><br><span class="line">7) &quot;v5&quot;</span><br><span class="line">8) &quot;100&quot;</span><br></pre></td></tr></table></figure></p>
+<p>2.zrangebyscore key 开始score结束score:查询在某一个范围之间的元素<br>“(“:表示不包含，limit:作用是限制返回元素的个数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v4&quot;</span><br><span class="line">5) &quot;v5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 70 90 //70-90之间的元素，包含70也包含90</span><br><span class="line">1) &quot;v2&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br><span class="line">3) &quot;v4&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 70 (90</span><br><span class="line">1) &quot;v2&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 (70 (90  //70-90之间的元素，不包含70也不包含90</span><br><span class="line">1) &quot;v3&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 60 90</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v4&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrangebyscore zset1 60 90 limit 2 2 //从第二个元素开始取两个</span><br><span class="line">1) &quot;v3&quot;</span><br><span class="line">2) &quot;v4&quot;</span><br></pre></td></tr></table></figure></p>
+<p>3.zrem key 某score下对应的value值，作用是删除元素<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v2&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v4&quot;</span><br><span class="line">5) &quot;v5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrem zset1 v2</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br><span class="line">3) &quot;v4&quot;</span><br><span class="line">4) &quot;v5&quot;</span><br></pre></td></tr></table></figure></p>
+<p>4.zcard/zcount key score区间/zrank key values值，作用是获得下标值/zsocre key 对应的值，获得分数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrange zset1 0 -1 withscores</span><br><span class="line">1) &quot;v1&quot;</span><br><span class="line">2) &quot;60&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;80&quot;</span><br><span class="line">5) &quot;v4&quot;</span><br><span class="line">6) &quot;90&quot;</span><br><span class="line">7) &quot;v5&quot;</span><br><span class="line">8) &quot;100&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zcard zset1 //分数和后面的值是一体的，所以为4</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379[6]&gt; zcount zset1 60 80 //统计分数在60到80分之间的数量</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379[6]&gt; zrank zset1 v4  //获得v4的排名从0开始</span><br><span class="line">(integer) 2</span><br><span class="line">127.0.0.1:6379[6]&gt; zscore zset1 v4 //获得v4的score</span><br><span class="line">&quot;90&quot;</span><br></pre></td></tr></table></figure></p>
+<p>5.zrevrank key values值，作用是逆序获得下标值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrevrank zset1 v4 //倒过来的顺序，也是从0开始计数</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure></p>
+<p>6.zrevrange/zrevrangebyscore key score1 score2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; zrevrange zset1 0 -1 //逆序遍历元素</span><br><span class="line">1) &quot;v5&quot;</span><br><span class="line">2) &quot;v4&quot;</span><br><span class="line">3) &quot;v3&quot;</span><br><span class="line">4) &quot;v1&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; zrevrangebyscore zset1 90 70 //注意范围也要倒着写</span><br><span class="line">1) &quot;v4&quot;</span><br><span class="line">2) &quot;v3&quot;</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -1176,7 +1652,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/03/同步工具类之栅栏/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/10/Redis学习笔记——五大常用的数据类型之Hash/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="LiuWuWu">
@@ -1195,7 +1671,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2018/07/03/同步工具类之栅栏/" itemprop="url">同步工具类之栅栏</a></h1>
+                <a class="post-title-link" href="/2018/09/10/Redis学习笔记——五大常用的数据类型之Hash/" itemprop="url">Redis学习笔记——五大常用的数据类型之Hash</a></h1>
         
 
         <div class="post-meta">
@@ -1207,8 +1683,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-03T15:34:03+08:00">
-                2018-07-03
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-09-10T16:22:21+08:00">
+                2018-09-10
               </time>
             
 
@@ -1230,8 +1706,8 @@
               
               
                 <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
+                  <a href="/categories/Redis学习笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">Redis学习笔记</span>
                   </a>
                 </span>
 
@@ -1269,441 +1745,11 @@
       
         
           
-            <h3 id="栅栏简介"><a href="#栅栏简介" class="headerlink" title="栅栏简介"></a>栅栏简介</h3><p>栅栏和闭锁的功能有点相似，但是也有所不同，不然它也就没有存在的必要了。他们之间的差异我们在后文中会进行总结。栅栏就是设置一个关卡， 等所有要到达的线程都到达汇合了之后这些线程才可以同时继续执行，有点不抛弃不放弃任何一个小伙伴的意思。就像在旅游的时候，大巴车肯定会等到所有的人都到达了之后才会出发，不然司机肯定会被投诉的。本文主要介绍两种栅栏：CyclicBarrier和Exchanger。</p>
-<h3 id="CyclicBarrier"><a href="#CyclicBarrier" class="headerlink" title="CyclicBarrier"></a>CyclicBarrier</h3><p>CyclicBarrier可以使得一定数量的参与方反复的在栅栏处汇集，他在并行迭代算法中非常有用，我们可以将一个问题划分为几个相互独立的子问题，在不同的线程中进行计算，先到达的线程等待其他线程，当所有的线程都到达栅栏处时一起往下执行。栅栏可以通过重置的方式继续执行。<br>接下来为了讲解问题的方便，我将以旅游团为例进行介绍：出发的时候必须等到所有人到达了之后在开车，每参观完一个景点都要清点人数，确定大家都到齐之后去下一个经典，返回前也要如此。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CyclicBarrierTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        <span class="comment">//首先新建一个CyclicBarrier</span></span><br><span class="line">        CyclicBarrier cb=<span class="keyword">new</span> CyclicBarrier(<span class="number">6</span>);</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">           <span class="keyword">new</span> Thread(<span class="keyword">new</span> beforeTraval(cb,i)).start();</span><br><span class="line">       &#125;</span><br><span class="line">       cb.await();</span><br><span class="line">       System.out.println(<span class="string">"----------------------------"</span>);</span><br><span class="line">        System.out.println(<span class="string">"准备好了，出发....."</span>);</span><br><span class="line">        cb.reset();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> Traval1(cb,i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">        cb.await();</span><br><span class="line">        System.out.println(<span class="string">"----------------------------"</span>);</span><br><span class="line">        System.out.println(<span class="string">"都集合完了我们回家....."</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">beforeTraval</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CyclicBarrier cb;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">beforeTraval</span><span class="params">(CyclicBarrier cb,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cb=cb;</span><br><span class="line">        <span class="keyword">this</span>.count=count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">500</span>);</span><br><span class="line">            System.out.println(<span class="string">"第"</span>+count+<span class="string">"个游客已经准备就绪了"</span>);</span><br><span class="line">            cb.await();</span><br><span class="line">           <span class="comment">// Thread.currentThread().sleep(1000);</span></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Traval1</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CyclicBarrier cb;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Traval1</span><span class="params">(CyclicBarrier cb,<span class="keyword">int</span> count)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.cb=cb;</span><br><span class="line">        <span class="keyword">this</span>.count=count;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">500</span>);</span><br><span class="line">            System.out.println(<span class="string">"第"</span>+count+<span class="string">"个游客已经游览完长城了"</span>);</span><br><span class="line">            cb.await();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="Exchanger"><a href="#Exchanger" class="headerlink" title="Exchanger"></a>Exchanger</h3><p>Exchanger一般用于两个工作线程之间交换数据,当一个线程先到达后，就会在那里等待，知道另外一个线程出现，是不是有点像香港电影中的黑帮交易，双方汇合之后一手交钱一手交货。 从官方的javadoc可以知道，当一个线程到达exchange调用点时，如果它的伙伴线程此前已经调用了此方法，那么它的伙伴会被调度唤醒并与之进行对象交换，然后各自返回。如果它的伙伴还没到达交换点，那么当前线程将会被挂起，直至伙伴线程到达——完成交换正常返回；或者当前线程被中断——抛出中断异常；又或者是等候超时——抛出超时异常。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExchangerTest</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        Exchanger ex=<span class="keyword">new</span> Exchanger();</span><br><span class="line">        <span class="comment">//新建一个线程，他有钱，需要与别人交换糖果</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                <span class="keyword">int</span> money=<span class="number">100</span>;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">"我有钱我想和别人交换糖果"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    String a=(String)ex.exchange(money);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我拿钱换了"</span>+a);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">        <span class="comment">//两外一个线程有糖果想要换钱</span></span><br><span class="line">        <span class="keyword">new</span> Thread(<span class="keyword">new</span> Runnable()&#123;</span><br><span class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">                String suger=<span class="string">"超级好吃的巧克力糖果"</span>;</span><br><span class="line">                System.out.println(Thread.currentThread().getName()+<span class="string">"我有糖果我想换钱"</span>);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="keyword">int</span> a=(<span class="keyword">int</span>)ex.exchange(suger);</span><br><span class="line">                    System.out.println(Thread.currentThread().getName()+<span class="string">"我拿糖果换了"</span>+a+<span class="string">"元钱"</span>);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="栅栏和闭锁的区别"><a href="#栅栏和闭锁的区别" class="headerlink" title="栅栏和闭锁的区别"></a>栅栏和闭锁的区别</h3><p>1.栅栏主要是等待线程(所有的线程都同时到达了，这些线程才开始往下继续执行)，而闭锁主要是等待事件（一个或者一组线程必须等到某一个或者一组他们需要的事件发生了才继续执行）。栅栏是都到了往下继续进行，闭锁是某一事件发生了（裁判枪响了）继续进行。<br>2.栅栏是可以重复使用的，可以进行重置，而闭锁是一次性的；<br>3.栅栏是通过查看await()的个数决定是否触发，闭锁是通过countdown()方法来决定是否触发。一个是加法计数，一个是减法计数。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/02/同步工具类之闭锁/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/07/02/同步工具类之闭锁/" itemprop="url">同步工具类之闭锁</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-02T09:31:53+08:00">
-                2018-07-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>同步工具类可以是任何一个对象，只要它能够根据自身的状态来协调线程的控制流，常用的同步工具类包括信号量、栅栏、闭锁。所有的同步工具类都包含一些特定的结构工作化属性，他们封装了一些状态，这些状态决定了执行同步工具类的线程是继续执行还是等待。此外还提供了一些方法对状态进行操作，还提供了另外一些方法用于高效的等待同步工具类进入到预期的状态。<br>———— 摘录至并发编程实战</p>
-<h3 id="闭锁"><a href="#闭锁" class="headerlink" title="闭锁"></a>闭锁</h3><p>闭锁就像是一扇门，只有到达了结束状态时这扇门才会打开，换句话说没有接收到开门的指令谁也别想进来。感觉这就像古代的时候的城门，不到某一个具体的时间，不会开门。闭锁主要用来使得一个或者几个线程等待一组事件的发生。闭锁里有个计数器，每当一个事件发生计数器就减一(countdown()方法)，当计数器的值为0的时候就会打开这扇门。若有多条线程，其中一条线程需要等到其他所有线程准备完所需的资源后才能运行，这样的情况可以使用闭锁。接下来我就以赛跑比赛为例介绍一下闭锁的使用。众所周知在赛跑比赛中所有的选手都要等待裁判的发令枪响才能够出发，等到所有的选手都冲过终点比赛就结束了。所以我们可以选择使用两个闭锁，一个控制开始，一个控制结束。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.concurrent.CountDownLatch;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">countdownlatchteat</span> </span>&#123;</span><br><span class="line">    <span class="comment">//static int i=0;</span></span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> num=<span class="number">5</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String [] args)</span></span>&#123;</span><br><span class="line">        <span class="comment">//首先新建两个闭锁，一个控制开始，一个控制结束</span></span><br><span class="line">          CountDownLatch start=<span class="keyword">new</span> CountDownLatch(<span class="number">1</span>);</span><br><span class="line">          CountDownLatch end=<span class="keyword">new</span> CountDownLatch(num);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;<span class="number">6</span>;i++)&#123;</span><br><span class="line">            <span class="keyword">new</span> Thread(<span class="keyword">new</span> runner(start,end,i)).start();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">10000</span>);</span><br><span class="line">            System.out.println(<span class="string">"比赛开始"</span>);</span><br><span class="line">            start.countDown();</span><br><span class="line">            end.await();</span><br><span class="line">            System.out.println(<span class="string">"比赛结束"</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">runner</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    CountDownLatch start;</span><br><span class="line">    CountDownLatch end;</span><br><span class="line">    <span class="keyword">int</span> j;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">runner</span><span class="params">(<span class="keyword">final</span> CountDownLatch start,<span class="keyword">final</span> CountDownLatch end,<span class="keyword">int</span> i)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.end=end;</span><br><span class="line">        <span class="keyword">this</span>.start=start;</span><br><span class="line">        <span class="keyword">this</span>.j=i;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">           <span class="comment">// Thread.currentThread().sleep(1000);</span></span><br><span class="line">            System.out.println(<span class="string">"大家好，我是"</span>+j+<span class="string">"号运动员，我准备好了"</span>);</span><br><span class="line">            start.await();</span><br><span class="line">            System.out.println(j+<span class="string">"号运动员正在奋力的向前跑........."</span>);</span><br><span class="line">            Thread.currentThread().sleep(<span class="number">3000</span>);</span><br><span class="line">            System.out.println(j+<span class="string">"号运动员已经到达了终点"</span>);</span><br><span class="line">            end.countDown();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/24/hash冲突详解/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/24/hash冲突详解/" itemprop="url">Hash冲突详解</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T14:26:20+08:00">
-                2018-06-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/算法/" itemprop="url" rel="index">
-                    <span itemprop="name">算法</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h4 id="hash冲突简介"><a href="#hash冲突简介" class="headerlink" title="hash冲突简介"></a>hash冲突简介</h4><p>在Java编程语言中，最基本的数据结构有两种，一种是数组，另外一种是模拟引用，所有的数据结构都可以通过这两种数据结构进行构造，HashMap同样如此。HashMap在进行数据的存储的时候是通过hash算法计算键值的hash值来确定元素的储存位置的，如果hash函数设置的不是很合理就会出现不同的键值计算得到的hash值一样，这就是所谓的hash冲突。hash冲突十分普遍，一般来说很难避免，只能通过一定的手段降低冲突的风险。</p>
-<h4 id="hash冲突的解决办法"><a href="#hash冲突的解决办法" class="headerlink" title="hash冲突的解决办法"></a>hash冲突的解决办法</h4><p>1.开放地址法<br>所谓开放地址法就是在新开辟的数组中依次有序寻找空位进行存储。常用的开放地址法有三种：线性探测法、二次探测法、再哈希法。参考博客<a href="https://blog.csdn.net/cai2016/article/details/52728761?hmsr=toutiao.io&amp;utm_medium=toutiao.io&amp;utm_source=toutiao.io" target="_blank" rel="noopener">哈希表之开放地址的三种方法</a>。本文主要讲述一下线性探测法，所谓线性探测说白了就是看有没有空位置，没有空位置我就按照顺序找下去，知道找到空位置就把元素放进去。取元素的时候就首先根据hash值进行定位，如果那个位置的元素和我们要寻找的元素不相等，就顺序的找下去，不撞南墙不回头，直到找到那个元素为止。<br>2.再散列函数法<br>首先多定义几个函数f1、f2…，当f1函数出现hash冲突的时候就换一个哈希函数f2进行定位如果还是出现冲突再换一个函数….<br>3.链地址法<br>链地址法就是通过数组加链表的方式来处理hash冲突，首先定义一个链表数组，每个数组的元素就是一组hash值相同的链表，通过这种方法可以有效的减小查询的效率同时由于采用了链表的数据结构，元素之间的存储空间并不一定需要是连续的，可以节约内存空间，hashmap就是通过这种方式处理hash冲突的。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/24/同步容器/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="LiuWuWu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/liuwuwu.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Coder Paradise">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/06/24/同步容器/" itemprop="url">同步容器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-06-24T14:26:20+08:00">
-                2018-06-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
-                  <a href="/categories/并发编程/" itemprop="url" rel="index">
-                    <span itemprop="name">并发编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="容器的简介"><a href="#容器的简介" class="headerlink" title="容器的简介"></a>容器的简介</h3><p>Java中容器主要包括List、Queue、Set和Map其中前三个继承自Collection接口，而Map本身是一个接口。List中常用的是ArrayList和LinkedList其中ArrayList的底层实现是数组而LinkedList的底层实现是链表，前者进行数据的插入和删除不是很方便需要进行元素的复制，但是可以根据索引直接访问；而后者进行数据的插入和删除比较方便不需要进行元素的复制（链表的优势），但是不可以根据索引直接访问。Queue中常见的是PriorityQueue和LinkedList(没办法它既是爹又是妈，谁让他实现了这两个接口的呢)。Set中常见的是HashSet和TreeSet，众所周知Set的特点就是不能有重复的元素，TreeSet的底层实现是红黑树，其中存储的元素也是有序的，它是通过compareTo()方法或者传入的比较器来判断两个元素的大小以及判断是否重复的，HashSet中是通过equals()方法判断元素是否重复的，其中的元素是无序的；Map中比较常见的是HashMap，他的特点就是储存的是键值对，键值不能重复也不能为空。常见的集合类如下图所示：<br><img src="https://liuwuwu.github.io/picture/Collection.png" alt="常见的集合类"><br>像LinkedList、HashSet、TreeSet、HashMap等都是线程不安全的，在多线程环境中进行并发访问时容易出现问题关于这方面的问题我在后面的博客中会进行总结。为了解决这些问题就出现了同步容器。</p>
-<h3 id="同步容器"><a href="#同步容器" class="headerlink" title="同步容器"></a>同步容器</h3><h4 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h4><p>Java中常见的同步容器大概可以分为两类：<br>1.HashTable、Stack、Vector;<br>2.通过Collections类中的静态方法创建的类；<br>HashTable实现了Map接口，里面的所有方法都都通过内置锁进行了同步;<br><img src="https://liuwuwu.github.io/picture/tongbu.png" alt="">Vector实现了List接口，底层实现也是数组，其中的方法都通过内置锁进行了同步；Stack继承了Vector。这些类有个共同的特点就是里面的方法都是通过Synchornized关键字实现的，是不是这些同步容器类就一定是线程安全的呢？答案是否定的，在多线程环境中使用这些同步容器类时往往需要客户端进行额外的同步，不然还是容易出现线程的安全性。</p>
-<h4 id="性能分析"><a href="#性能分析" class="headerlink" title="性能分析"></a>性能分析</h4><p>1.因为同步容器类的底层实现是通过Synchornized关键字修饰方法实现的，所以对容器的并发访问都是串行执行的，这就五星之中降低了系统的性能（多个线程同时访问时会出现阻塞等待的情况）；<br>2.同步容器虽然能够确保一个时刻只有一个线程访问它，但是它不能够保证除了其他代码与他构成的整体的原子性，就像一个官员他自己虽然很清廉但是如果他所在部门的他的其他同事的不是很清廉，这仍然会影响整个部门的形象。所以就需要用户添加额外的同步机制进行协调处理；参考博客 <a href="https://www.cnblogs.com/dolphin0520/p/3933404.html" target="_blank" rel="noopener">Java并发编程：同步容器</a><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> Vector&lt;Integer&gt; vector = <span class="keyword">new</span> Vector&lt;Integer&gt;();</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">10</span>;i++)</span><br><span class="line">                vector.add(i);</span><br><span class="line">            Thread thread1 = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;vector.size();i++)</span><br><span class="line">                        vector.remove(i);</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;;</span><br><span class="line">            Thread thread2 = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">                    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;vector.size();i++)</span><br><span class="line">                        vector.get(i);</span><br><span class="line">                &#125;;</span><br><span class="line">            &#125;;</span><br><span class="line">            thread1.start();</span><br><span class="line">            thread2.start();</span><br><span class="line">            <span class="keyword">while</span>(Thread.activeCount()&gt;<span class="number">10</span>)   &#123;</span><br><span class="line">                 </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>3.对同步容器进行并发的迭代修改时会报ConcurrentModificationException异常，这个异常的出现原因就是迭代器在进行遍历时候会检查expectedModCount和modCount值是否相等，如果不相等就会抛出这个异常。但是单线程中在迭代器进行删除元素不会抛出这个异常，主要是调用迭代器的删除方法时会对这两个值进行同步。关于这个异常可以参考<a href="https://www.cnblogs.com/dolphin0520/p/3933551.html" target="_blank" rel="noopener">Java ConcurrentModificationException异常原因和解决方法</a></p>
+            <p>Hash数据类型仍然是KV模式，但是v是一个键值对<br>1.hset/hget/hmset/hmget/hgetall/hdel<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hset hash2 id 5</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hset hash2 age 77</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hset hash2 name liu</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hget hash2 id</span><br><span class="line">&quot;5&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hmset hash2 food xiangjiao drink coffer</span><br><span class="line">OK</span><br><span class="line">127.0.0.1:6379[6]&gt; hmget hash2 id name age</span><br><span class="line">1) &quot;5&quot;</span><br><span class="line">2) &quot;liu&quot;</span><br><span class="line">3) &quot;77&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hgetall hash2</span><br><span class="line"> 1) &quot;id&quot;</span><br><span class="line"> 2) &quot;5&quot;</span><br><span class="line"> 3) &quot;age&quot;</span><br><span class="line"> 4) &quot;77&quot;</span><br><span class="line"> 5) &quot;name&quot;</span><br><span class="line"> 6) &quot;liu&quot;</span><br><span class="line"> 7) &quot;food&quot;</span><br><span class="line"> 8) &quot;xiangjiao&quot;</span><br><span class="line"> 9) &quot;drink&quot;</span><br><span class="line">10) &quot;coffer&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hdel hash2 id</span><br><span class="line">(integer) 1</span><br><span class="line">127.0.0.1:6379[6]&gt; hgetall hash2</span><br><span class="line">1) &quot;age&quot;</span><br><span class="line">2) &quot;77&quot;</span><br><span class="line">3) &quot;name&quot;</span><br><span class="line">4) &quot;liu&quot;</span><br><span class="line">5) &quot;food&quot;</span><br><span class="line">6) &quot;xiangjiao&quot;</span><br><span class="line">7) &quot;drink&quot;</span><br><span class="line">8) &quot;coffer&quot;</span><br></pre></td></tr></table></figure></p>
+<p>2.hlen:判断hash中元素的个数；hexists key 在key里面某个值的key<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hlen hash2</span><br><span class="line">(integer) 4</span><br><span class="line">127.0.0.1:6379[6]&gt; hexists hash2 id</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379[6]&gt; hexists hash2 age</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure></p>
+<p>3.hkeys/hvals<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hkeys hash2</span><br><span class="line">1) &quot;age&quot;</span><br><span class="line">2) &quot;name&quot;</span><br><span class="line">3) &quot;food&quot;</span><br><span class="line">4) &quot;drink&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hvals hash2</span><br><span class="line">1) &quot;77&quot;</span><br><span class="line">2) &quot;liu&quot;</span><br><span class="line">3) &quot;xiangjiao&quot;</span><br><span class="line">4) &quot;coffer&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt;</span><br></pre></td></tr></table></figure></p>
+<p>4.hincrby/hincrbyfloat //加上一个整数或者小数<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hget hash2 age</span><br><span class="line">&quot;77&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hincrby hash2 age 3</span><br><span class="line">(integer) 80</span><br><span class="line">127.0.0.1:6379[6]&gt; hincrbyfloat hash2 age 0.5</span><br><span class="line">&quot;80.5&quot;</span><br></pre></td></tr></table></figure></p>
+<p>5.hsetnx //不存在则添加<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379[6]&gt; hgetall hash2</span><br><span class="line"> 1) &quot;age&quot;</span><br><span class="line"> 2) &quot;80.5&quot;</span><br><span class="line"> 3) &quot;name&quot;</span><br><span class="line"> 4) &quot;liu&quot;</span><br><span class="line"> 5) &quot;food&quot;</span><br><span class="line"> 6) &quot;xiangjiao&quot;</span><br><span class="line"> 7) &quot;drink&quot;</span><br><span class="line"> 8) &quot;coffer&quot;</span><br><span class="line"> 9) &quot;id&quot;</span><br><span class="line">10) &quot;8&quot;</span><br><span class="line">127.0.0.1:6379[6]&gt; hsetnx hash2 id 2</span><br><span class="line">(integer) 0</span><br><span class="line">127.0.0.1:6379[6]&gt; hsetnx hash2 num 2</span><br><span class="line">(integer) 1</span><br></pre></td></tr></table></figure></p>
 
           
         
@@ -1743,7 +1789,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/4/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1791,7 +1837,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">70</span>
+                  <span class="site-state-item-count">82</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
